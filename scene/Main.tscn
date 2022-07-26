@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
 [ext_resource path="res://scene/StartGameController.tscn" type="PackedScene" id=3]
-[ext_resource path="res://script/ThrowawayController.gd" type="Script" id=4]
 
 [node name="Main" type="Node"]
 
@@ -32,11 +31,8 @@ position = Vector2( 200, 320 )
 [node name="MainDeckController" parent="Table" instance=ExtResource( 1 )]
 position = Vector2( 200, 500 )
 
-[node name="ThrowawayController" type="Node2D" parent="Table"]
-script = ExtResource( 4 )
-
 [connection signal="add_card" from="Table/StartGameController" to="Table" method="add_card"]
 [connection signal="return_cards" from="Table/StartGameController" to="Table/DealController" method="add_cards"]
 [connection signal="return_cards" from="Table/OffhandDeckController" to="Table/DealController" method="add_cards"]
-[connection signal="return_cards" from="Table/DealController" to="Table/MainDeckController" method="add_cards"]
-[connection signal="return_cards" from="Table/MainDeckController" to="Table/OffhandDeckController" method="add_cards"]
+[connection signal="return_cards" from="Table/DealController" to="Table" method="return_cards"]
+[connection signal="return_cards" from="Table/MainDeckController" to="Table/DealController" method="add_cards"]

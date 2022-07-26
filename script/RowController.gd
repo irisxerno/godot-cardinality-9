@@ -9,9 +9,6 @@ var movex = 110
 func _ready():
 	pass # Replace with function body.
 
-#func _process(delta):
-#	pass
-
 func add_cards(cds):
 	self.cards.append_array(cds)
 	update_cols()
@@ -37,12 +34,12 @@ func update_cols():
 		cursor += Vector2(cc.movex*(len(by_suits[suit])-1),0)
 
 func return_cards(cds):
-	emit_signal("return_cards", cds)
 	var new_cards = []
 	for c in cards:
 		if not c in cds:
 			new_cards.append(c)
 	cards = new_cards
 	update_cols()
+	emit_signal("return_cards", cds)
 	
 		

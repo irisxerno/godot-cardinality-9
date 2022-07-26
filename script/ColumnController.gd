@@ -26,11 +26,7 @@ func _on_mouse_exited():
 
 func _on_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		if $Touch.time_left > 0:
-			return_cards()
-			$Touch.stop()
-		else:
-			$Touch.start()
+		return_cards()
 
 func return_cards():
 	emit_signal("return_cards", cards)

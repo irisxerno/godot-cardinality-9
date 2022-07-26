@@ -12,3 +12,7 @@ func add_card(inst):
 
 func to_front(inst):
 	move_child(inst, get_child_count())
+
+func return_cards(cds):
+	for c in cds:
+		c.queue_free()
