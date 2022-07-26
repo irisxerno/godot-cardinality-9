@@ -1,11 +1,15 @@
 extends Area2D
 
+signal to_front
+
 export var value = 0
 export var suit = 0
 export var face_up = false
 
 const value_visual_10 = ["x","J","Q","K"]
 const suit_visual = ["Ν","β","δ","λ","φ","Ξ","Γ","Σ","Ψ","Ω","Μ"]
+
+var dest_position = position
 
 func _ready():
 	update_face()
@@ -28,11 +32,12 @@ func update_face():
 		$Face.visible = false
 
 func move_to(position):
-	if self.position == position:
+	emit_signal("to_front", self)
+	if self.position == position or dest_position == position:
 		return
-	var tween = get_node("Tween")
-	tween.interpolate_property(self, "position", self.position, position, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
-	tween.start()
+	dest_position = position
+	$Tween.interpolate_property(self, "position", self.position, dest_position, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
+	$Tween.start()
 
 func flip():
 	face_up = !face_up

@@ -6,14 +6,9 @@ func _ready():
 #func _process(delta):
 #	pass
 
-func _on_add_child(inst):
+func add_card(inst):
+	inst.connect("to_front", self, "to_front")
 	call_deferred("add_child", inst)
 
-func _on_return_cards(dest_str, cards):
-	var dest = get_node_or_null(dest_str)
-	if dest and dest.has_method("add_cards"):
-		dest.call_deferred("add_cards", cards)
-	else:
-		for inst in cards:
-			inst.move_to(Vector2(0,0))
-		print("Destination %s not found, leaving %d cards as orphans" % [dest_str, len(cards)])
+func to_front(inst):
+	move_child(inst, get_child_count())

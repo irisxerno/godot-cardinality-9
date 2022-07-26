@@ -17,6 +17,7 @@ config/icon="res://icon.png"
 [autoload]
 
 Window="*res://Window.gd"
+CardSort="*res://CardSort.gd"
 
 [display]
 

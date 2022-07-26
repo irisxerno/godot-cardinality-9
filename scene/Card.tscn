@@ -3,8 +3,11 @@
 [ext_resource path="res://res/Hack-Bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://script/Card.gd" type="Script" id=2]
 
+[sub_resource type="RectangleShape2D" id=7]
+extents = Vector2( 52, 74 )
+
 [sub_resource type="StyleBoxFlat" id=6]
-bg_color = Color( 0.2, 0.160784, 0.160784, 1 )
+bg_color = Color( 0.2, 0.160784, 0.160784, 0.752941 )
 border_color = Color( 1, 1, 1, 1 )
 corner_radius_top_left = 8
 corner_radius_top_right = 8
@@ -41,7 +44,7 @@ border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color( 1, 1, 1, 1 )
+border_color = Color( 0, 0, 0, 1 )
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -52,13 +55,13 @@ expand_margin_right = 1.0
 expand_margin_top = 1.0
 expand_margin_bottom = 1.0
 
-[sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 52, 74 )
-
 [node name="Card" type="Area2D"]
-modulate = Color( 1, 1, 1, 0.941176 )
 position = Vector2( 1, 0 )
 script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource( 7 )
 
 [node name="Display" type="PanelContainer" parent="."]
 anchor_left = 0.5
@@ -76,6 +79,7 @@ __meta__ = {
 }
 
 [node name="Face" type="Panel" parent="."]
+visible = false
 modulate = Color( 0, 0, 0, 1 )
 margin_left = -46.0
 margin_top = -68.0
@@ -101,17 +105,11 @@ custom_fonts/font = SubResource( 3 )
 text = "Ν"
 
 [node name="Back" type="Panel" parent="."]
-visible = false
-modulate = Color( 0, 0, 0, 1 )
 margin_left = -52.0
 margin_top = -74.0
 margin_right = 53.0
 margin_bottom = 74.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 8 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-shape = SubResource( 7 )
 
 [node name="Tween" type="Tween" parent="."]

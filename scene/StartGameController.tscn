@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://script/StartGameController.gd" type="Script" id=1]
+
+[node name="StartGameController" type="Node2D"]
+visible = false
+position = Vector2( 640, -90 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+deal_count = 20
+deal_suits = 9
+
+[node name="MoveTo" type="Position2D" parent="."]
+visible = false
+position = Vector2( 0, 480 )
+
+[node name="DealAnimTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[node name="DispAnimTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="DealAnimTimer" to="." method="_on_DealAnimTimer_timeout"]
+[connection signal="timeout" from="DispAnimTimer" to="." method="_on_DispAnimTimer_timeout"]
