@@ -1,16 +1,49 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
 
-[node name="Main" type="Node2D"]
+[ext_resource path="res://script/RainbowGenerator.gd" type="Script" id=1]
 
-[node name="Background" type="CanvasLayer" parent="."]
-layer = -1
+[sub_resource type="Animation" id=2]
+resource_name = "fade_out"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
 
-[node name="ColorRect" type="ColorRect" parent="Background"]
+[node name="Main" type="Node"]
+
+[node name="Background" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.223529, 0.301961, 0.301961, 1 )
+mouse_filter = 2
+color = Color( 0.18, 0.2, 0.2, 1 )
+
+[node name="Table" type="Node2D" parent="."]
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Table" type="CanvasLayer" parent="."]
+[node name="RainbowGenerator" type="Node2D" parent="Table"]
+position = Vector2( 61, 91 )
+script = ExtResource( 1 )
+move = Vector2( 109, 0 )
+mover = Vector2( 0, 152 )
+countr = 4
+
+[node name="Blackout" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Blackout"]
+autoplay = "fade_out"
+anims/fade_out = SubResource( 2 )
