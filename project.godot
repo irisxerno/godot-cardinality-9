@@ -14,6 +14,10 @@ config/name="cardinality 9"
 run/main_scene="res://scene/Main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+Window="*res://Window.gd"
+
 [display]
 
 window/size/width=1280
@@ -54,11 +58,6 @@ texture={
 ui_fullscreen={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777254,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
-}
-ui_window={
-"deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777247,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
  ]
 }
 
