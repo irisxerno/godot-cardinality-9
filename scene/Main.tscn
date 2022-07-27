@@ -19,20 +19,20 @@ __meta__ = {
 }
 
 [node name="StartGameController" parent="Table" instance=ExtResource( 3 )]
-deal_count = 52
-quick = true
+deal_count = 10
+deal_suits = 4
 
-[node name="OffhandDeckController" parent="Table" instance=ExtResource( 1 )]
+[node name="OffhandController" parent="Table" instance=ExtResource( 1 )]
 position = Vector2( 200, 140 )
 
 [node name="DealController" parent="Table" instance=ExtResource( 1 )]
 position = Vector2( 200, 320 )
 
-[node name="MainDeckController" parent="Table" instance=ExtResource( 1 )]
+[node name="MainhandController" parent="Table" instance=ExtResource( 1 )]
 position = Vector2( 200, 500 )
 
 [connection signal="add_card" from="Table/StartGameController" to="Table" method="add_card"]
-[connection signal="return_cards" from="Table/StartGameController" to="Table/DealController" method="add_cards"]
-[connection signal="return_cards" from="Table/OffhandDeckController" to="Table/DealController" method="add_cards"]
-[connection signal="return_cards" from="Table/DealController" to="Table" method="return_cards"]
-[connection signal="return_cards" from="Table/MainDeckController" to="Table/DealController" method="add_cards"]
+[connection signal="return_cards" from="Table/StartGameController" to="Table/DealController" method="update_cols"]
+[connection signal="request_return_cards" from="Table/OffhandController" to="Table/DealController" method="request_take_cards"]
+[connection signal="request_return_cards" from="Table/DealController" to="Table" method="_on_DealController_request_return_cards"]
+[connection signal="request_return_cards" from="Table/MainhandController" to="Table/DealController" method="request_take_cards"]

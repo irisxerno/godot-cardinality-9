@@ -8,5 +8,3 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
 }
-
-[node name="Cols" type="Node2D" parent="."]

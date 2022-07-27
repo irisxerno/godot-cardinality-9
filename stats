@@ -1,0 +1,7 @@
+          default base  mult
+mainhand  5       0     1
+offhand   5       0     1
+extra     0       5     1
+attack    5       0     5
+armory    0       5     5
+

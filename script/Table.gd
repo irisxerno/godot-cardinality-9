@@ -1,5 +1,11 @@
 extends Node2D
 
+export var mainhand = 5
+export var offhand = 5
+export var extra = 0
+export var attack = 5
+export var armory = 0
+
 func _ready():
 	pass # Replace with function body.
 
@@ -13,6 +19,19 @@ func add_card(inst):
 func to_front(inst):
 	move_child(inst, get_child_count())
 
-func return_cards(cds):
-	for c in cds:
-		c.queue_free()
+func _on_DealController_request_return_cards(inst):
+	var mainhand_curr = $MainhandController.count
+	var offhand_curr = $OffhandController.count
+	var take
+	var dest
+	if mainhand_curr < mainhand:
+		take = mainhand - mainhand_curr
+		dest = $MainhandController
+	elif offhand_curr < offhand:
+		take = offhand - offhand_curr
+		dest = $OffhandController
+	else:
+		dest = $DealController
+	var c = inst.cards.slice(max(len(inst.cards)-take,0), len(inst.cards)-1)
+	inst.remove_cards(c)
+	dest.update_cols(c)

@@ -1,8 +1,9 @@
 extends Area2D
 
-signal return_cards
+signal request_return_cards
+signal update
 
-var cards
+var cards = []
 var movex = 30
 var movey = 2
 
@@ -26,8 +27,12 @@ func _on_mouse_exited():
 
 func _on_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		return_cards()
+		emit_signal("request_return_cards", self)
 
-func return_cards():
-	emit_signal("return_cards", cards)
-	queue_free()
+func remove_cards(rcs):
+	var new_cards = []
+	for c in cards:
+		if not c in rcs:
+			new_cards.append(c)
+	cards = new_cards
+	emit_signal("update")
