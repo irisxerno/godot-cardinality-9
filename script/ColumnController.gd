@@ -7,17 +7,31 @@ var cards = []
 var movex = 30
 var movey = 2
 
+var base_shape
+
+func _ready():
+	base_shape = $CollisionShape2D.shape.duplicate()
+
 func add_cards(cs):
 	cards = cs
 	cards.sort_custom(CardSort, "sort_by_value")
+	update()
 
+func update():
 	var cursor = Vector2(0,0)
 	for c in cards:
 		c.move_to(to_global(cursor))
 		cursor += Vector2(movex,movey)
-	$CollisionShape2D.shape = $CollisionShape2D.shape.duplicate()
+	$CollisionShape2D.shape = base_shape.duplicate()
 	$CollisionShape2D.shape.extents += Vector2(movex,movey)*(len(cards)-1)*0.5
-	$CollisionShape2D.position += Vector2(movex,movey)*(len(cards)-1)*0.5
+	$CollisionShape2D.position = Vector2(movex,movey)*(len(cards)-1)*0.5
+
+	if len(cards) > 0:
+		input_pickable = true
+		$CollisionShape2D.visible = true
+	else:
+		input_pickable = false
+		$CollisionShape2D.visible = false # for Debug/Visible Collision Shapes
 
 func _on_mouse_entered():
 	pass

@@ -20,8 +20,8 @@ func update_cols(new_cards):
 	
 	for inst in cols:
 		cards.append_array(inst.cards)
-		inst.queue_free()
-	cols = []
+		inst.cards = []
+		inst.update()
 		
 	cards.append_array(new_cards)
 	count = len(cards)
@@ -33,16 +33,23 @@ func update_cols(new_cards):
 		by_suits[c.suit].append(c)
 
 	var cursor = Vector2(0,0)
+	var colc = 0
 	for suit in by_suits.keys():
-		var cc = column_controller_scene.instance()
-		add_child(cc)
-		cols.append(cc)
-		cc.connect("request_return_cards", self, "_request_return_cards")
-		cc.connect("update", self, "update")
+		var cc
+		if len(cols) < colc+1:
+			cc = column_controller_scene.instance()
+			add_child(cc)
+			cols.append(cc)
+			cc.connect("request_return_cards", self, "_request_return_cards")
+			cc.connect("update", self, "update")
+		else:
+			cc = cols[colc]
+
 		cc.position = cursor
 		cc.add_cards(by_suits[suit])
 		cursor += Vector2(movex, 0)
 		cursor += Vector2(cc.movex*(len(by_suits[suit])-1),0)
+		colc += 1
 
 func _request_return_cards(inst):
 	emit_signal("request_return_cards", inst)

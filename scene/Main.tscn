@@ -11,6 +11,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color( 0.18, 0.2, 0.2, 1 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Table" type="Node2D" parent="."]
 script = ExtResource( 2 )
@@ -19,6 +22,7 @@ __meta__ = {
 }
 
 [node name="StartGameController" parent="Table" instance=ExtResource( 3 )]
+deal_count = 20
 
 [node name="OffhandController" parent="Table" instance=ExtResource( 1 )]
 position = Vector2( 200, 140 )

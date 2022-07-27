@@ -31,12 +31,12 @@ func update_face():
 		$Back.visible = true
 		$Face.visible = false
 
-func move_to(position):
+func move_to(new_position):
 	emit_signal("to_front", self)
-	if self.position == position or dest_position == position:
+	if position == new_position or dest_position == new_position:
 		return
-	dest_position = position
-	$Tween.interpolate_property(self, "position", self.position, dest_position, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
+	dest_position = new_position
+	$Tween.interpolate_property(self, "position", position, dest_position, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
 	$Tween.start()
 
 func flip():
