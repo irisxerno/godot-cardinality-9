@@ -19,8 +19,6 @@ __meta__ = {
 }
 
 [node name="StartGameController" parent="Table" instance=ExtResource( 3 )]
-deal_count = 10
-deal_suits = 4
 
 [node name="OffhandController" parent="Table" instance=ExtResource( 1 )]
 position = Vector2( 200, 140 )

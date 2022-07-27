@@ -7,6 +7,8 @@ var movex = 110
 
 var count = 0
 
+var cols = []
+
 func _ready():
 	pass # Replace with function body.
 
@@ -16,9 +18,10 @@ func update():
 func update_cols(new_cards):
 	var cards = []
 	
-	for inst in get_children():
+	for inst in cols:
 		cards.append_array(inst.cards)
 		inst.queue_free()
+	cols = []
 		
 	cards.append_array(new_cards)
 	count = len(cards)
@@ -33,6 +36,7 @@ func update_cols(new_cards):
 	for suit in by_suits.keys():
 		var cc = column_controller_scene.instance()
 		add_child(cc)
+		cols.append(cc)
 		cc.connect("request_return_cards", self, "_request_return_cards")
 		cc.connect("update", self, "update")
 		cc.position = cursor
@@ -47,3 +51,7 @@ func request_take_cards(inst):
 	var new_cards = inst.cards
 	inst.remove_cards(new_cards)
 	update_cols(new_cards)
+
+func pop_col(inst):
+	breakpoint
+	request_take_cards(inst)

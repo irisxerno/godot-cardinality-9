@@ -10,8 +10,6 @@ __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true
 }
-deal_count = 20
-deal_suits = 9
 
 [node name="MoveTo" type="Position2D" parent="."]
 visible = false

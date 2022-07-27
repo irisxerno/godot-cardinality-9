@@ -31,6 +31,7 @@ func _on_DealController_request_return_cards(inst):
 		take = offhand - offhand_curr
 		dest = $OffhandController
 	else:
+		take = len(inst.cards)
 		dest = $DealController
 	var c = inst.cards.slice(max(len(inst.cards)-take,0), len(inst.cards)-1)
 	inst.remove_cards(c)
