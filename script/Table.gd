@@ -33,6 +33,8 @@ func _on_DealController_request_return_cards(inst):
 	else:
 		take = len(inst.cards)
 		dest = $DealController
+	if not dest == $DealController:
+		take = min(take, attack)
 	var c = inst.cards.slice(max(len(inst.cards)-take,0), len(inst.cards)-1)
 	inst.remove_cards(c)
 	dest.update_cols(c)
