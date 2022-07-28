@@ -7,10 +7,16 @@ var movex = 110
 
 var count = 0
 
+export var max_count = 0
+
 var cols = []
 
+var level_bar
+
 func _ready():
-	pass # Replace with function body.
+	if max_count != -1 and has_node("LevelBar"):
+		level_bar = get_node("LevelBar")
+		level_bar.set_bars(max_count)
 
 func update():
 	update_cols([])
@@ -50,6 +56,8 @@ func update_cols(new_cards):
 		cursor += Vector2(movex, 0)
 		cursor += Vector2(cc.movex*(len(by_suits[suit])-1),0)
 		colc += 1
+	if level_bar:
+		level_bar.count(count)
 
 func _request_return_cards(inst):
 	emit_signal("request_return_cards", inst)

@@ -2,38 +2,34 @@ extends Node2D
 
 export var mainhand = 5
 export var offhand = 5
-export var extra = 0
 export var attack = 5
-export var armory = 0
 
-func _ready():
-	pass # Replace with function body.
+func _enter_tree():
+	update_counts()
 
-#func _process(delta):
-#	pass
+func update_counts():
+	$Mainhand.max_count = mainhand
+	$Offhand.max_count = offhand
 
 func add_card(inst):
 	inst.connect("to_front", self, "to_front")
 	call_deferred("add_child", inst)
 
-func to_front(inst):
-	move_child(inst, get_child_count())
-
-func _on_DealController_request_return_cards(inst):
-	var mainhand_curr = $MainhandController.count
-	var offhand_curr = $OffhandController.count
+func _on_Deal_request_return_cards(inst):
+	var mainhand_curr = $Mainhand.count
+	var offhand_curr = $Offhand.count
 	var take
 	var dest
 	if mainhand_curr < mainhand:
 		take = mainhand - mainhand_curr
-		dest = $MainhandController
+		dest = $Mainhand
 	elif offhand_curr < offhand:
 		take = offhand - offhand_curr
-		dest = $OffhandController
+		dest = $Offhand
 	else:
 		take = len(inst.cards)
-		dest = $DealController
-	if not dest == $DealController:
+		dest = $Deal
+	if not dest == $Deal:
 		take = min(take, attack)
 	var c = inst.cards.slice(max(len(inst.cards)-take,0), len(inst.cards)-1)
 	inst.remove_cards(c)

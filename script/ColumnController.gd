@@ -7,6 +7,8 @@ var cards = []
 var movex = 30
 var movey = 2
 
+export var count = -1
+
 var base_shape
 
 func _ready():

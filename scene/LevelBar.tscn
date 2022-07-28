@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://script/LevelBar.gd" type="Script" id=1]
+
+[node name="LevelBar" type="Node2D"]
+modulate = Color( 1, 1, 1, 0.25098 )
+position = Vector2( 0, 90 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_horizontal_guides_": [ -343.0 ]
+}
+gap = 10
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -25.0
+margin_top = -2.5
+margin_right = 25.0
+margin_bottom = 2.5

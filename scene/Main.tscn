@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
 [ext_resource path="res://scene/StartGameController.tscn" type="PackedScene" id=3]
+[ext_resource path="res://script/Cards.gd" type="Script" id=4]
+[ext_resource path="res://scene/LevelBar.tscn" type="PackedScene" id=5]
 
 [node name="Main" type="Node"]
 
@@ -15,26 +17,33 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="StartGameController" parent="." instance=ExtResource( 3 )]
+visible = true
+
 [node name="Table" type="Node2D" parent="."]
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="StartGameController" parent="Table" instance=ExtResource( 3 )]
-deal_count = 20
+[node name="Offhand" parent="Table" instance=ExtResource( 1 )]
+position = Vector2( 200, 160 )
 
-[node name="OffhandController" parent="Table" instance=ExtResource( 1 )]
-position = Vector2( 200, 140 )
+[node name="LevelBar" parent="Table/Offhand" instance=ExtResource( 5 )]
 
-[node name="DealController" parent="Table" instance=ExtResource( 1 )]
-position = Vector2( 200, 320 )
+[node name="Deal" parent="Table" instance=ExtResource( 1 )]
+position = Vector2( 200, 340 )
 
-[node name="MainhandController" parent="Table" instance=ExtResource( 1 )]
-position = Vector2( 200, 500 )
+[node name="Mainhand" parent="Table" instance=ExtResource( 1 )]
+position = Vector2( 200, 520 )
 
-[connection signal="add_card" from="Table/StartGameController" to="Table" method="add_card"]
-[connection signal="return_cards" from="Table/StartGameController" to="Table/DealController" method="update_cols"]
-[connection signal="request_return_cards" from="Table/OffhandController" to="Table/DealController" method="request_take_cards"]
-[connection signal="request_return_cards" from="Table/DealController" to="Table" method="_on_DealController_request_return_cards"]
-[connection signal="request_return_cards" from="Table/MainhandController" to="Table/DealController" method="request_take_cards"]
+[node name="LevelBar" parent="Table/Mainhand" instance=ExtResource( 5 )]
+
+[node name="Cards" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[connection signal="add_card" from="StartGameController" to="Cards" method="add_card"]
+[connection signal="return_cards" from="StartGameController" to="Table/Deal" method="update_cols"]
+[connection signal="request_return_cards" from="Table/Offhand" to="Table/Deal" method="request_take_cards"]
+[connection signal="request_return_cards" from="Table/Deal" to="Table" method="_on_Deal_request_return_cards"]
+[connection signal="request_return_cards" from="Table/Mainhand" to="Table/Deal" method="request_take_cards"]
