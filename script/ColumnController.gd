@@ -16,7 +16,7 @@ func _ready():
 
 func add_cards(cs):
 	cards = cs
-	cards.sort_custom(CardSort, "sort_by_value")
+	cards.sort_custom(Sort, "by_value")
 	update()
 
 func update():

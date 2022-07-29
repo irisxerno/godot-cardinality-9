@@ -11,26 +11,18 @@ export var deal_suits = 4
 export var step = Vector2(1,1)
 export var quick = false
 
-func _ready():
-	if quick:
-		$DealAnimTimer.wait_time /= 2
-		$DispAnimTimer.wait_time /= 2
-
-	var scene = load("res://scene/Card.tscn")
-	randomize()
-	for i in range(deal_count):
+func deal_from_data(card_data):
+	var scene = preload("res://scene/Card.tscn")
+	for d in card_data:
 		var inst = scene.instance()
-		inst.position = position
-		inst.value = randi() % 12 + 2
-		inst.suit = randi() % deal_suits + 1
+		inst.value = d["value"]
+		inst.suit = d["suit"]
+		inst.position = self.position
 		inst.face_up = true
 		cards.append(inst)
 		emit_signal("add_card", inst)
 	$DealAnimTimer.start()
-
-#func _process(delta):
-#	pass
-
+	
 func _on_DealAnimTimer_timeout():
 	cards[anim_count].move_to(position+$MoveTo.position+step*anim_count)
 	anim_count += 1

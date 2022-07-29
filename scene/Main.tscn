@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://script/Cards.gd" type="Script" id=4]
 [ext_resource path="res://scene/LevelBar.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scene/Pulltab.tscn" type="PackedScene" id=6]
+[ext_resource path="res://script/WorldGeneration.gd" type="Script" id=7]
 [ext_resource path="res://script/Interface.gd" type="Script" id=8]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -25,10 +26,6 @@ color = Color( 0.18, 0.2, 0.2, 1 )
 __meta__ = {
 "_edit_lock_": true
 }
-
-[node name="StartGameController" parent="." instance=ExtResource( 3 )]
-visible = true
-quick = true
 
 [node name="Table" type="Node2D" parent="."]
 script = ExtResource( 2 )
@@ -86,10 +83,18 @@ margin_left = 160.84
 margin_right = 1831.68
 margin_bottom = 500.0
 
-[connection signal="add_card" from="StartGameController" to="Cards" method="add_card"]
-[connection signal="return_cards" from="StartGameController" to="Table/Deal" method="update_cols"]
+[node name="WorldGeneration" type="Node" parent="."]
+script = ExtResource( 7 )
+
+[node name="GameStartDealer" parent="." instance=ExtResource( 3 )]
+visible = true
+quick = true
+
 [connection signal="request_return_cards" from="Table/Offhand" to="Table/Deal" method="request_take_cards"]
 [connection signal="request_return_cards" from="Table/Deal" to="Table" method="_on_Deal_request_return_cards"]
 [connection signal="request_return_cards" from="Table/Mainhand" to="Table/Deal" method="request_take_cards"]
+[connection signal="return_card_data" from="WorldGeneration" to="GameStartDealer" method="deal_from_data"]
+[connection signal="add_card" from="GameStartDealer" to="Cards" method="add_card"]
+[connection signal="return_cards" from="GameStartDealer" to="Table/Deal" method="update_cols"]
 
 [editable path="Tabs/World"]

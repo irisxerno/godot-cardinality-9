@@ -32,12 +32,8 @@ func update_cols(new_cards):
 	cards.append_array(new_cards)
 	count = len(cards)
 	
-	var by_suits = {}
-	for c in cards:
-		if not c.suit in by_suits:
-			by_suits[c.suit] = []
-		by_suits[c.suit].append(c)
-
+	var by_suits = Sort.to_suits(cards)
+	
 	var cursor = Vector2(0,0)
 	var colc = 0
 	for suit in by_suits.keys():
