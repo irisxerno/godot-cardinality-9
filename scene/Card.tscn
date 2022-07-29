@@ -79,7 +79,6 @@ __meta__ = {
 }
 
 [node name="Face" type="Panel" parent="."]
-visible = false
 modulate = Color( 0, 0, 0, 1 )
 margin_left = -46.0
 margin_top = -68.0
@@ -105,6 +104,7 @@ custom_fonts/font = SubResource( 3 )
 text = "Ν"
 
 [node name="Back" type="Panel" parent="."]
+visible = false
 margin_left = -52.0
 margin_top = -74.0
 margin_right = 53.0
