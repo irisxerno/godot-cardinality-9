@@ -65,7 +65,6 @@ margin_left = -640.0
 margin_top = -240.0
 margin_right = 640.0
 margin_bottom = 720.0
-open_distance = 200
 
 [node name="Background" parent="Tabs/World" index="0"]
 anchor_left = 0.5
