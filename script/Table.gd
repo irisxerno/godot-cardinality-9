@@ -4,6 +4,16 @@ export var mainhand = 5
 export var offhand = 5
 export var attack = 5
 
+var input = false
+func set_input(b):
+	input = b
+	for inst in get_children():
+		if self.has_method("set_input"):
+			inst.set_input(b)
+
+func _ready():
+	set_input(false)
+	
 func _enter_tree():
 	update_counts()
 

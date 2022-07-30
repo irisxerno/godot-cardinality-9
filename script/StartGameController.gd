@@ -2,6 +2,7 @@ extends Node2D
 
 signal add_card
 signal return_cards
+signal done
 
 var cards = []
 var anim_count = 0
@@ -32,4 +33,5 @@ func _on_DealAnimTimer_timeout():
 
 func _on_DispAnimTimer_timeout():
 	emit_signal("return_cards", cards)
+	emit_signal("done")
 	queue_free()

@@ -24,17 +24,15 @@ func _rand_tile_num(w, h):
 
 func _rand_armories(w, h):
 	var armories = {}
-	var max_armory = w
+	var max_armory = w + 1
 	for i in range(w*world_row_len+h):
 		var avalue = rng.randi_range(2, 13)
 		var asuit = rng.randi_range(1, 4 + w)
 		if not asuit in armories:
 			armories[asuit] = []
 		if len(armories[asuit]) < max_armory:
-			armories[asuit].append({
-				"value": avalue,
-				"suit": asuit
-			})
+			armories[asuit].append(avalue)
+	return armories
 
 func _rand_tile(w, h):
 	var num = _rand_tile_num(w, h)
@@ -76,6 +74,7 @@ func new_world(w):
 			tiles.append(_rand_tile(w, h))
 		r -= 1
 		h += 1
+	return tiles
 
 func _ready():
 	new_game()

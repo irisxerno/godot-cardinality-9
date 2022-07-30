@@ -1,28 +1,28 @@
-extends Control
+extends Node2D
 
-var state = "hide"
+var tiles = []
+var tile_size = 150
 
-export var open_distance = 300
-export var close_distance = 0
-export var property = "margin_top"
+func world_from_data(world):
+	var enemy_scene = preload("res://scene/Tile.tscn")
+	var card_scene = preload("res://scene/Card.tscn")
+	var row = 0
+	var col = 0 
+	for dat in world:
+		var enemy = enemy_scene.instance()
+		for c_dat in dat["cards"]:
+			var card = card_scene.instance()
+			card.value = c_dat["value"]
+			card.suit = c_dat["suit"]
+			card.face_up = false
+			enemy.cards.append(card)
+		for k in dat["armories"]:
+			# TODO: create armory node2d
+			pass
+		enemy.position += Vector2(tile_size*row + tile_size/2*col, -tile_size*col)
+		add_child(enemy)
+		row += 1
+		if row > 4-col:
+			row = 0
+			col += 1
 
-func update_state(new_state):
-	$Button.mouse_filter = MOUSE_FILTER_PASS
-	var dest_dist = close_distance
-	if new_state == "open":
-		dest_dist = open_distance
-	$Tween.interpolate_property(self, property, get(property), dest_dist, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
-	$Tween.start()
-	state = new_state
-
-func press():
-	if $Tween.is_active():
-		return
-	var new_state = "open"
-	if state == "open":
-		new_state = "close"
-	update_state(new_state)
-
-func _on_gui_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		press()

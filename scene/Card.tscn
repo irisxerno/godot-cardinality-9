@@ -113,3 +113,5 @@ mouse_filter = 2
 custom_styles/panel = SubResource( 8 )
 
 [node name="Tween" type="Tween" parent="."]
+
+[node name="AlphaTween" type="Tween" parent="."]

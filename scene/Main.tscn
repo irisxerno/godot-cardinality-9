@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://scene/Pulltab.tscn" type="PackedScene" id=6]
 [ext_resource path="res://script/WorldGeneration.gd" type="Script" id=7]
 [ext_resource path="res://script/Interface.gd" type="Script" id=8]
+[ext_resource path="res://script/World.gd" type="Script" id=9]
+[ext_resource path="res://script/Main.gd" type="Script" id=10]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.1875, 0.25, 0.208333, 0.752941 )
@@ -17,6 +19,7 @@ corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
 [node name="Main" type="Node"]
+script = ExtResource( 10 )
 
 [node name="Background" type="ColorRect" parent="."]
 anchor_right = 1.0
@@ -55,33 +58,35 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 8 )
 
-[node name="World" parent="Tabs" instance=ExtResource( 6 )]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -640.0
-margin_top = -240.0
-margin_right = 640.0
+[node name="WorldView" parent="Tabs" instance=ExtResource( 6 )]
+anchor_left = 0.75
+anchor_right = 0.75
+margin_left = -960.0
+margin_right = 320.0
 margin_bottom = 720.0
+open_distance = 150
 
-[node name="Background" parent="Tabs/World" index="0"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -350.68
+[node name="Background" parent="Tabs/WorldView" index="0"]
+anchor_left = 0.75
+anchor_right = 0.75
+margin_left = -600.0
 margin_top = -600.0
-margin_right = 529.32
-mouse_filter = 1
+margin_right = 200.0
+mouse_filter = 2
 custom_styles/panel = SubResource( 1 )
 
-[node name="Enemies" type="Node2D" parent="Tabs/World/Background" index="0"]
-position = Vector2( -0.320007, 600 )
-
-[node name="Button" parent="Tabs/World" index="1"]
+[node name="Button" parent="Tabs/WorldView" index="1"]
 modulate = Color( 0.501961, 0.25098, 0.25098, 0.878431 )
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = 160.84
-margin_right = 1831.68
+anchor_left = 0.75
+anchor_right = 0.75
+margin_left = -120.0
+margin_right = 1480.0
 margin_bottom = 500.0
+mouse_filter = 1
+
+[node name="World" type="Node2D" parent="Tabs/WorldView"]
+position = Vector2( 450, -80 )
+script = ExtResource( 9 )
 
 [node name="WorldGeneration" type="Node" parent="."]
 script = ExtResource( 7 )
@@ -93,8 +98,12 @@ quick = true
 [connection signal="request_return_cards" from="Table/Offhand" to="Table/Deal" method="request_take_cards"]
 [connection signal="request_return_cards" from="Table/Deal" to="Table" method="_on_Deal_request_return_cards"]
 [connection signal="request_return_cards" from="Table/Mainhand" to="Table/Deal" method="request_take_cards"]
+[connection signal="tab" from="Tabs" to="." method="_on_tab"]
+[connection signal="request_press" from="Tabs/WorldView" to="Tabs" method="_on_request_press"]
 [connection signal="return_card_data" from="WorldGeneration" to="GameStartDealer" method="deal_from_data"]
+[connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="world_from_data"]
 [connection signal="add_card" from="GameStartDealer" to="Cards" method="add_card"]
+[connection signal="done" from="GameStartDealer" to="." method="_on_GameStartDealer_done"]
 [connection signal="return_cards" from="GameStartDealer" to="Table/Deal" method="update_cols"]
 
-[editable path="Tabs/World"]
+[editable path="Tabs/WorldView"]

@@ -10,6 +10,7 @@ const value_visual_10 = ["x","J","Q","K"]
 const suit_visual = ["Ν","β","δ","λ","φ","Ξ","Γ","Σ","Ψ","Ω","Μ"]
 
 var dest_position = position
+var dest_a = 1
 
 func _ready():
 	update_face()
@@ -31,6 +32,13 @@ func update_face():
 		$Back.visible = true
 		$Face.visible = false
 
+func alpha_to(new_a):
+	if new_a == dest_a:
+		return
+	dest_a = new_a
+	$AlphaTween.interpolate_property(self, "modulate", modulate, Color(1, 1, 1, new_a), 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
+	$AlphaTween.start()
+	
 func move_to(new_position):
 	emit_signal("to_front", self)
 	if position == new_position or dest_position == new_position:

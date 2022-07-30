@@ -11,6 +11,12 @@ export var count = -1
 
 var base_shape
 
+var input = false
+func set_input(b):
+	input = b
+	for c in cards:
+		c.alpha_to(1 if input else 0.25)
+
 func _ready():
 	base_shape = $CollisionShape2D.shape.duplicate()
 
@@ -23,6 +29,7 @@ func update():
 	var cursor = Vector2(0,0)
 	for c in cards:
 		c.move_to(to_global(cursor))
+		c.alpha_to(1 if input else 0.25)
 		cursor += Vector2(movex,movey)
 	$CollisionShape2D.shape = base_shape.duplicate()
 	$CollisionShape2D.shape.extents += Vector2(movex,movey)*(len(cards)-1)*0.5
@@ -42,7 +49,7 @@ func _on_mouse_exited():
 	pass
 
 func _on_input_event(viewport, event, shape_idx):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+	if input and event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		emit_signal("request_return_cards", self)
 
 func remove_cards(rcs):
