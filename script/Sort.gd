@@ -1,9 +1,11 @@
 extends Node
 
+
 static func by_value(a, b):
 	if a.value < b.value:
 		return true
 	return false
+
 
 static func to_suits(things):
 	var by_suits = {}

@@ -1,28 +1,28 @@
 extends Node2D
 
+
 var tiles = []
 var tile_size = 150
 
+
 func world_from_data(world):
-	var enemy_scene = preload("res://scene/Tile.tscn")
+	var tile_scene = preload("res://scene/Tile.tscn")
 	var card_scene = preload("res://scene/Card.tscn")
 	var row = 0
 	var col = 0 
 	for dat in world:
-		var enemy = enemy_scene.instance()
-		for c_dat in dat["cards"]:
-			var card = card_scene.instance()
-			card.value = c_dat["value"]
-			card.suit = c_dat["suit"]
-			card.face_up = false
-			enemy.cards.append(card)
-		for k in dat["armories"]:
-			# TODO: create armory node2d
-			pass
-		enemy.position += Vector2(tile_size*row + tile_size/2*col, -tile_size*col)
-		add_child(enemy)
+		var tile = tile_scene.instance()
+		tile.cards = dat["cards"]
+		tile.armories = dat["armories"]
+		tile.position += Vector2(tile_size*row + tile_size/2*col, -tile_size*col)
+		tile.connect("request_select", self, "request_select")
+		add_child(tile)
+		tiles.append(tile)
 		row += 1
 		if row > 4-col:
 			row = 0
 			col += 1
 
+
+func request_select(inst):
+	print(inst)

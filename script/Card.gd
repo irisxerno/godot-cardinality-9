@@ -1,5 +1,6 @@
 extends Area2D
 
+
 signal to_front
 
 export var value = 0
@@ -12,8 +13,10 @@ const suit_visual = ["Ν","β","δ","λ","φ","Ξ","Γ","Σ","Ψ","Ω","Μ"]
 var dest_position = position
 var dest_a = 1
 
+
 func _ready():
 	update_face()
+
 
 func update_face():
 	if self.value >= 10 and self.value <= 13:
@@ -32,13 +35,7 @@ func update_face():
 		$Back.visible = true
 		$Face.visible = false
 
-func alpha_to(new_a):
-	if new_a == dest_a:
-		return
-	dest_a = new_a
-	$AlphaTween.interpolate_property(self, "modulate", modulate, Color(1, 1, 1, new_a), 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
-	$AlphaTween.start()
-	
+
 func move_to(new_position):
 	emit_signal("to_front", self)
 	if position == new_position or dest_position == new_position:
@@ -47,6 +44,8 @@ func move_to(new_position):
 	$Tween.interpolate_property(self, "position", position, dest_position, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
 	$Tween.start()
 
+
 func flip():
 	face_up = !face_up
 	update_face()
+	

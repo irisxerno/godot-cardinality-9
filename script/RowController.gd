@@ -1,40 +1,27 @@
 extends Node2D
 
+
 signal request_return_cards
 
 var column_controller_scene = preload("res://scene/ColumnController.tscn") 
 var movex = 110
+var cols = []
 
 var count = 0
-
 export var max_count = 0
-
-var cols = []
 
 var level_bar
 
-var input = false
-func set_input(b):
-	input = b
-	for inst in cols:
-		inst.set_input(b)
-	alpha_to(1 if input else 0.25)
-	update()
-
-func alpha_to(new_a):
-	if new_a == modulate.a:
-		return
-	$Tween.interpolate_property(self, "modulate", modulate, Color(1, 1, 1, new_a), 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
-	$Tween.start()
 
 func _ready():
 	if max_count != -1 and has_node("LevelBar"):
 		level_bar = get_node("LevelBar")
 		level_bar.set_bars(max_count)
-	modulate.a = 0
+
 
 func update():
 	update_cols([])
+
 
 func update_cols(new_cards):
 	var cards = []
@@ -57,7 +44,6 @@ func update_cols(new_cards):
 			cc = column_controller_scene.instance()
 			add_child(cc)
 			cols.append(cc)
-			cc.set_input(input)
 			cc.connect("request_return_cards", self, "_request_return_cards")
 			cc.connect("update", self, "update")
 		else:
@@ -71,13 +57,16 @@ func update_cols(new_cards):
 	if level_bar:
 		level_bar.count(count)
 
+
 func _request_return_cards(inst):
 	emit_signal("request_return_cards", inst)
+
 
 func request_take_cards(inst):
 	var new_cards = inst.cards
 	inst.remove_cards(new_cards)
 	update_cols(new_cards)
+
 
 func pop_col(inst):
 	breakpoint
