@@ -1,4 +1,4 @@
-extends Area2D
+extends Control
 
 
 signal request_select
@@ -29,6 +29,24 @@ func update():
 		$Defeated.visible = true
 
 
-func _on_input_event(viewport, event, shape_idx):
+var mouse_entered = false
+
+
+func _on_mouse_entered():
+	mouse_entered = true
+
+func _on_mouse_exited():
+	mouse_entered = false
+
+
+func _on_gui_input(event):
 	if state == "show" and event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		emit_signal("request_select",  self)
+		mouse_entered = true
+		selected = !selected
+		update()
+
+
+func _input(event):
+	if event is InputEventMouseButton and event.pressed and !mouse_entered and selected:
+		selected = false
+		update()

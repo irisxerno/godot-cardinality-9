@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 
 var tiles = []
@@ -14,7 +14,7 @@ func world_from_data(world):
 		var tile = tile_scene.instance()
 		tile.cards = dat["cards"]
 		tile.armories = dat["armories"]
-		tile.position += Vector2(tile_size*row + tile_size/2*col, -tile_size*col)
+		tile.rect_position += Vector2(tile_size*row + tile_size/2*col, -tile_size*col)
 		tile.connect("request_select", self, "request_select")
 		add_child(tile)
 		tiles.append(tile)
@@ -22,7 +22,3 @@ func world_from_data(world):
 		if row > 4-col:
 			row = 0
 			col += 1
-
-
-func request_select(inst):
-	print(inst)
