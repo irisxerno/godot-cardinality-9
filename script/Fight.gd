@@ -3,7 +3,7 @@ extends Node2D
 
 signal done
 
-var attack = 5
+var stats
 var tile
 var input = true
 
@@ -29,7 +29,7 @@ func _on_Mainhand_request_return_cards(inst):
 
 	var mainhand_curr = $Mainhand.count
 	var attack_curr = $Attack.count
-	var take = attack
+	var take = stats.get_attack()
 	var c = inst.cards.slice(max(len(inst.cards)-take,0), len(inst.cards)-1)
 	inst.remove_cards(c)
 	$Attack.add_cards(c)
@@ -69,8 +69,6 @@ func _on_Tally_done(c):
 		dest = $EnemyController
 	dest.add_cards($Attack.return_all())
 
-	# TODO: Attempt to add cards from Offhand
-
 	$Attack/LevelBar.count(0)
 
 	if $Mainhand.count() == 0:
@@ -79,6 +77,13 @@ func _on_Tally_done(c):
 		emit_signal("done", true)
 	else:
 		set_input(true)
+		var take = stats.get_mainhand() - $Mainhand.count()
+		print(stats.get_mainhand(), $Mainhand.count(), take)
+		c = []
+		for i in range(min(take, $Offhand.count())):
+			print("vitut")
+			c.append($Offhand.cards.pop_front())
+		$Mainhand.add_cards(c)
 
 func clear():
 	for inst in get_children():

@@ -12,6 +12,8 @@ func _ready():
 
 
 func set_bars(new_bar_count):
+	# TODO: Implement a blinking one: if it has Timer it should turn itself off
+	# Would be used to visualize Stats/Attack
 	if len(bars) < new_bar_count:
 		for i in range(new_bar_count-len(bars)):
 			var new_bar = shape.duplicate()

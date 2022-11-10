@@ -56,11 +56,15 @@ func move_to(new_position):
 
 
 func kill():
-	# TODO: killing animation
-	queue_free()
+	$AlphaTween.interpolate_property(self, "modulate", Color(1, 1, 1, 1), Color(1, 1, 1, 0), 2, Tween.TRANS_QUAD)
+	$AlphaTween.start()
 
 
 func flip():
 	face_up = !face_up
 	update_face()
 	
+
+
+func _on_AlphaTween_completed(object, key):
+	queue_free()

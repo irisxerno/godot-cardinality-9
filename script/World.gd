@@ -6,6 +6,7 @@ var tiles = []
 var tile_rsize = 125
 var tile_csize = 100
 
+
 func world_from_data(world):
 	var tile_scene = preload("res://scene/Tile.tscn")
 	var card_scene = preload("res://scene/Card.tscn")

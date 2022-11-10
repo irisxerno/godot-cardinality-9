@@ -22,9 +22,9 @@ func _on_select_tile(tile):
 	$Builder.visible = false
 	$Fight.visible = true
 	$Fight.set_input(false)
-	$Background.set_color("fight")
+	$Background.to_color("fight")
 
-	$Fight.attack = $Tabs/StatsView/Stats/Attack.level
+	$Fight.stats = $Tabs/StatsView/Stats
 	$Fight.tile = tile
 	$Fight/Mainhand.add_cards($Builder/Mainhand.cards())
 	$Fight/Extra.add_cards($Builder/Deal.cards())
@@ -34,9 +34,9 @@ func _on_select_tile(tile):
 
 func _on_GameStartDealer_done():
 	$Tabs.update_all("close")
-	$Background.set_color("build")
+	$Background.to_color("build")
 	state = "build"
-	update_world_odist()
+	call_deferred("update_world_odist")
 
 
 func update_world_odist():
@@ -63,8 +63,11 @@ func _on_Fight_done(win):
 
 		# TODO: we need to update the tickers
 		$Tabs/StatsView/Stats.return_cost($Fight/Extra.count()+len(reward)-len(r))
-		
+
 		$Tabs/WorldView/World.defeat($Fight.tile)
+		$Background.set_color("growth")
+	else:
+		$Background.set_color("death")
 
 	$Cards.mark_death()
 	
@@ -72,7 +75,7 @@ func _on_Fight_done(win):
 	$Tabs.update_all("close")
 	$Builder.visible = true
 	$Fight.visible = false
-	$Background.set_color("build")
+	$Background.to_color("build")
 	$Builder.update()
 	
 	$Fight.clear()
