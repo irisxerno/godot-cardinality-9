@@ -14,7 +14,9 @@ export var face_up = true
 
 
 func deal_from_data(card_data):
-	print(card_data)
+	if len(card_data) == 0:
+		return
+	anim_count = 0
 	var scene = preload("res://scene/Card.tscn")
 	for d in card_data:
 		var inst = scene.instance()

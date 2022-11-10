@@ -13,6 +13,10 @@ export var count = -1
 var base_shape
 
 
+func cards():
+	return cards
+
+
 func _ready():
 	base_shape = $CollisionShape2D.shape.duplicate()
 

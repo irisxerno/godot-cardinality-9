@@ -34,3 +34,14 @@ func _on_Deal_request_return_cards(inst):
 	inst.remove_cards(c)
 	dest.add_cards(c)
 
+
+func update():
+	for inst in get_children():
+		if inst.has_method("update"):
+			inst.update()
+
+
+func clear():
+	for inst in get_children():
+		if inst.has_method("return_all"):
+			inst.return_all()

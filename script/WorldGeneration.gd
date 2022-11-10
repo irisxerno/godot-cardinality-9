@@ -41,6 +41,18 @@ func _rand_armories(w, h):
 	return armories
 
 
+func _rand_reward(w, num):
+	var cards = []
+	var suit = rng.randi_range(1, 4 + w)
+	for i in range(num):
+		var value = rng.randi_range(2, 13)
+		cards.append({
+			"value": value,
+			"suit": suit
+		})
+	return cards
+
+
 func _rand_tile(w, h):
 	var num = _rand_tile_num(w, h)
 	var cards = []
@@ -55,7 +67,8 @@ func _rand_tile(w, h):
 		})
 	return {
 		"cards": cards,
-		"armories": _rand_armories(w, h)
+		"armories": _rand_armories(w, h),
+		"reward": _rand_reward(w, num)
 	}
 
 

@@ -13,6 +13,8 @@ const suit_visual = ["Ν","β","δ","λ","φ","Ξ","Γ","Σ","Ψ","Ω","Μ"]
 var dest_position = position
 var dest_a = 1
 
+var death = false
+
 
 func _ready():
 	update_face()
@@ -44,6 +46,11 @@ func move_to(new_position):
 	dest_position = new_position
 	$Tween.interpolate_property(self, "position", position, dest_position, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
 	$Tween.start()
+
+
+func kill():
+	# TODO: killing animation
+	queue_free()
 
 
 func flip():

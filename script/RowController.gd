@@ -26,6 +26,7 @@ func _ready():
 		level_bar = get_node("LevelBar")
 		level_bar.set_bars(max_count)
 
+
 func update():
 	add_cards([])
 
@@ -35,6 +36,20 @@ func cards():
 
 	for inst in cols:
 		cards.append_array(inst.cards)
+
+	return cards
+
+
+func count():
+	return count
+
+
+func return_all():
+	var cards = []
+
+	for inst in cols:
+		cards.append_array(inst.cards)
+		inst.cards = []
 
 	return cards
 
@@ -52,6 +67,7 @@ func add_cards(new_cards):
 	
 	for inst in cards:
 		inst.face_up = true
+		inst.death = false
 		inst.update()
 	
 	var by_suits = Sort.to_suits(cards)

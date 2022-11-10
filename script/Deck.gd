@@ -28,6 +28,20 @@ func remove_cards(rcs):
 	update()
 
 
+func request_take_cards(inst):
+	var new_cards = inst.cards
+	inst.remove_cards(new_cards)
+	add_cards(new_cards)
+
+
+func cards():
+	return cards
+
+
+func count():
+	return len(cards)
+
+
 func update():
 	var cursor = Vector2(0,0)
 	for inst in cards:
@@ -35,3 +49,8 @@ func update():
 		inst.move_to(self.position+cursor)
 		cursor += step
 	count = len(cards)
+
+
+func return_all():
+	return cards
+	cards = []

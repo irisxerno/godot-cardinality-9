@@ -33,12 +33,26 @@ rect_scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 2 )
 
 [node name="Defeated" type="TextureRect" parent="."]
+modulate = Color( 0.501961, 0.501961, 0.501961, 0.501961 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 300.0
-margin_bottom = 300.0
-rect_scale = Vector2( 0.25, 0.25 )
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 325.0
+margin_bottom = 325.0
+rect_scale = Vector2( 0.125, 0.125 )
 texture = ExtResource( 5 )
+expand = true
+stretch_mode = 4
+
+[node name="Dot" type="TextureRect" parent="."]
+modulate = Color( 0.501961, 0.501961, 0.501961, 0.25098 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 700.0
+margin_bottom = 700.0
+rect_scale = Vector2( 0.125, 0.125 )
+texture = ExtResource( 2 )
 expand = true
 stretch_mode = 4
 

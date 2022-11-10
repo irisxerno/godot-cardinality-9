@@ -16,7 +16,6 @@
 [ext_resource path="res://script/Deck.gd" type="Script" id=14]
 [ext_resource path="res://script/Background.gd" type="Script" id=15]
 [ext_resource path="res://script/Fight.gd" type="Script" id=16]
-[ext_resource path="res://scene/Card.tscn" type="PackedScene" id=17]
 [ext_resource path="res://script/Tally.gd" type="Script" id=18]
 
 [sub_resource type="DynamicFont" id=4]
@@ -24,6 +23,9 @@ size = 32
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 12 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 630, 350 )
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.1875, 0.25, 0.208333, 0.752941 )
@@ -81,13 +83,12 @@ position = Vector2( 200, 520 )
 
 [node name="Dealer" parent="Builder" instance=ExtResource( 3 )]
 visible = true
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Fight" type="Node2D" parent="."]
 script = ExtResource( 16 )
-
-[node name="Card" parent="Fight" instance=ExtResource( 17 )]
-visible = false
-position = Vector2( 300, 350 )
 
 [node name="Mainhand" parent="Fight" instance=ExtResource( 1 )]
 position = Vector2( 300, 550 )
@@ -108,12 +109,16 @@ position = Vector2( 300, 260 )
 position = Vector2( 1400, 300 )
 script = ExtResource( 14 )
 
+[node name="Trash" type="Node2D" parent="Fight"]
+position = Vector2( -100, 300 )
+script = ExtResource( 14 )
+
 [node name="Attack" parent="Fight" instance=ExtResource( 1 )]
 position = Vector2( 300, 430 )
 
 [node name="Dealer" parent="Fight" instance=ExtResource( 3 )]
 visible = true
-position = Vector2( 510, -50 )
+position = Vector2( 510, -150 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -123,9 +128,12 @@ face_up = false
 visible = true
 position = Vector2( 0, 240 )
 
-[node name="Tally" type="Node2D" parent="Fight"]
+[node name="Tally" type="Area2D" parent="Fight"]
 position = Vector2( 200, 340 )
 script = ExtResource( 18 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Label" type="Label" parent="Fight/Tally"]
 anchor_left = 0.5
@@ -141,6 +149,12 @@ text = "0"
 align = 1
 valign = 1
 autowrap = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fight/Tally"]
+visible = false
+position = Vector2( 440, 20 )
+shape = SubResource( 5 )
+disabled = true
 
 [node name="Cards" type="Node2D" parent="."]
 script = ExtResource( 4 )
@@ -164,12 +178,12 @@ anchor_right = 0.75
 margin_left = -960.0
 margin_right = 320.0
 margin_bottom = 720.0
-open_distance = 150
+open_distance = 220
 
 [node name="Background" parent="Tabs/WorldView" index="0"]
 anchor_left = 0.75
 anchor_right = 0.75
-margin_left = -600.0
+margin_left = -460.0
 margin_top = -600.0
 margin_right = 200.0
 custom_styles/panel = SubResource( 1 )
@@ -184,10 +198,10 @@ margin_bottom = 500.0
 mouse_filter = 1
 
 [node name="World" type="Control" parent="Tabs/WorldView"]
-margin_left = 410.0
-margin_top = -130.0
-margin_right = 410.0
-margin_bottom = -130.0
+margin_left = 530.0
+margin_top = -120.0
+margin_right = 530.0
+margin_bottom = -120.0
 script = ExtResource( 9 )
 __meta__ = {
 "_edit_group_": true
@@ -231,7 +245,6 @@ margin_top = -220.0
 margin_right = 300.0
 margin_bottom = 310.0
 script = ExtResource( 13 )
-xp = 100
 
 [node name="XP" type="Label" parent="Tabs/StatsView/Stats"]
 anchor_right = 1.0
@@ -310,10 +323,13 @@ mult = 5
 [connection signal="add_card" from="Builder/Dealer" to="Cards" method="add_card"]
 [connection signal="done" from="Builder/Dealer" to="." method="_on_GameStartDealer_done"]
 [connection signal="return_cards" from="Builder/Dealer" to="Builder/Deal" method="add_cards"]
+[connection signal="done" from="Fight" to="." method="_on_Fight_done"]
 [connection signal="request_return_cards" from="Fight/Mainhand" to="Fight" method="_on_Mainhand_request_return_cards"]
 [connection signal="add_card" from="Fight/Dealer" to="Cards" method="add_card"]
 [connection signal="done" from="Fight/Dealer" to="Fight" method="_on_Dealer_done"]
-[connection signal="return_cards" from="Fight/Dealer" to="Fight/EnemyController" method="add_cards"]
+[connection signal="return_cards" from="Fight/Dealer" to="Fight" method="_on_Dealer_return_cards"]
+[connection signal="done" from="Fight/Tally" to="Fight" method="_on_Tally_done"]
+[connection signal="input_event" from="Fight/Tally" to="Fight/Tally" method="_on_input_event"]
 [connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_from_data"]
 [connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="world_from_data"]
 [connection signal="select_tile" from="Tabs/WorldView/World" to="." method="_on_select_tile"]

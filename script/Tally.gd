@@ -3,23 +3,19 @@ extends Node2D
 
 signal done
 
+var last_c
+
 
 func start_count(a, e):
 	var ac = count(a)
 	var ec = count(e)
-	$Label.text = str(ac-ec)
-	var c = 0
-	if ac >= ec:
-		c += 1
-	if ec >= ac:
-		c -= 1
-	print(c)
-	emit_signal("done", c)
+	last_c = ac-ec
+	$Label.text = str(last_c)
+	$CollisionShape2D.disabled = false
 
 
 static func count(deck):
 	var s = Sort.to_suits(deck)
-	print(s)
 	var i = 0
 	for k in s:
 		var ii = 1
@@ -27,3 +23,11 @@ static func count(deck):
 			ii *= inst.value
 		i += ii
 	return i
+
+
+func _on_input_event(viewport, event, shape_idx):
+	if event is InputEventMouseButton and event.pressed:
+
+		$CollisionShape2D.disabled = true
+		emit_signal("done", last_c)
+		$Label.text = "0"
