@@ -76,6 +76,8 @@ position = Vector2( 200, 160 )
 [node name="Deal" parent="Builder" instance=ExtResource( 1 )]
 position = Vector2( 200, 340 )
 
+[node name="LevelBar" parent="Builder/Deal" instance=ExtResource( 5 )]
+
 [node name="Mainhand" parent="Builder" instance=ExtResource( 1 )]
 position = Vector2( 200, 520 )
 
@@ -92,7 +94,6 @@ script = ExtResource( 16 )
 
 [node name="Mainhand" parent="Fight" instance=ExtResource( 1 )]
 position = Vector2( 300, 550 )
-max_count = 5
 
 [node name="Offhand" type="Node2D" parent="Fight"]
 position = Vector2( 100, 560 )
@@ -115,6 +116,9 @@ script = ExtResource( 14 )
 
 [node name="Attack" parent="Fight" instance=ExtResource( 1 )]
 position = Vector2( 300, 430 )
+
+[node name="LevelBar" parent="Fight/Attack" instance=ExtResource( 5 )]
+position = Vector2( 0, 0 )
 
 [node name="Dealer" parent="Fight" instance=ExtResource( 3 )]
 visible = true
@@ -245,6 +249,7 @@ margin_top = -220.0
 margin_right = 300.0
 margin_bottom = 310.0
 script = ExtResource( 13 )
+xp = 100
 
 [node name="XP" type="Label" parent="Tabs/StatsView/Stats"]
 anchor_right = 1.0
@@ -317,8 +322,10 @@ margin_bottom = 155.0
 base = 5
 mult = 5
 
+[connection signal="dump" from="Builder/Offhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder/Deal" method="request_take_cards"]
 [connection signal="request_return_cards" from="Builder/Deal" to="Builder" method="_on_Deal_request_return_cards"]
+[connection signal="dump" from="Builder/Mainhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Mainhand" to="Builder/Deal" method="request_take_cards"]
 [connection signal="add_card" from="Builder/Dealer" to="Cards" method="add_card"]
 [connection signal="done" from="Builder/Dealer" to="." method="_on_GameStartDealer_done"]
@@ -335,12 +342,18 @@ mult = 5
 [connection signal="select_tile" from="Tabs/WorldView/World" to="." method="_on_select_tile"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="try_buy"]
+[connection signal="update" from="Tabs/StatsView/Stats/Mainhand" to="Builder/Mainhand" method="limit"]
+[connection signal="update" from="Tabs/StatsView/Stats/Mainhand" to="Builder/Mainhand/LevelBar" method="set_bars"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Offhand" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Offhand" to="Tabs/StatsView/Stats" method="try_buy"]
+[connection signal="update" from="Tabs/StatsView/Stats/Offhand" to="Builder/Offhand" method="limit"]
+[connection signal="update" from="Tabs/StatsView/Stats/Offhand" to="Builder/Offhand/LevelBar" method="set_bars"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Extra" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Extra" to="Tabs/StatsView/Stats" method="try_buy"]
+[connection signal="update" from="Tabs/StatsView/Stats/Extra" to="Builder/Deal/LevelBar" method="set_bars"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Attack" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Attack" to="Tabs/StatsView/Stats" method="try_buy"]
+[connection signal="update" from="Tabs/StatsView/Stats/Attack" to="Fight/Attack/LevelBar" method="set_bars"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="try_buy"]
 

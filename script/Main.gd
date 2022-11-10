@@ -5,6 +5,7 @@ signal start_fight
 var state = "none"
 
 func _ready():
+	$Builder.stats = $Tabs/StatsView/Stats
 	$Tabs.update_all("hide")
 	$Builder.visible = true
 	$Fight.visible = false
@@ -47,17 +48,20 @@ func update_world_odist():
 
 func _on_Fight_done(win):
 	# TODO: losing animation
-	
+
 	if win:
 		$Builder.clear()
 		$Builder/Mainhand.add_cards($Fight/Mainhand.cards())
 		$Builder/Offhand.add_cards($Fight/Offhand.cards())
+
 		var reward = $Fight.tile.reward
 		var maxc = $Tabs/StatsView/Stats/Mainhand.level + $Tabs/StatsView/Stats/Offhand.level + $Tabs/StatsView/Stats/Extra.level - $Fight/Mainhand.count() - $Fight/Offhand.count()
 		var r = []
 		if maxc > 0:
 			r = reward.slice(0, maxc-1)
 		$Builder/Dealer.deal_from_data(r)
+
+		# TODO: we need to update the tickers
 		$Tabs/StatsView/Stats.return_cost($Fight/Extra.count()+len(reward)-len(r))
 		
 		$Tabs/WorldView/World.defeat($Fight.tile)

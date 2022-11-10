@@ -38,8 +38,12 @@ func _on_Mainhand_request_return_cards(inst):
 	var enemy_curr = inst.count
 	attack_curr = $EnemyAttack.count
 	take = $Attack.count
-	c = inst.cards.slice(max(inst.count-take,0), inst.count-1)
-	inst.remove_cards(c)
+	
+	c = []
+	for i in range(min(take, len(inst.cards))):
+		c.append(inst.cards.pop_front())
+	
+	inst.update()
 	$EnemyAttack.add_cards(c)
 	
 	$Tally.start_count($Attack.cards(), $EnemyAttack.cards())
@@ -56,18 +60,18 @@ func _on_Dealer_return_cards(new_cards):
 
 
 func _on_Tally_done(c):
-
 	var dest = $Trash
 	if c >= 0:
 		dest = $Mainhand
 	dest.add_cards($EnemyAttack.return_all())
 	dest = $Trash
 	if c <= 0:
-		# TODO: FIFO instead of stack
 		dest = $EnemyController
 	dest.add_cards($Attack.return_all())
 
 	# TODO: Attempt to add cards from Offhand
+
+	$Attack/LevelBar.count(0)
 
 	if $Mainhand.count() == 0:
 		emit_signal("done", false)
@@ -76,12 +80,8 @@ func _on_Tally_done(c):
 	else:
 		set_input(true)
 
-
 func clear():
 	for inst in get_children():
 		if inst.has_method("return_all"):
 			inst.return_all()
 	tile = null
-	# ???
-	$Offhand.cards = []
-	$Trash.cards = []

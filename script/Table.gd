@@ -4,17 +4,13 @@ export var mainhand = 5
 export var offhand = 5
 export var attack = 5
 
-
-func _enter_tree():
-	update_counts()
-
-
-func update_counts():
-	$Mainhand.max_count = mainhand
-	$Offhand.max_count = offhand
+var stats = null
 
 
 func _on_Deal_request_return_cards(inst):
+	var mainhand = stats.get_mainhand()
+	var offhand = stats.get_offhand()
+	var attack = stats.get_attack()
 	var mainhand_curr = $Mainhand.count
 	var offhand_curr = $Offhand.count
 	var take

@@ -15,8 +15,15 @@ var dest_a = 1
 
 var death = false
 
+export var test = false
+
 
 func _ready():
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	if test:
+		value = rng.randi_range(2,13)
+		suit = rng.randi_range(1,9)
 	update_face()
 
 

@@ -2,13 +2,13 @@ extends Node2D
 
 
 signal request_return_cards
+signal dump
 
 var column_controller_scene = preload("res://scene/ColumnController.tscn") 
 var movex = 110
 var cols = []
 
 var count = 0
-export var max_count = 0
 
 var level_bar
 
@@ -22,9 +22,8 @@ func toggle():
 
 
 func _ready():
-	if max_count != -1 and has_node("LevelBar"):
+	if has_node("LevelBar"):
 		level_bar = get_node("LevelBar")
-		level_bar.set_bars(max_count)
 
 
 func update():
@@ -102,6 +101,17 @@ func request_take_cards(inst):
 	var new_cards = inst.cards
 	inst.remove_cards(new_cards)
 	add_cards(new_cards)
+
+
+func limit(n):
+	var cards = return_all()
+	var ret = []
+	var ii = len(cards) - n
+	if ii > 0:
+		for i in range(ii):
+			ret.append(cards.pop_back())
+	add_cards(cards)
+	emit_signal("dump", ret)
 
 
 func pop_col(inst):

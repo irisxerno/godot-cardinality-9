@@ -7,6 +7,7 @@ var last_c
 
 
 func start_count(a, e):
+	# TODO: make it tick
 	var ac = count(a)
 	var ec = count(e)
 	last_c = ac-ec
@@ -27,7 +28,6 @@ static func count(deck):
 
 func _on_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed:
-
 		$CollisionShape2D.disabled = true
 		emit_signal("done", last_c)
 		$Label.text = "0"

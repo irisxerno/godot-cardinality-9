@@ -2,6 +2,7 @@ extends Control
 
 signal return_cost
 signal try_buy
+signal update
 
 export var default = 0
 export var base = 0
@@ -33,8 +34,10 @@ func increase():
 
 func update():
 	$Level.text = str(level)
+	$Cost.text = ""
 	if cost() != level:
 		$Cost.text = str(cost())
+	emit_signal("update", level)
 
 
 func _on_gui_input(event):

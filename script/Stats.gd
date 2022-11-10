@@ -22,3 +22,15 @@ func try_buy(inst):
 func return_cost(i):
 	xp += i
 	update()
+
+
+func get_mainhand():
+	return $Mainhand.level
+func get_offhand():
+	return $Offhand.level
+func get_extra():
+	return $Extra.level
+func get_attack():
+	return $Attack.level
+func get_armory():
+	return $Armory.level

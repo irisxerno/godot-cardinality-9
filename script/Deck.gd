@@ -52,5 +52,6 @@ func update():
 
 
 func return_all():
-	return cards
 	cards = []
+	return cards
+
