@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://script/StartGameController.gd" type="Script" id=1]
+[ext_resource path="res://script/Dealer.gd" type="Script" id=1]
 
-[node name="StartGameController" type="Node2D"]
+[node name="Dealer" type="Node2D"]
 visible = false
 position = Vector2( 640, -90 )
 script = ExtResource( 1 )
@@ -19,6 +19,7 @@ position = Vector2( 0, 480 )
 wait_time = 0.1
 
 [node name="DispAnimTimer" type="Timer" parent="."]
+wait_time = 0.5
 one_shot = true
 
 [connection signal="timeout" from="DealAnimTimer" to="." method="_on_DealAnimTimer_timeout"]

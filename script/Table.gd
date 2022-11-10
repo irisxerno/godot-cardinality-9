@@ -1,6 +1,5 @@
 extends Node2D
 
-
 export var mainhand = 5
 export var offhand = 5
 export var attack = 5
@@ -13,11 +12,6 @@ func _enter_tree():
 func update_counts():
 	$Mainhand.max_count = mainhand
 	$Offhand.max_count = offhand
-
-
-func add_card(inst):
-	inst.connect("to_front", self, "to_front")
-	call_deferred("add_child", inst)
 
 
 func _on_Deal_request_return_cards(inst):
@@ -38,4 +32,5 @@ func _on_Deal_request_return_cards(inst):
 		take = min(take, attack)
 	var c = inst.cards.slice(max(len(inst.cards)-take,0), len(inst.cards)-1)
 	inst.remove_cards(c)
-	dest.update_cols(c)
+	dest.add_cards(c)
+

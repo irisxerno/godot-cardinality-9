@@ -1,8 +1,8 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
-[ext_resource path="res://scene/StartGameController.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scene/Dealer.tscn" type="PackedScene" id=3]
 [ext_resource path="res://script/Cards.gd" type="Script" id=4]
 [ext_resource path="res://scene/LevelBar.tscn" type="PackedScene" id=5]
 [ext_resource path="res://scene/Pulltab.tscn" type="PackedScene" id=6]
@@ -13,6 +13,17 @@
 [ext_resource path="res://scene/Stat.tscn" type="PackedScene" id=11]
 [ext_resource path="res://res/Hack-Bold.ttf" type="DynamicFontData" id=12]
 [ext_resource path="res://script/Stats.gd" type="Script" id=13]
+[ext_resource path="res://script/Deck.gd" type="Script" id=14]
+[ext_resource path="res://script/Background.gd" type="Script" id=15]
+[ext_resource path="res://script/Fight.gd" type="Script" id=16]
+[ext_resource path="res://scene/Card.tscn" type="PackedScene" id=17]
+[ext_resource path="res://script/Tally.gd" type="Script" id=18]
+
+[sub_resource type="DynamicFont" id=4]
+size = 32
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 12 )
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.1875, 0.25, 0.208333, 0.752941 )
@@ -41,10 +52,13 @@ script = ExtResource( 10 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-color = Color( 0.16, 0.186667, 0.2, 1 )
+color = Color( 0.121569, 0.121569, 0.121569, 1 )
+script = ExtResource( 15 )
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="Tween" type="Tween" parent="Background"]
 
 [node name="Builder" type="Node2D" parent="."]
 script = ExtResource( 2 )
@@ -65,21 +79,84 @@ position = Vector2( 200, 520 )
 
 [node name="LevelBar" parent="Builder/Mainhand" instance=ExtResource( 5 )]
 
+[node name="Dealer" parent="Builder" instance=ExtResource( 3 )]
+visible = true
+
+[node name="Fight" type="Node2D" parent="."]
+script = ExtResource( 16 )
+
+[node name="Card" parent="Fight" instance=ExtResource( 17 )]
+visible = false
+position = Vector2( 300, 350 )
+
+[node name="Mainhand" parent="Fight" instance=ExtResource( 1 )]
+position = Vector2( 300, 550 )
+max_count = 5
+
+[node name="Offhand" type="Node2D" parent="Fight"]
+position = Vector2( 100, 560 )
+script = ExtResource( 14 )
+
+[node name="EnemyController" type="Node2D" parent="Fight"]
+position = Vector2( 510, 190 )
+script = ExtResource( 14 )
+
+[node name="EnemyAttack" parent="Fight" instance=ExtResource( 1 )]
+position = Vector2( 300, 260 )
+
+[node name="Extra" type="Node2D" parent="Fight"]
+position = Vector2( 1400, 300 )
+script = ExtResource( 14 )
+
+[node name="Attack" parent="Fight" instance=ExtResource( 1 )]
+position = Vector2( 300, 430 )
+
+[node name="Dealer" parent="Fight" instance=ExtResource( 3 )]
+visible = true
+position = Vector2( 510, -50 )
+__meta__ = {
+"_edit_group_": true
+}
+face_up = false
+
+[node name="MoveTo" parent="Fight/Dealer" index="0"]
+visible = true
+position = Vector2( 0, 240 )
+
+[node name="Tally" type="Node2D" parent="Fight"]
+position = Vector2( 200, 340 )
+script = ExtResource( 18 )
+
+[node name="Label" type="Label" parent="Fight/Tally"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -150.0
+margin_top = -40.0
+margin_right = 50.0
+margin_bottom = 60.0
+custom_fonts/font = SubResource( 4 )
+text = "0"
+align = 1
+valign = 1
+autowrap = true
+
 [node name="Cards" type="Node2D" parent="."]
 script = ExtResource( 4 )
 
 [node name="WorldGeneration" type="Node" parent="."]
 script = ExtResource( 7 )
 
-[node name="GameStartDealer" parent="." instance=ExtResource( 3 )]
-visible = true
-quick = true
-
 [node name="Tabs" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 8 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
 
 [node name="WorldView" parent="Tabs" instance=ExtResource( 6 )]
 anchor_left = 0.75
@@ -230,10 +307,16 @@ mult = 5
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder/Deal" method="request_take_cards"]
 [connection signal="request_return_cards" from="Builder/Deal" to="Builder" method="_on_Deal_request_return_cards"]
 [connection signal="request_return_cards" from="Builder/Mainhand" to="Builder/Deal" method="request_take_cards"]
-[connection signal="return_card_data" from="WorldGeneration" to="GameStartDealer" method="deal_from_data"]
+[connection signal="add_card" from="Builder/Dealer" to="Cards" method="add_card"]
+[connection signal="done" from="Builder/Dealer" to="." method="_on_GameStartDealer_done"]
+[connection signal="return_cards" from="Builder/Dealer" to="Builder/Deal" method="add_cards"]
+[connection signal="request_return_cards" from="Fight/Mainhand" to="Fight" method="_on_Mainhand_request_return_cards"]
+[connection signal="add_card" from="Fight/Dealer" to="Cards" method="add_card"]
+[connection signal="done" from="Fight/Dealer" to="Fight" method="_on_Dealer_done"]
+[connection signal="return_cards" from="Fight/Dealer" to="Fight/EnemyController" method="add_cards"]
+[connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_from_data"]
 [connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="world_from_data"]
-[connection signal="add_card" from="GameStartDealer" to="Cards" method="add_card"]
-[connection signal="return_cards" from="GameStartDealer" to="Builder/Deal" method="update_cols"]
+[connection signal="select_tile" from="Tabs/WorldView/World" to="." method="_on_select_tile"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="try_buy"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Offhand" to="Tabs/StatsView/Stats" method="return_cost"]
@@ -245,5 +328,6 @@ mult = 5
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="try_buy"]
 
+[editable path="Fight/Dealer"]
 [editable path="Tabs/WorldView"]
 [editable path="Tabs/StatsView"]

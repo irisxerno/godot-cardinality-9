@@ -29,24 +29,15 @@ func update():
 		$Defeated.visible = true
 
 
-var mouse_entered = false
-
-
-func _on_mouse_entered():
-	mouse_entered = true
-
-func _on_mouse_exited():
-	mouse_entered = false
-
-
 func _on_gui_input(event):
 	if state == "show" and event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		mouse_entered = true
+		if selected:
+			emit_signal("request_select", self)
 		selected = !selected
 		update()
 
 
 func _input(event):
-	if event is InputEventMouseButton and event.pressed and !mouse_entered and selected:
+	if event is InputEventMouseButton and event.pressed and not Rect2(Vector2(), rect_size).has_point(get_local_mouse_position()) and selected:
 		selected = false
 		update()

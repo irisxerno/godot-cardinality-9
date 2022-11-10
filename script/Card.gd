@@ -37,6 +37,7 @@ func update_face():
 
 
 func move_to(new_position):
+	update_face()
 	emit_signal("to_front", self)
 	if position == new_position or dest_position == new_position:
 		return

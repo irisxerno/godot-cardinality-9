@@ -1,5 +1,6 @@
 extends Control
 
+signal select_tile
 
 var tiles = []
 var tile_size = 150
@@ -22,3 +23,7 @@ func world_from_data(world):
 		if row > 4-col:
 			row = 0
 			col += 1
+
+
+func request_select(inst):
+	emit_signal("select_tile", inst)

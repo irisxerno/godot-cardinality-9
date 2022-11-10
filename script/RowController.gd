@@ -12,30 +12,50 @@ export var max_count = 0
 
 var level_bar
 
+export var move_vect = Vector2(0, -200)
+
+
+func toggle():
+	position -= move_vect
+	move_vect *= -1
+	update()
+
 
 func _ready():
 	if max_count != -1 and has_node("LevelBar"):
 		level_bar = get_node("LevelBar")
 		level_bar.set_bars(max_count)
 
-
 func update():
-	update_cols([])
+	add_cards([])
 
 
-func update_cols(new_cards):
+func cards():
 	var cards = []
-	
+
+	for inst in cols:
+		cards.append_array(inst.cards)
+
+	return cards
+
+
+func add_cards(new_cards):
+	var cards = []
+
 	for inst in cols:
 		cards.append_array(inst.cards)
 		inst.cards = []
 		inst.update()
-		
+
 	cards.append_array(new_cards)
 	count = len(cards)
 	
-	var by_suits = Sort.to_suits(cards)
+	for inst in cards:
+		inst.face_up = true
+		inst.update()
 	
+	var by_suits = Sort.to_suits(cards)
+
 	var cursor = Vector2(0,0)
 	var colc = 0
 	for suit in by_suits.keys():
@@ -65,7 +85,7 @@ func _request_return_cards(inst):
 func request_take_cards(inst):
 	var new_cards = inst.cards
 	inst.remove_cards(new_cards)
-	update_cols(new_cards)
+	add_cards(new_cards)
 
 
 func pop_col(inst):
