@@ -15,7 +15,7 @@ export var hide_distance = -100
 export var property = "margin_top"
 
 
-func update_state(new_state):
+func update_state(new_state, tween=true):
 	var dest_dist = close_distance
 	if new_state == "open":
 		dest_dist = open_distance
@@ -23,8 +23,11 @@ func update_state(new_state):
 	elif new_state == "hide":
 		dest_dist = hide_distance
 		emit_signal("close")
-	$Tween.interpolate_property(self, property, get(property), dest_dist, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
-	$Tween.start()
+	if not tween:
+		self.set(property, dest_dist)
+	else:
+		$Tween.interpolate_property(self, property, get(property), dest_dist, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
+		$Tween.start()
 	state = new_state
 
 

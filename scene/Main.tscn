@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://script/Background.gd" type="Script" id=15]
 [ext_resource path="res://script/Fight.gd" type="Script" id=16]
 [ext_resource path="res://script/Tally.gd" type="Script" id=18]
+[ext_resource path="res://script/ArmoryController.gd" type="Script" id=19]
 
 [sub_resource type="DynamicFont" id=4]
 size = 32
@@ -99,6 +100,13 @@ position = Vector2( 300, 550 )
 position = Vector2( 100, 560 )
 script = ExtResource( 14 )
 
+[node name="ArmoryController" type="Node2D" parent="Fight"]
+position = Vector2( 100, -100 )
+script = ExtResource( 19 )
+
+[node name="MoveTo" type="Position2D" parent="Fight/ArmoryController"]
+position = Vector2( 0, 200 )
+
 [node name="EnemyController" type="Node2D" parent="Fight"]
 position = Vector2( 510, 190 )
 script = ExtResource( 14 )
@@ -161,6 +169,9 @@ shape = SubResource( 5 )
 disabled = true
 
 [node name="Cards" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="Armories" type="Node2D" parent="."]
 script = ExtResource( 4 )
 
 [node name="WorldGeneration" type="Node" parent="."]
@@ -310,6 +321,7 @@ default = 5
 mult = 5
 
 [node name="Armory" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
+visible = false
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -321,6 +333,22 @@ margin_bottom = 155.0
 base = 5
 mult = 5
 
+[node name="Label2" type="Label" parent="Tabs/StatsView/Stats"]
+modulate = Color( 1, 1, 1, 0.501961 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -100.0
+margin_top = 160.0
+margin_right = -20.0
+margin_bottom = 240.0
+custom_fonts/font = SubResource( 4 )
+text = "?"
+align = 1
+valign = 1
+autowrap = true
+
 [connection signal="dump" from="Builder/Offhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder/Deal" method="request_take_cards"]
 [connection signal="request_return_cards" from="Builder/Deal" to="Builder" method="_on_Deal_request_return_cards"]
@@ -331,6 +359,7 @@ mult = 5
 [connection signal="return_cards" from="Builder/Dealer" to="Builder/Deal" method="add_cards"]
 [connection signal="done" from="Fight" to="." method="_on_Fight_done"]
 [connection signal="request_return_cards" from="Fight/Mainhand" to="Fight" method="_on_Mainhand_request_return_cards"]
+[connection signal="add_card" from="Fight/ArmoryController" to="Armories" method="add_card"]
 [connection signal="add_card" from="Fight/Dealer" to="Cards" method="add_card"]
 [connection signal="done" from="Fight/Dealer" to="Fight" method="_on_Dealer_done"]
 [connection signal="return_cards" from="Fight/Dealer" to="Fight" method="_on_Dealer_return_cards"]

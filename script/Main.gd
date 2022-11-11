@@ -6,7 +6,7 @@ var state = "none"
 
 func _ready():
 	$Builder.stats = $Tabs/StatsView/Stats
-	$Tabs.update_all("hide")
+	$Tabs.update_all("hide", false)
 	$Builder.visible = true
 	$Fight.visible = false
 
@@ -33,6 +33,7 @@ func _on_select_tile(tile):
 	$Fight/Extra.add_cards($Builder/Deal.cards())
 	$Fight/Offhand.add_cards($Builder/Offhand.cards())
 	$Fight/Dealer.deal_from_data(tile.cards)
+	$Fight/ArmoryController.deal_from_data(tile.armories)
 
 
 func _on_GameStartDealer_done():
@@ -62,6 +63,7 @@ func _on_Fight_done(win):
 		var r = []
 		if maxc > 0:
 			r = reward.slice(0, maxc-1)
+		# TODO: block input while this animation is playing
 		$Builder/Dealer.deal_from_data(r)
 
 		# TODO: we need to update the tickers

@@ -38,15 +38,18 @@ func _on_Mainhand_request_return_cards(inst):
 	var enemy_curr = inst.count
 	attack_curr = $EnemyAttack.count
 	take = $Attack.count
-	
+
 	c = []
 	for i in range(min(take, len(inst.cards))):
 		c.append(inst.cards.pop_front())
-	
+
 	inst.update()
 	$EnemyAttack.add_cards(c)
-	
-	$Tally.start_count($Attack.cards(), $EnemyAttack.cards())
+
+	var ec = $EnemyAttack.cards()
+	ec.append_array($ArmoryController.list())
+
+	$Tally.start_count($Attack.cards(), ec)
 
 
 func _on_Dealer_done():
@@ -78,10 +81,8 @@ func _on_Tally_done(c):
 	else:
 		set_input(true)
 		var take = stats.get_mainhand() - $Mainhand.count()
-		print(stats.get_mainhand(), $Mainhand.count(), take)
 		c = []
 		for i in range(min(take, $Offhand.count())):
-			print("vitut")
 			c.append($Offhand.cards.pop_front())
 		$Mainhand.add_cards(c)
 

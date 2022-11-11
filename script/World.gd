@@ -1,6 +1,7 @@
 extends Control
 
 signal select_tile
+signal ccount
 
 var tiles = []
 var tile_rsize = 125
@@ -56,3 +57,5 @@ func defeat(inst):
 		if tile.row > inst.row - 2 and tile.row < inst.row + 2 and tile.col > inst.col - 2 and tile.col < inst.col + 2:
 			if not (tile.row - inst.row == tile.col - inst.col):
 				tile.advance_state()
+				print(ccount())
+				#emit_signal("ccount", ccount())

@@ -16,7 +16,7 @@ var dest_a = 1
 var death = false
 
 export var test = false
-
+export var armory = false
 
 func _ready():
 	var rng = RandomNumberGenerator.new()
@@ -63,7 +63,7 @@ func kill():
 func flip():
 	face_up = !face_up
 	update_face()
-	
+
 
 
 func _on_AlphaTween_completed(object, key):

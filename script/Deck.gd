@@ -52,6 +52,7 @@ func update():
 
 
 func return_all():
+	var c = cards
 	cards = []
-	return cards
+	return c
 
