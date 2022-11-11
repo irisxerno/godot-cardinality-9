@@ -47,7 +47,7 @@ func update():
 func advance_state():
 	if state == "hide":
 		state = "peek"
-	if state == "peek":
+	elif state == "peek":
 		state = "show"
 	update()
 

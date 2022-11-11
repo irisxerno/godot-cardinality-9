@@ -15,7 +15,10 @@ func _on_select_tile(tile):
 	if state != "build":
 		return
 
-	# TODO: we should check if its even possible to fight
+	if $Builder/Mainhand.count() == 0:
+		$Background.set_color("death")
+		$Background.to_color("build")
+		return
 
 	state = "fight"
 	$Tabs.update_all("hide")
