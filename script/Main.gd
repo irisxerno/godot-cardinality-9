@@ -33,56 +33,61 @@ func _on_select_tile(tile):
 	$Fight/Extra.add_cards($Builder/Deal.cards())
 	$Fight/Offhand.add_cards($Builder/Offhand.cards())
 	$Fight/Dealer.deal_from_data(tile.cards)
+	$Fight/Dealer.start()
 	$Fight/ArmoryController.deal_from_data(tile.armories)
 
 
-func _on_GameStartDealer_done():
+func to_build():
 	$Tabs.update_all("close")
+	$Tabs/StatsView.update_state("open")
 	$Background.to_color("build")
 	state = "build"
-	call_deferred("update_world_odist")
-
-
-func update_world_odist():
-	var world = $Tabs/WorldView/World
-	var view = $Tabs/WorldView
-	var cc = world.ccount()
-	view.open_distance = world.tile_csize * cc + 40
 
 
 func _on_Fight_done(win):
 	# TODO: losing animation
 
+	$Cards.mark_death()
+
 	if win:
 		$Builder.clear()
-		$Builder/Mainhand.add_cards($Fight/Mainhand.cards())
-		$Builder/Offhand.add_cards($Fight/Offhand.cards())
 
 		var reward = $Fight.tile.reward
 		var maxc = $Tabs/StatsView/Stats/Mainhand.level + $Tabs/StatsView/Stats/Offhand.level + $Tabs/StatsView/Stats/Extra.level - $Fight/Mainhand.count() - $Fight/Offhand.count()
 		var r = []
 		if maxc > 0:
 			r = reward.slice(0, maxc-1)
-		# TODO: block input while this animation is playing
-		$Builder/Dealer.deal_from_data(r)
 
-		# TODO: we need to update the tickers
+		$Builder/Dealer.add_cards($Fight/Mainhand.cards())
+		$Builder/Dealer.add_cards($Fight/Offhand.cards())
+		$Builder/Dealer.deal_from_data(r)
+		$Builder/Dealer.start()
+
+		$Tabs/StatsView/Stats.reset_ticks()
 		$Tabs/StatsView/Stats.return_cost($Fight/Extra.count()+len(reward)-len(r))
 
 		$Tabs/WorldView/World.defeat($Fight.tile)
 		$Background.set_color("growth")
+		$Background.to_color("none")
 	else:
 		$Background.set_color("death")
+		$Background.to_color("build")
+		to_build()
 
-	$Cards.mark_death()
-	
 	state = "build"
-	$Tabs.update_all("close")
 	$Builder.visible = true
 	$Fight.visible = false
-	$Background.to_color("build")
+
 	$Builder.update()
 	
 	$Fight.clear()
 	
 	$Cards.kill()
+
+
+func _on_Tabs_resized():
+	$Fight/Extra.position = Vector2(OS.window_size.x+100,OS.window_size.y/2)
+
+
+func _on_World_ccount(cc):
+	$Tabs/WorldView.open_distance = 100 * cc + 50

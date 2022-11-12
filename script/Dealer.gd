@@ -13,10 +13,22 @@ export var step = Vector2(1,1)
 export var face_up = true
 
 
+func add_cards(ns):
+	for inst in ns:
+		inst.death = false
+		inst.face_up = true
+		inst.update_face()
+		cards.append(inst)
+
+
+func deal_data_now(card_data):
+	deal_from_data(card_data)
+	start()
+
+
 func deal_from_data(card_data):
 	if len(card_data) == 0:
 		return
-	anim_count = 0
 	var scene = preload("res://scene/Card.tscn")
 	for d in card_data:
 		var inst = scene.instance()
@@ -26,6 +38,9 @@ func deal_from_data(card_data):
 		inst.face_up = face_up
 		cards.append(inst)
 		emit_signal("add_card", inst)
+
+
+func start():
 	$DealAnimTimer.start()
 
 
@@ -41,3 +56,4 @@ func _on_DispAnimTimer_timeout():
 	emit_signal("return_cards", cards)
 	emit_signal("done")
 	cards = []
+	anim_count = 0

@@ -51,7 +51,7 @@ func move_to(new_position):
 	if position == new_position or dest_position == new_position:
 		return
 	dest_position = new_position
-	$Tween.interpolate_property(self, "position", position, dest_position, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
+	$Tween.interpolate_property(self, "position", position, dest_position, 0.5, Tween.TRANS_QUAD)
 	$Tween.start()
 
 

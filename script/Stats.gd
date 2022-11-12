@@ -24,6 +24,12 @@ func return_cost(i):
 	update()
 
 
+func reset_ticks():
+	for inst in get_children():
+		if inst.has_method("cost"):
+			inst.get_node("Tickmarks").reset()
+
+
 func get_mainhand():
 	return $Mainhand.level
 func get_offhand():

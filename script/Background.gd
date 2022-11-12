@@ -2,7 +2,7 @@ extends ColorRect
 
 
 var colors = {
-	none = Color("1a1a1a"),
+	none = Color("1f1f1f"),
 	build = Color("#2a2a2a"),
 	fight = Color("#332929"),
 	death = Color("#540016"),

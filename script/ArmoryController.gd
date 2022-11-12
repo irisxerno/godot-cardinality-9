@@ -3,18 +3,16 @@ extends Node2D
 
 signal add_card
 
-var anim_count
 var armories = {}
 
 var step = Vector2(5, 5)
 
 
 func deal_from_data(armory_data):
+	armories = {}
 	if len(armory_data) == 0:
 		return
-	anim_count = 0
 	var scene = preload("res://scene/Armory.tscn")
-	armories = {}
 	for k in armory_data:
 		armories[k] = []
 		for d in armory_data[k]:
@@ -51,4 +49,5 @@ func return_all():
 	for inst in list():
 		inst.move_to(to_global(inst.position+Vector2(0, -100)))
 		inst.kill()
+	armories = {}
 	return

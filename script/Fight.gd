@@ -74,7 +74,7 @@ func _on_Tally_done(c):
 
 	$Attack/LevelBar.count(0)
 
-	if $Mainhand.count() == 0:
+	if $Mainhand.count()+$Offhand.count() == 0:
 		emit_signal("done", false)
 	elif $EnemyController.count() == 0:
 		emit_signal("done", true)

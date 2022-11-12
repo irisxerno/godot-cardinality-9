@@ -26,7 +26,7 @@ use_filter = true
 font_data = ExtResource( 12 )
 
 [sub_resource type="RectangleShape2D" id=5]
-extents = Vector2( 630, 350 )
+extents = Vector2( 1280, 720 )
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.1875, 0.25, 0.208333, 0.752941 )
@@ -164,7 +164,7 @@ autowrap = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Fight/Tally"]
 visible = false
-position = Vector2( 440, 20 )
+position = Vector2( 1070, 370 )
 shape = SubResource( 5 )
 disabled = true
 
@@ -183,44 +183,58 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 8 )
 __meta__ = {
-"_edit_group_": true,
 "_edit_lock_": true
 }
 
 [node name="WorldView" parent="Tabs" instance=ExtResource( 6 )]
-anchor_left = 0.75
-anchor_right = 0.75
-margin_left = -960.0
-margin_right = 320.0
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -1280.0
 margin_bottom = 720.0
-open_distance = 220
+open_distance = 999
 
 [node name="Background" parent="Tabs/WorldView" index="0"]
-anchor_left = 0.75
-anchor_right = 0.75
-margin_left = -460.0
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -840.0
 margin_top = -600.0
-margin_right = 200.0
+margin_right = -180.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="Button" parent="Tabs/WorldView" index="1"]
 modulate = Color( 0.501961, 0.25098, 0.25098, 0.878431 )
-anchor_left = 0.75
-anchor_right = 0.75
-margin_left = -160.0
-margin_right = 1440.0
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -580.0
+margin_right = 1020.0
 margin_bottom = 500.0
 mouse_filter = 1
 
 [node name="World" type="Control" parent="Tabs/WorldView"]
-margin_left = 530.0
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -810.0
 margin_top = -120.0
-margin_right = 530.0
+margin_right = -810.0
 margin_bottom = -120.0
 script = ExtResource( 9 )
 __meta__ = {
 "_edit_group_": true
 }
+
+[node name="Label3" type="Label" parent="Tabs/WorldView"]
+modulate = Color( 1, 1, 1, 0.25098 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = 130.0
+margin_top = 10.0
+margin_right = 230.0
+margin_bottom = 48.0
+custom_fonts/font = SubResource( 4 )
+text = "W: 0"
+align = 1
+valign = 1
+autowrap = true
 
 [node name="StatsView" parent="Tabs" instance=ExtResource( 6 )]
 anchor_right = 1.0
@@ -240,6 +254,7 @@ margin_bottom = 310.0
 custom_styles/panel = SubResource( 2 )
 
 [node name="Button" parent="Tabs/StatsView" index="1"]
+visible = false
 modulate = Color( 0.5, 0.479167, 0.375, 0.878431 )
 anchor_left = 1.0
 anchor_top = 0.5
@@ -355,7 +370,7 @@ autowrap = true
 [connection signal="dump" from="Builder/Mainhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Mainhand" to="Builder/Deal" method="request_take_cards"]
 [connection signal="add_card" from="Builder/Dealer" to="Cards" method="add_card"]
-[connection signal="done" from="Builder/Dealer" to="." method="_on_GameStartDealer_done"]
+[connection signal="done" from="Builder/Dealer" to="." method="to_build"]
 [connection signal="return_cards" from="Builder/Dealer" to="Builder/Deal" method="add_cards"]
 [connection signal="done" from="Fight" to="." method="_on_Fight_done"]
 [connection signal="request_return_cards" from="Fight/Mainhand" to="Fight" method="_on_Mainhand_request_return_cards"]
@@ -365,8 +380,10 @@ autowrap = true
 [connection signal="return_cards" from="Fight/Dealer" to="Fight" method="_on_Dealer_return_cards"]
 [connection signal="done" from="Fight/Tally" to="Fight" method="_on_Tally_done"]
 [connection signal="input_event" from="Fight/Tally" to="Fight/Tally" method="_on_input_event"]
-[connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_from_data"]
+[connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_data_now"]
 [connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="world_from_data"]
+[connection signal="resized" from="Tabs" to="." method="_on_Tabs_resized"]
+[connection signal="ccount" from="Tabs/WorldView/World" to="." method="_on_World_ccount"]
 [connection signal="select_tile" from="Tabs/WorldView/World" to="." method="_on_select_tile"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="try_buy"]

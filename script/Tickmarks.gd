@@ -37,6 +37,11 @@ func update():
 			tick.visible = false
 
 
+func reset():
+	count = 0
+	update()
+
+
 func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == BUTTON_LEFT or event.button_index == BUTTON_RIGHT:

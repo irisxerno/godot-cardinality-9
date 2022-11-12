@@ -30,6 +30,7 @@ func world_from_data(world):
 		if row > 4-col:
 			row = 0
 			col += 1
+	emit_signal("ccount", ccount())
 
 
 func ccount():
@@ -57,5 +58,4 @@ func defeat(inst):
 		if tile.row > inst.row - 2 and tile.row < inst.row + 2 and tile.col > inst.col - 2 and tile.col < inst.col + 2:
 			if not (tile.row - inst.row == tile.col - inst.col):
 				tile.advance_state()
-				print(ccount())
-				#emit_signal("ccount", ccount())
+				emit_signal("ccount", ccount())
