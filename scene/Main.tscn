@@ -14,17 +14,12 @@
 [ext_resource path="res://res/Hack-Bold.ttf" type="DynamicFontData" id=12]
 [ext_resource path="res://script/Stats.gd" type="Script" id=13]
 [ext_resource path="res://script/Deck.gd" type="Script" id=14]
+[ext_resource path="res://res/Hack.tres" type="DynamicFont" id=15]
 [ext_resource path="res://script/Fight.gd" type="Script" id=16]
 [ext_resource path="res://scene/Background.tscn" type="PackedScene" id=17]
 [ext_resource path="res://script/Tally.gd" type="Script" id=18]
 [ext_resource path="res://script/ArmoryController.gd" type="Script" id=19]
 [ext_resource path="res://script/UserArmory.gd" type="Script" id=20]
-
-[sub_resource type="DynamicFont" id=4]
-size = 32
-use_mipmaps = true
-use_filter = true
-font_data = ExtResource( 12 )
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
@@ -147,7 +142,7 @@ margin_left = -150.0
 margin_top = -40.0
 margin_right = 50.0
 margin_bottom = 60.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = ExtResource( 15 )
 text = "0"
 align = 1
 valign = 1
@@ -229,7 +224,7 @@ margin_left = 300.0
 margin_top = 130.0
 margin_right = 400.0
 margin_bottom = 168.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = ExtResource( 15 )
 text = "W: 0"
 align = 1
 valign = 1
@@ -274,6 +269,7 @@ margin_top = -270.0
 margin_right = 300.0
 margin_bottom = 260.0
 script = ExtResource( 13 )
+xp = 130
 
 [node name="XP" type="Label" parent="Tabs/StatsView/Stats"]
 anchor_right = 1.0
@@ -357,7 +353,7 @@ margin_left = -100.0
 margin_top = 160.0
 margin_right = -20.0
 margin_bottom = 240.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = ExtResource( 15 )
 text = "?"
 align = 1
 valign = 1

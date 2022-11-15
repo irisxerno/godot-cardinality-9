@@ -7,7 +7,15 @@ signal return_world_data
 var rng = RandomNumberGenerator.new()
 
 var world_row_len = 5
-var iq_chance = 1/4
+var iq_chance = 1.0/4.0
+
+
+func mx(w):
+	return 4 + w
+
+
+func iq():
+	return rng.randf() < iq_chance
 
 
 func _rand_roll(c, n, m):
@@ -32,7 +40,7 @@ func _rand_reward(w, num):
 		var value = rng.randi_range(2, 13)
 		cards.append({
 			"value": value,
-			"suit": rng.randi_range(1, 4 + w)
+			"suit": rng.randi_range(1, mx(w))
 		})
 	return cards
 
@@ -40,11 +48,11 @@ func _rand_reward(w, num):
 func _rand_tile(w, h):
 	var num = _rand_tile_num(w, h)
 	var cards = []
-	var suit = rng.randi_range(1, 4 + w)
+	var suit = rng.randi_range(1, mx(w))
 	for i in range(num):
 		var value = rng.randi_range(2, 13)
-		if rng.randf() > iq_chance:
-			suit = rng.randi_range(1, 4 + w)
+		if not iq():
+			suit = rng.randi_range(1, mx(w))
 		cards.append({
 			"value": value,
 			"suit": suit
@@ -56,10 +64,10 @@ func _rand_tile(w, h):
 		if h == world_row_len:
 			avalue = max(avalue, rng.randi_range(2, 13))
 		var asuit
-		if rng.randf() > iq_chance:
+		if not iq():
 			asuit = cards[rng.randi_range(0, len(cards)-1)].suit
 		else:
-			asuit = rng.randi_range(1, 4 + w)
+			asuit = rng.randi_range(1, mx(w))
 		if not asuit in armories:
 			armories[asuit] = []
 		if len(armories[asuit]) < max_armory:
@@ -75,13 +83,14 @@ func _rand_tile(w, h):
 
 func new_game():
 	randomize()
-	rng.seed = randi()
+	rng.seed = 1397823814
+	print(rng.seed)
 	
 	var cards = []
 	for i in range(10):
 		cards.append({
 			"value": rng.randi_range(2,13),
-			"suit": rng.randi_range(1,4)
+			"suit": rng.randi_range(1,mx(0))
 		})
 	emit_signal("return_card_data", cards)
 	return_new_world(0)

@@ -47,13 +47,7 @@ func _on_Mainhand_request_return_cards(inst):
 	inst.update()
 	$EnemyAttack.add_cards(c)
 
-	var cc = $Attack.cards()
-	cc.append_array(armory.list())
-
-	var ec = $EnemyAttack.cards()
-	ec.append_array($ArmoryController.list())
-
-	$Tally.start_count(cc, ec)
+	$Tally.start_count($Attack.cards(), armory.dict(), $EnemyAttack.cards(), $ArmoryController.dict())
 
 
 func _on_Dealer_done():

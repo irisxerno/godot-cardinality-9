@@ -45,6 +45,10 @@ func list():
 	return l
 
 
+func dict():
+	return armories
+
+
 func return_all():
 	for inst in list():
 		inst.move_to(to_global(inst.position+Vector2(0, -100)))

@@ -7,6 +7,7 @@ signal add_armory
 var slots = []
 var count = 0
 
+
 func find_selected():
 	for inst in slots:
 		if inst.selected:
@@ -46,6 +47,18 @@ func list():
 		if inst.armory:
 			armories.append(inst.armory)
 	return armories
+
+
+func dict():
+	var dict = {}
+	for s in slots:
+		var inst = s.armory
+		if not inst:
+			continue
+		if not inst.suit in dict:
+			dict[inst.suit] = []
+		dict[inst.suit].append(inst)
+	return dict
 
 
 func return_cards(cs):
