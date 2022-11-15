@@ -83,7 +83,7 @@ func _rand_tile(w, h):
 
 func new_game():
 	randomize()
-	rng.seed = 1397823814
+	rng.seed = rng.randi()
 	print(rng.seed)
 	
 	var cards = []

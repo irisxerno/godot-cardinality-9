@@ -28,7 +28,8 @@ func _process(delta):
 		hack_return_card = []
 		if backup_armory and armory == null:
 			armory = backup_armory
-			armory.to_alpha(1)
+			if $Timer.time_left == 0:
+				armory.to_alpha(1)
 
 
 func kill():

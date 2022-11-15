@@ -19,6 +19,7 @@ var kill = false
 export var test = false
 export var armory = false
 
+
 func _ready():
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
