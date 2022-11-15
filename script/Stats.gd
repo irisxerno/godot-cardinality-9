@@ -1,6 +1,9 @@
 extends Control
 
+
 export var xp = 0
+
+var score = 0
 
 
 func _ready():
@@ -22,6 +25,12 @@ func try_buy(inst):
 func return_cost(i):
 	xp += i
 	update()
+
+
+func add_xp(i):
+	score += i
+	print("score: ", score)
+	return_cost(i)
 
 
 func reset_ticks():

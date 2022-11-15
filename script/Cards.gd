@@ -7,7 +7,8 @@ func add_card(inst):
 
 
 func to_front(inst):
-	move_child(inst, get_child_count())
+	#move_child(inst, get_child_count())
+	inst.raise()
 
 
 func mark_death():

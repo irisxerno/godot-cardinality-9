@@ -35,7 +35,9 @@ func increase():
 func update():
 	$Level.text = str(level)
 	$Cost.text = ""
+	$Level.rect_position = Vector2(0,0)
 	if cost() != level:
+		$Level.rect_position = Vector2(-5, -5)
 		$Cost.text = str(cost())
 	emit_signal("update", level)
 

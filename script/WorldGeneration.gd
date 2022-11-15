@@ -26,21 +26,6 @@ func _rand_tile_num(w, h):
 	return ii
 
 
-func _rand_armories(w, h):
-	var armories = {}
-	var max_armory = w + 1
-	for i in range(w*world_row_len+h):
-		var avalue = rng.randi_range(2, 13)
-		if h == world_row_len:
-			avalue = max(avalue, rng.randi_range(2, 13))
-		var asuit = rng.randi_range(1, 4 + w)
-		if not asuit in armories:
-			armories[asuit] = []
-		if len(armories[asuit]) < max_armory:
-			armories[asuit].append(avalue)
-	return armories
-
-
 func _rand_reward(w, num):
 	var cards = []
 	for i in range(num):
@@ -64,12 +49,26 @@ func _rand_tile(w, h):
 			"value": value,
 			"suit": suit
 		})
-	var a = _rand_armories(w, h)
-	for k in a:
-		num += len(a[k])
+	var armories = {}
+	var max_armory = w + 1
+	for i in range(w*world_row_len+h):
+		var avalue = rng.randi_range(2, 13)
+		if h == world_row_len:
+			avalue = max(avalue, rng.randi_range(2, 13))
+		var asuit
+		if rng.randf() > iq_chance:
+			asuit = cards[rng.randi_range(0, len(cards)-1)].suit
+		else:
+			asuit = rng.randi_range(1, 4 + w)
+		if not asuit in armories:
+			armories[asuit] = []
+		if len(armories[asuit]) < max_armory:
+			armories[asuit].append(avalue)
+	for k in armories:
+		num += len(armories[k])
 	return {
 		"cards": cards,
-		"armories": a,
+		"armories": armories,
 		"reward": _rand_reward(w, num)
 	}
 
@@ -85,7 +84,11 @@ func new_game():
 			"suit": rng.randi_range(1,4)
 		})
 	emit_signal("return_card_data", cards)
-	emit_signal("return_world_data", new_world(0))
+	return_new_world(0)
+
+
+func return_new_world(n):
+	emit_signal("return_world_data", new_world(n), n)
 
 
 func new_world(w):
@@ -98,7 +101,3 @@ func new_world(w):
 		r -= 1
 		h += 1
 	return tiles
-
-
-func _ready():
-	new_game()

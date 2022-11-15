@@ -5,6 +5,7 @@ export var offhand = 5
 export var attack = 5
 
 var stats = null
+var armory = null
 
 
 func _on_Deal_request_return_cards(inst):
@@ -15,7 +16,11 @@ func _on_Deal_request_return_cards(inst):
 	var offhand_curr = $Offhand.count
 	var take
 	var dest
-	if mainhand_curr < mainhand:
+	var uselect = armory.find_selected()
+	if uselect:
+		take = 1
+		dest = uselect
+	elif mainhand_curr < mainhand:
 		take = mainhand - mainhand_curr
 		dest = $Mainhand
 	elif offhand_curr < offhand:
@@ -28,7 +33,10 @@ func _on_Deal_request_return_cards(inst):
 		take = min(take, attack)
 	var c = inst.cards.slice(max(len(inst.cards)-take,0), len(inst.cards)-1)
 	inst.remove_cards(c)
-	dest.add_cards(c)
+	if uselect:
+		dest.give_card(c[0])
+	else:
+		dest.add_cards(c)
 
 
 func update():

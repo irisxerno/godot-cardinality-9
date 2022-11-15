@@ -1,11 +1,15 @@
 extends Node
 
-signal start_fight
 
 var state = "none"
 
+
 func _ready():
+	$WorldGeneration.new_game()
+	$Background.set_color("none")
 	$Builder.stats = $Tabs/StatsView/Stats
+	$Builder.armory = $UserArmory
+	$Fight.armory = $UserArmory
 	$Tabs.update_all("hide", false)
 	$Builder.visible = true
 	$Fight.visible = false
@@ -25,6 +29,7 @@ func _on_select_tile(tile):
 	$Builder.visible = false
 	$Fight.visible = true
 	$Fight.set_input(false)
+	$UserArmory.visible = false
 	$Background.to_color("fight")
 
 	$Fight.stats = $Tabs/StatsView/Stats
@@ -38,6 +43,7 @@ func _on_select_tile(tile):
 
 
 func to_build():
+	$UserArmory.visible = true
 	$Tabs.update_all("close")
 	$Tabs/StatsView.update_state("open")
 	$Background.to_color("build")
@@ -64,11 +70,18 @@ func _on_Fight_done(win):
 		$Builder/Dealer.start()
 
 		$Tabs/StatsView/Stats.reset_ticks()
-		$Tabs/StatsView/Stats.return_cost($Fight/Extra.count()+len(reward)-len(r))
+		$Tabs/StatsView/Stats.add_xp($Fight/Extra.count()+len(reward)-len(r))
+
+		$UserArmory.kill_cards()
 
 		$Tabs/WorldView/World.defeat($Fight.tile)
 		$Background.set_color("growth")
 		$Background.to_color("none")
+
+		if $Fight.tile.col == 4:
+			$WorldGeneration.return_new_world($Tabs/WorldView/World.num+1)
+			$Foreground.set_color("flash")
+			$Foreground.to_color("off")
 	else:
 		$Background.set_color("death")
 		$Background.to_color("build")
@@ -86,7 +99,8 @@ func _on_Fight_done(win):
 
 
 func _on_Tabs_resized():
-	$Fight/Extra.position = Vector2(OS.window_size.x+100,OS.window_size.y/2)
+	$Fight/Extra.position = Vector2(OS.window_size.x+45,OS.window_size.y/2)
+	$UserArmory.position = Vector2(OS.window_size.x - 260, 640)
 
 
 func _on_World_ccount(cc):

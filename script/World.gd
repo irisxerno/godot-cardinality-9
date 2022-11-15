@@ -6,11 +6,20 @@ signal ccount
 var tiles = []
 var tile_rsize = 125
 var tile_csize = 100
+var num = 0
 
 
-func world_from_data(world):
+func clear():
+	for tile in tiles:
+		tile.queue_free()
+	tiles = []
+
+
+func world_from_data(world, n):
+	clear()
+	num = n
+	$Label.text = "W: " + str(num)
 	var tile_scene = preload("res://scene/Tile.tscn")
-	var card_scene = preload("res://scene/Card.tscn")
 	var row = 0
 	var col = 0 
 	for dat in world:

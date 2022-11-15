@@ -1,4 +1,4 @@
-extends Area2D
+extends Node2D
 
 
 signal to_front
@@ -14,6 +14,7 @@ var dest_position = position
 var dest_a = 1
 
 var death = false
+var kill = false
 
 export var test = false
 export var armory = false
@@ -55,9 +56,14 @@ func move_to(new_position):
 	$Tween.start()
 
 
-func kill():
-	$AlphaTween.interpolate_property(self, "modulate", Color(1, 1, 1, 1), Color(1, 1, 1, 0), 2, Tween.TRANS_QUAD)
+func to_alpha(a):
+	$AlphaTween.interpolate_property(self, "modulate", self.modulate, Color(1, 1, 1, a), 1, Tween.TRANS_QUAD, Tween.EASE_OUT)
 	$AlphaTween.start()
+
+
+func kill(k=true):
+	kill = k
+	to_alpha(0)
 
 
 func flip():
@@ -65,6 +71,6 @@ func flip():
 	update_face()
 
 
-
 func _on_AlphaTween_completed(object, key):
-	queue_free()
+	if kill:
+		queue_free()

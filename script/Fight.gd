@@ -5,6 +5,7 @@ signal done
 
 var stats
 var tile
+var armory
 var input = true
 
 
@@ -46,10 +47,13 @@ func _on_Mainhand_request_return_cards(inst):
 	inst.update()
 	$EnemyAttack.add_cards(c)
 
+	var cc = $Attack.cards()
+	cc.append_array(armory.list())
+
 	var ec = $EnemyAttack.cards()
 	ec.append_array($ArmoryController.list())
 
-	$Tally.start_count($Attack.cards(), ec)
+	$Tally.start_count(cc, ec)
 
 
 func _on_Dealer_done():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -14,10 +14,11 @@
 [ext_resource path="res://res/Hack-Bold.ttf" type="DynamicFontData" id=12]
 [ext_resource path="res://script/Stats.gd" type="Script" id=13]
 [ext_resource path="res://script/Deck.gd" type="Script" id=14]
-[ext_resource path="res://script/Background.gd" type="Script" id=15]
 [ext_resource path="res://script/Fight.gd" type="Script" id=16]
+[ext_resource path="res://scene/Background.tscn" type="PackedScene" id=17]
 [ext_resource path="res://script/Tally.gd" type="Script" id=18]
 [ext_resource path="res://script/ArmoryController.gd" type="Script" id=19]
+[ext_resource path="res://script/UserArmory.gd" type="Script" id=20]
 
 [sub_resource type="DynamicFont" id=4]
 size = 32
@@ -51,17 +52,7 @@ font_data = ExtResource( 12 )
 [node name="Main" type="Node"]
 script = ExtResource( 10 )
 
-[node name="Background" type="ColorRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-color = Color( 0.121569, 0.121569, 0.121569, 1 )
-script = ExtResource( 15 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="Tween" type="Tween" parent="Background"]
+[node name="Background" parent="." instance=ExtResource( 17 )]
 
 [node name="Builder" type="Node2D" parent="."]
 script = ExtResource( 2 )
@@ -70,17 +61,17 @@ __meta__ = {
 }
 
 [node name="Offhand" parent="Builder" instance=ExtResource( 1 )]
-position = Vector2( 200, 160 )
+position = Vector2( 200, 120 )
 
 [node name="LevelBar" parent="Builder/Offhand" instance=ExtResource( 5 )]
 
 [node name="Deal" parent="Builder" instance=ExtResource( 1 )]
-position = Vector2( 200, 340 )
+position = Vector2( 200, 300 )
 
 [node name="LevelBar" parent="Builder/Deal" instance=ExtResource( 5 )]
 
 [node name="Mainhand" parent="Builder" instance=ExtResource( 1 )]
-position = Vector2( 200, 520 )
+position = Vector2( 200, 480 )
 
 [node name="LevelBar" parent="Builder/Mainhand" instance=ExtResource( 5 )]
 
@@ -119,7 +110,7 @@ position = Vector2( 1400, 300 )
 script = ExtResource( 14 )
 
 [node name="Trash" type="Node2D" parent="Fight"]
-position = Vector2( -100, 300 )
+position = Vector2( -45, 340 )
 script = ExtResource( 14 )
 
 [node name="Attack" parent="Fight" instance=ExtResource( 1 )]
@@ -168,6 +159,13 @@ position = Vector2( 1070, 370 )
 shape = SubResource( 5 )
 disabled = true
 
+[node name="UserArmory" type="Node2D" parent="."]
+position = Vector2( 1020, 640 )
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+
 [node name="Cards" type="Node2D" parent="."]
 script = ExtResource( 4 )
 
@@ -183,6 +181,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 8 )
 __meta__ = {
+"_edit_group_": true,
 "_edit_lock_": true
 }
 
@@ -222,14 +221,14 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Label3" type="Label" parent="Tabs/WorldView"]
+[node name="Label" type="Label" parent="Tabs/WorldView/World"]
 modulate = Color( 1, 1, 1, 0.25098 )
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = 130.0
-margin_top = 10.0
-margin_right = 230.0
-margin_bottom = 48.0
+margin_left = 300.0
+margin_top = 130.0
+margin_right = 400.0
+margin_bottom = 168.0
 custom_fonts/font = SubResource( 4 )
 text = "W: 0"
 align = 1
@@ -248,9 +247,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_top = -190.0
+margin_top = -240.0
 margin_right = 220.0
-margin_bottom = 310.0
+margin_bottom = 260.0
 custom_styles/panel = SubResource( 2 )
 
 [node name="Button" parent="Tabs/StatsView" index="1"]
@@ -271,9 +270,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_top = -220.0
+margin_top = -270.0
 margin_right = 300.0
-margin_bottom = 310.0
+margin_bottom = 260.0
 script = ExtResource( 13 )
 
 [node name="XP" type="Label" parent="Tabs/StatsView/Stats"]
@@ -336,7 +335,6 @@ default = 5
 mult = 5
 
 [node name="Armory" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
-visible = false
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -348,7 +346,8 @@ margin_bottom = 155.0
 base = 5
 mult = 5
 
-[node name="Label2" type="Label" parent="Tabs/StatsView/Stats"]
+[node name="Temp" type="Label" parent="Tabs/StatsView/Stats"]
+visible = false
 modulate = Color( 1, 1, 1, 0.501961 )
 anchor_left = 0.5
 anchor_top = 0.5
@@ -363,6 +362,10 @@ text = "?"
 align = 1
 valign = 1
 autowrap = true
+
+[node name="Foreground" parent="." instance=ExtResource( 17 )]
+color = Color( 0, 0, 0, 0 )
+duration = 2.0
 
 [connection signal="dump" from="Builder/Offhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder/Deal" method="request_take_cards"]
@@ -380,6 +383,8 @@ autowrap = true
 [connection signal="return_cards" from="Fight/Dealer" to="Fight" method="_on_Dealer_return_cards"]
 [connection signal="done" from="Fight/Tally" to="Fight" method="_on_Tally_done"]
 [connection signal="input_event" from="Fight/Tally" to="Fight/Tally" method="_on_input_event"]
+[connection signal="add_armory" from="UserArmory" to="Armories" method="add_card"]
+[connection signal="return_cards" from="UserArmory" to="Builder/Deal" method="add_cards"]
 [connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_data_now"]
 [connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="world_from_data"]
 [connection signal="resized" from="Tabs" to="." method="_on_Tabs_resized"]
@@ -401,6 +406,7 @@ autowrap = true
 [connection signal="update" from="Tabs/StatsView/Stats/Attack" to="Fight/Attack/LevelBar" method="set_bars"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="try_buy"]
+[connection signal="update" from="Tabs/StatsView/Stats/Armory" to="UserArmory" method="set_slots"]
 
 [editable path="Fight/Dealer"]
 [editable path="Tabs/WorldView"]
