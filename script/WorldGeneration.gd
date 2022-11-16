@@ -51,7 +51,9 @@ func _rand_tile(w, h):
 	var suit = rng.randi_range(1, mx(w))
 	for i in range(num):
 		var value = rng.randi_range(2, 13)
-		if not iq():
+		if iq() and len(cards) > 0:
+			suit = cards[rng.randi_range(0, len(cards)-1)].suit
+		else:
 			suit = rng.randi_range(1, mx(w))
 		cards.append({
 			"value": value,
@@ -64,7 +66,7 @@ func _rand_tile(w, h):
 		if h == world_row_len:
 			avalue = max(avalue, rng.randi_range(2, 13))
 		var asuit
-		if not iq():
+		if iq():
 			asuit = cards[rng.randi_range(0, len(cards)-1)].suit
 		else:
 			asuit = rng.randi_range(1, mx(w))
