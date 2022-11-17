@@ -32,6 +32,12 @@ func increase():
 	update()
 
 
+func setl(l):
+	$Tickmarks.reset()
+	level = l
+	update()
+
+
 func update():
 	$Level.text = str(level)
 	$Cost.text = ""

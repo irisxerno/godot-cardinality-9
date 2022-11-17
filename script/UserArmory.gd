@@ -8,6 +8,20 @@ var slots = []
 var count = 0
 
 
+func new():
+	for inst in slots:
+		if inst.armory:
+			inst.armory.kill()
+			inst.armory = null
+		if inst.backup_armory:
+			inst.backup_armory.kill()
+			inst.backup_armory = null
+		if inst.card:
+			inst.card.kill()
+			inst.card = null
+	set_slots(0)
+
+
 func find_selected():
 	for inst in slots:
 		if inst.selected:
@@ -18,6 +32,7 @@ func find_selected():
 func kill_cards():
 	for inst in slots:
 		inst.kill()
+	# TODO: i might want to setup a reordering job to avoid inconsistency with save
 
 
 func set_slots(new_slot_count):
@@ -59,6 +74,31 @@ func dict():
 			dict[inst.suit] = []
 		dict[inst.suit].append(inst)
 	return dict
+
+
+func to_data():
+	var armory_data = []
+	for s in slots:
+		var inst = s.armory
+		var a = null
+		if inst:
+			a = {
+				"value": inst.value,
+				"suit": inst.suit
+			}
+		armory_data.append(a)
+	return armory_data
+
+
+func from_data(adata):
+	new()
+	set_slots(len(adata))
+	for i in range(len(adata)):
+		var inst = slots[i]
+		var ad = adata[i]
+		if ad:
+			inst.new_armory(ad["value"], int(ad["suit"]))
+			inst.backup_armory = inst.armory
 
 
 func return_cards(cs):

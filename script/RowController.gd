@@ -53,6 +53,13 @@ func return_all():
 	return cards
 
 
+func clear(death=false):
+	for inst in cols:
+		for ins in inst.cards:
+			ins.death = death
+		inst.cards = []
+
+
 func add_cards(new_cards):
 	var cards = []
 

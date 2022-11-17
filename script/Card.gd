@@ -16,8 +16,10 @@ var dest_a = 1
 var death = false
 var kill = false
 
-export var test = false
+var test = false
 export var armory = false
+
+var test_notween = false
 
 
 func _ready():
@@ -53,11 +55,16 @@ func move_to(new_position):
 	if position == new_position or dest_position == new_position:
 		return
 	dest_position = new_position
+	if test_notween:
+		self.position = dest_position
+		return
 	$Tween.interpolate_property(self, "position", position, dest_position, 0.5, Tween.TRANS_QUAD)
 	$Tween.start()
 
 
 func to_alpha(a):
+	if test_notween and kill:
+		queue_free()
 	$AlphaTween.interpolate_property(self, "modulate", self.modulate, Color(1, 1, 1, a), 1, Tween.TRANS_QUAD, Tween.EASE_OUT)
 	$AlphaTween.start()
 

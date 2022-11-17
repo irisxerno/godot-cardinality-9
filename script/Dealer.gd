@@ -33,7 +33,7 @@ func deal_from_data(card_data):
 	for d in card_data:
 		var inst = scene.instance()
 		inst.value = d["value"]
-		inst.suit = d["suit"]
+		inst.suit = int(d["suit"])
 		inst.position = self.position
 		inst.face_up = face_up
 		cards.append(inst)
@@ -42,6 +42,11 @@ func deal_from_data(card_data):
 
 func start():
 	$DealAnimTimer.start()
+
+
+func update():
+	for inst in cards:
+		inst.death = false
 
 
 func _on_DealAnimTimer_timeout():

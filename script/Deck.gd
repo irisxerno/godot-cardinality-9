@@ -56,3 +56,12 @@ func return_all():
 	cards = []
 	return c
 
+
+func clear(death=false):
+	if death:
+		for inst in cards:
+			inst.death = true
+	return_all()
+		
+
+

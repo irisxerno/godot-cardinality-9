@@ -2,12 +2,15 @@ extends Node2D
 
 
 var raise_counter = 0
+var rcmax = 0
 
 
 func _process(delta):
 	if raise_counter > 0:
+		if raise_counter > rcmax:
+			rcmax = raise_counter
 		if get_node("Debug"):
-			$Debug.text = str(raise_counter)
+			$Debug.text = str(raise_counter)+"/"+str(rcmax)
 	raise_counter = 0
 
 
@@ -22,13 +25,8 @@ func to_front(inst):
 	inst.raise()
 
 
-func mark_death():
+func kill(all = false):
 	for inst in get_children():
-		if inst.has_method("update_face"):
-			inst.death = true
-
-
-func kill():
-	for inst in get_children():
-		if inst.has_method("kill") and inst.death:
-			inst.kill()
+		if inst.has_method("kill"):
+			if inst.death or all:
+				inst.kill()

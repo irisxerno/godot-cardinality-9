@@ -41,7 +41,7 @@ func update():
 		$Label.visible = false
 		$Background.visible = false
 		$Border.visible = false
-		# $Defeated.visible = true
+		$Defeated.visible = true
 
 
 func advance_state():

@@ -15,7 +15,7 @@ func clear():
 	tiles = []
 
 
-func world_from_data(world, n):
+func from_data(world, n):
 	clear()
 	num = n
 	$Label.text = "W: " + str(num)
@@ -32,6 +32,8 @@ func world_from_data(world, n):
 		tile.rect_position += Vector2(tile_rsize*row + tile_rsize/2*col, -tile_csize*col)
 		if col == 0:
 			tile.state = "show"
+		if "state" in dat:
+			tile.state = dat["state"]
 		tile.connect("request_select", self, "request_select")
 		add_child(tile)
 		tiles.append(tile)
@@ -40,6 +42,18 @@ func world_from_data(world, n):
 			row = 0
 			col += 1
 	emit_signal("ccount", ccount())
+
+
+func to_data():
+	var data = []
+	for inst in tiles:
+		data.append({
+			"cards": inst.cards,
+			"armories": inst.armories,
+			"reward": inst.reward,
+			"state": inst.state
+		})
+	return data
 
 
 func ccount():

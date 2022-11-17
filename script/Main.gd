@@ -5,14 +5,25 @@ var state = "none"
 
 
 func _ready():
-	$WorldGeneration.new_game()
 	$Background.set_color("none")
-	$Builder.stats = $Tabs/StatsView/Stats
-	$Builder.armory = $UserArmory
-	$Fight.armory = $UserArmory
+
+	var stats = $Tabs/StatsView/Stats
+	var armory = $UserArmory
+	var world = $Tabs/WorldView/World
+	$Builder.stats = stats
+	$Builder.armory = armory
+	$Savior.stats = stats
+	$Savior.armory = armory
+	$Savior.world = world
+	$Savior.generator = $WorldGeneration
+	$Fight.stats = stats
+	$Fight.armory = armory
+
 	$Tabs.update_all("hide", false)
 	$Builder.visible = true
 	$Fight.visible = false
+	
+	$Savior.start()
 
 
 func _on_select_tile(tile):
@@ -32,7 +43,6 @@ func _on_select_tile(tile):
 	$UserArmory.visible = false
 	$Background.to_color("fight")
 
-	$Fight.stats = $Tabs/StatsView/Stats
 	$Fight.tile = tile
 	$Fight/Mainhand.add_cards($Builder/Mainhand.cards())
 	$Fight/Extra.add_cards($Builder/Deal.cards())
@@ -53,9 +63,8 @@ func to_build():
 func _on_Fight_done(win):
 	# TODO: losing animation
 
-	$Cards.mark_death()
-
 	if win:
+		$Savior.savable = true
 		$Builder.clear()
 
 		var reward = $Fight.tile.reward
@@ -64,6 +73,11 @@ func _on_Fight_done(win):
 		if maxc > 0:
 			r = reward.slice(0, maxc-1)
 
+		var loss = 0
+		if maxc - len(r) > 0:
+			loss = maxc - len(r)
+			print("net loss: -", loss)
+		
 		$Builder/Dealer.add_cards($Fight/Mainhand.cards())
 		$Builder/Dealer.add_cards($Fight/Offhand.cards())
 		$Builder/Dealer.deal_from_data(r)
@@ -71,6 +85,7 @@ func _on_Fight_done(win):
 
 		$Tabs/StatsView/Stats.reset_ticks()
 		$Tabs/StatsView/Stats.add_xp($Fight/Extra.count()+len(reward)-len(r))
+		$Tabs/StatsView/Stats.add_loss(loss)
 
 		$UserArmory.kill_cards()
 
@@ -91,17 +106,29 @@ func _on_Fight_done(win):
 	$Builder.visible = true
 	$Fight.visible = false
 
+	$Fight.clear(true)
+
 	$Builder.update()
-	
-	$Fight.clear()
-	
+
 	$Cards.kill()
 
 
 func _on_Tabs_resized():
-	$Fight/Extra.position = Vector2(OS.window_size.x+45,OS.window_size.y/2)
-	$UserArmory.position = Vector2(OS.window_size.x - 260, 640)
+	var w = $Tabs.rect_size
+	$Fight/Extra.position = Vector2(w.x+45,w.y/2)
+	$UserArmory.position = Vector2(w.x - 260, 640)
 
 
 func _on_World_ccount(cc):
 	$Tabs/WorldView.open_distance = 100 * cc + 50
+
+
+func reset(i):
+	$Tabs.update_all("hide", true)
+	$Builder.visible = true
+	$Fight.visible = false
+	
+	$Builder.clear(true)
+	$UserArmory.new()
+	$Cards.kill()
+	$Savior.load_next(i)

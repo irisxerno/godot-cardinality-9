@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -20,6 +20,9 @@
 [ext_resource path="res://script/Tally.gd" type="Script" id=18]
 [ext_resource path="res://script/ArmoryController.gd" type="Script" id=19]
 [ext_resource path="res://script/UserArmory.gd" type="Script" id=20]
+[ext_resource path="res://script/Savior.gd" type="Script" id=21]
+[ext_resource path="res://script/Saves.gd" type="Script" id=22]
+[ext_resource path="res://script/Click.gd" type="Script" id=23]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
@@ -30,7 +33,7 @@ use_filter = true
 font_data = ExtResource( 12 )
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.1875, 0.25, 0.208333, 0.752941 )
+bg_color = Color( 0.188235, 0.25098, 0.207843, 0.752941 )
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
@@ -49,16 +52,30 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 12 )
 
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.160784, 0.145098, 0.137255, 0.752941 )
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="DynamicFont" id=10]
+size = 32
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 12 )
+
 [node name="Main" type="Node"]
 script = ExtResource( 10 )
+
+[node name="Savior" type="Node" parent="."]
+script = ExtResource( 21 )
 
 [node name="Background" parent="." instance=ExtResource( 17 )]
 
 [node name="Builder" type="Node2D" parent="."]
+position = Vector2( 40, 0 )
 script = ExtResource( 2 )
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="Offhand" parent="Builder" instance=ExtResource( 1 )]
 position = Vector2( 200, 120 )
@@ -170,10 +187,10 @@ __meta__ = {
 script = ExtResource( 4 )
 
 [node name="Debug" type="Label" parent="Cards"]
-margin_left = 50.0
-margin_top = 50.0
-margin_right = 90.0
-margin_bottom = 69.0
+margin_left = 70.0
+margin_top = 30.0
+margin_right = 110.0
+margin_bottom = 49.0
 custom_colors/font_color = Color( 1, 1, 1, 0.501961 )
 custom_fonts/font = SubResource( 6 )
 text = "0"
@@ -190,7 +207,6 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 8 )
 __meta__ = {
-"_edit_group_": true,
 "_edit_lock_": true
 }
 
@@ -372,10 +388,55 @@ align = 1
 valign = 1
 autowrap = true
 
+[node name="SaveView" parent="Tabs" instance=ExtResource( 6 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+open_distance = 220
+property = "margin_left"
+
+[node name="Background" parent="Tabs/SaveView" index="0"]
+margin_left = -250.0
+margin_top = 150.0
+margin_bottom = 680.0
+custom_styles/panel = SubResource( 9 )
+
+[node name="Button" parent="Tabs/SaveView" index="1"]
+modulate = Color( 0.419608, 0.25098, 0.501961, 0.878431 )
+margin_top = 640.0
+margin_right = 1600.0
+margin_bottom = 1140.0
+rect_rotation = -90.0
+mouse_filter = 1
+
+[node name="Saves" type="Control" parent="Tabs/SaveView"]
+margin_left = -200.0
+margin_top = 170.0
+margin_right = -200.0
+margin_bottom = 170.0
+script = ExtResource( 22 )
+
+[node name="newgame" type="Label" parent="Tabs/SaveView"]
+modulate = Color( 1, 1, 1, 0.25098 )
+margin_left = -170.0
+margin_top = 620.0
+margin_right = -37.0
+margin_bottom = 660.0
+mouse_filter = 1
+custom_fonts/font = SubResource( 10 )
+text = "newgame"
+script = ExtResource( 23 )
+
 [node name="Foreground" parent="." instance=ExtResource( 17 )]
 color = Color( 0, 0, 0, 0 )
 duration = 2.0
 
+[node name="Position2D" type="Position2D" parent="."]
+position = Vector2( -30, 130 )
+
+[connection signal="card_data" from="Savior" to="Builder/Dealer" method="deal_data_now"]
+[connection signal="reset" from="Savior" to="." method="reset"]
+[connection signal="return_cards" from="Savior" to="Builder/Deal" method="add_cards"]
+[connection signal="update" from="Savior" to="Tabs/SaveView/Saves" method="set_saves"]
 [connection signal="dump" from="Builder/Offhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder/Deal" method="request_take_cards"]
 [connection signal="request_return_cards" from="Builder/Deal" to="Builder" method="_on_Deal_request_return_cards"]
@@ -383,7 +444,7 @@ duration = 2.0
 [connection signal="request_return_cards" from="Builder/Mainhand" to="Builder/Deal" method="request_take_cards"]
 [connection signal="add_card" from="Builder/Dealer" to="Cards" method="add_card"]
 [connection signal="done" from="Builder/Dealer" to="." method="to_build"]
-[connection signal="return_cards" from="Builder/Dealer" to="Builder/Deal" method="add_cards"]
+[connection signal="return_cards" from="Builder/Dealer" to="Savior" method="get_cards"]
 [connection signal="done" from="Fight" to="." method="_on_Fight_done"]
 [connection signal="request_return_cards" from="Fight/Mainhand" to="Fight" method="_on_Mainhand_request_return_cards"]
 [connection signal="add_card" from="Fight/ArmoryController" to="Armories" method="add_card"]
@@ -394,8 +455,11 @@ duration = 2.0
 [connection signal="input_event" from="Fight/Tally" to="Fight/Tally" method="_on_input_event"]
 [connection signal="add_armory" from="UserArmory" to="Armories" method="add_card"]
 [connection signal="return_cards" from="UserArmory" to="Builder/Deal" method="add_cards"]
+[connection signal="color" from="WorldGeneration" to="Savior" method="color"]
+[connection signal="new" from="WorldGeneration" to="UserArmory" method="new"]
+[connection signal="new" from="WorldGeneration" to="Tabs/StatsView/Stats" method="new"]
 [connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_data_now"]
-[connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="world_from_data"]
+[connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="from_data"]
 [connection signal="resized" from="Tabs" to="." method="_on_Tabs_resized"]
 [connection signal="ccount" from="Tabs/WorldView/World" to="." method="_on_World_ccount"]
 [connection signal="select_tile" from="Tabs/WorldView/World" to="." method="_on_select_tile"]
@@ -416,7 +480,11 @@ duration = 2.0
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="try_buy"]
 [connection signal="update" from="Tabs/StatsView/Stats/Armory" to="UserArmory" method="set_slots"]
+[connection signal="load_save" from="Tabs/SaveView/Saves" to="Savior" method="load_save"]
+[connection signal="click" from="Tabs/SaveView/newgame" to="Savior" method="newgame"]
+[connection signal="gui_input" from="Tabs/SaveView/newgame" to="Tabs/SaveView/newgame" method="_on_gui_input"]
 
 [editable path="Fight/Dealer"]
 [editable path="Tabs/WorldView"]
 [editable path="Tabs/StatsView"]
+[editable path="Tabs/SaveView"]

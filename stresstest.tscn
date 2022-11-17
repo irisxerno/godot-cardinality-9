@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://stresstest.gd" type="Script" id=1]
+[ext_resource path="res://res/Hack.tres" type="DynamicFont" id=2]
+
+[node name="stresstest" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Debug" type="Label" parent="."]
+margin_left = 100.0
+margin_top = 100.0
+margin_right = 140.0
+margin_bottom = 138.0
+custom_fonts/font = ExtResource( 2 )
+text = "0"

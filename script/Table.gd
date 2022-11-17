@@ -45,7 +45,7 @@ func update():
 			inst.update()
 
 
-func clear():
+func clear(death=false):
 	for inst in get_children():
-		if inst.has_method("return_all"):
-			inst.return_all()
+		if inst.has_method("clear"):
+			inst.clear(death)

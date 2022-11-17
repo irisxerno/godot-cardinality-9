@@ -51,15 +51,19 @@ func give_card(c):
 	$Timer.start()
 
 
-func _on_Timer_timeout():
-	$AlphaTween.interpolate_property($Flash, "modulate", Color(1, 1, 1, 1), Color(0, 0, 0, 0), 0.5, Tween.TRANS_LINEAR)
-	$AlphaTween.start()
+func new_armory(v,s):
 	var scene = preload("res://scene/Armory.tscn")
 	armory = scene.instance()
 	armory.position = $Hack2.to_global(Vector2(0,0))
-	armory.value = card.value
-	armory.suit = card.suit
+	armory.value = v
+	armory.suit = int(s)
 	emit_signal("add_armory", armory)
+
+
+func _on_Timer_timeout():
+	$AlphaTween.interpolate_property($Flash, "modulate", Color(1, 1, 1, 1), Color(0, 0, 0, 0), 0.5, Tween.TRANS_LINEAR)
+	$AlphaTween.start()
+	new_armory(card.value, card.suit)
 
 
 func clear():

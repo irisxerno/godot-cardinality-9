@@ -18,7 +18,7 @@ func deal_from_data(armory_data):
 		for d in armory_data[k]:
 			var inst = scene.instance()
 			inst.value = d
-			inst.suit = k
+			inst.suit = int(k)
 			inst.position = self.position
 			armories[k].append(inst)
 			emit_signal("add_card", inst)
@@ -49,7 +49,7 @@ func dict():
 	return armories
 
 
-func return_all():
+func clear(death=true):
 	for inst in list():
 		inst.move_to(to_global(inst.position+Vector2(0, -100)))
 		inst.kill()

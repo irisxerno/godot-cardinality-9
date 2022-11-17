@@ -84,8 +84,9 @@ func _on_Tally_done(c):
 			c.append($Offhand.cards.pop_front())
 		$Mainhand.add_cards(c)
 
-func clear():
+
+func clear(death=false):
 	for inst in get_children():
-		if inst.has_method("return_all"):
-			inst.return_all()
+		if inst.has_method("clear"):
+			inst.clear(death)
 	tile = null

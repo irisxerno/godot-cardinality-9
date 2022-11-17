@@ -3,11 +3,15 @@ extends Node
 
 signal return_card_data
 signal return_world_data
+signal new
+signal color
 
 var rng = RandomNumberGenerator.new()
 
 var world_row_len = 5
 var iq_chance = 1.0/4.0
+
+var seed_value = 0
 
 
 func mx(w):
@@ -85,15 +89,19 @@ func _rand_tile(w, h):
 
 func new_game():
 	randomize()
-	rng.seed = randi()
-	print(rng.seed)
-	
+	seed_value = randi()
+	rng.seed = seed_value
+
+	var c = Color(rng.randf(),rng.randf(),rng.randf(),1).to_rgba32()
+	emit_signal("color", c)
+
 	var cards = []
 	for i in range(10):
 		cards.append({
 			"value": rng.randi_range(2,13),
 			"suit": rng.randi_range(1,mx(0))
 		})
+	emit_signal("new")
 	emit_signal("return_card_data", cards)
 	return_new_world(0)
 
