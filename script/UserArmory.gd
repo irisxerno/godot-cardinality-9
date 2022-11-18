@@ -32,7 +32,6 @@ func find_selected():
 func kill_cards():
 	for inst in slots:
 		inst.kill()
-	# TODO: i might want to setup a reordering job to avoid inconsistency with save
 
 
 func set_slots(new_slot_count):

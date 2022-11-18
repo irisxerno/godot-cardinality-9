@@ -20,6 +20,10 @@ var saves = []
 var magic = 1040447947
 
 
+func archive():
+	print("# TODO: scoreboard functionality")
+
+
 func start():
 	var save_game = File.new()
 	var dir = Directory.new()

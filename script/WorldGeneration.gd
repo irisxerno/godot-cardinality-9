@@ -111,6 +111,8 @@ func return_new_world(n):
 
 
 func new_world(w):
+	if w > 5:
+		return []
 	var tiles = []
 	var r = world_row_len
 	var h = 0

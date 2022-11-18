@@ -3,15 +3,7 @@
 [ext_resource path="res://res/Hack-Bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://script/Card.gd" type="Script" id=2]
 [ext_resource path="res://res/circle_border.png" type="Texture" id=3]
-
-[sub_resource type="StyleBoxFlat" id=6]
-bg_color = Color( 0.2, 0.160784, 0.160784, 0.752941 )
-border_color = Color( 1, 1, 1, 1 )
-corner_radius_top_left = 96
-corner_radius_top_right = 96
-corner_radius_bottom_right = 96
-corner_radius_bottom_left = 96
-corner_detail = 20
+[ext_resource path="res://res/circle.png" type="Texture" id=4]
 
 [sub_resource type="DynamicFont" id=3]
 size = 24
@@ -25,67 +17,41 @@ script = ExtResource( 2 )
 face_up = true
 armory = true
 
-[node name="Display" type="PanelContainer" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -48.0
-margin_top = -48.0
-margin_right = 48.0
-margin_bottom = 48.0
-mouse_filter = 2
-custom_styles/panel = SubResource( 6 )
+[node name="Display" type="Sprite" parent="."]
+modulate = Color( 0.2, 0.160784, 0.160784, 0.752941 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 4 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Face" type="Control" parent="."]
+[node name="Face" type="Node2D" parent="."]
 modulate = Color( 0, 0, 0, 1 )
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -44.0
-margin_top = -44.0
-margin_right = 44.0
-margin_bottom = 44.0
-mouse_filter = 2
 
 [node name="Value" type="Label" parent="Face"]
-margin_left = 24.0
-margin_top = 17.0
-margin_right = 43.0
-margin_bottom = 55.0
+margin_left = -20.0
+margin_top = -26.0
+margin_right = -1.0
+margin_bottom = 12.0
 custom_fonts/font = SubResource( 3 )
 text = "0"
 
 [node name="Suit" type="Label" parent="Face"]
-margin_left = 24.0
-margin_top = 43.0
-margin_right = 43.0
-margin_bottom = 81.0
+margin_left = -20.0
+margin_top = -1.0
+margin_right = -1.0
+margin_bottom = 37.0
 custom_fonts/font = SubResource( 3 )
 text = "Ν"
 
-[node name="TextureRect" type="TextureRect" parent="Face"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -4.0
-margin_top = -4.0
-margin_right = 292.0
-margin_bottom = 292.0
-rect_scale = Vector2( 0.25, 0.25 )
-mouse_filter = 2
+[node name="TextureRect" type="Sprite" parent="Face"]
+scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 3 )
 
-[node name="Back" type="Control" parent="."]
-visible = false
-margin_left = -52.0
-margin_top = -74.0
-margin_right = 53.0
-margin_bottom = 74.0
-mouse_filter = 2
+[node name="Border" type="Node2D" parent="."]
+__meta__ = {
+"_editor_description_": "Card.gd"
+}
 
 [node name="Tween" type="Tween" parent="."]
 

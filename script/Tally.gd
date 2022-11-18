@@ -7,6 +7,7 @@ var last_c
 
 
 func start_count(a, r, e, er):
+	#breakpoint
 	# TODO: make it tick
 	var ac = count(a, r)
 	var ec = count(e, er)
@@ -19,8 +20,9 @@ static func count(deck, armory):
 	var s = Sort.to_suits(deck)
 	for k in armory:
 		var ar = armory[k]
-		if k in s:
-			s[k].append_array(armory[k])
+		var intk = int(k)
+		if intk in s:
+			s[intk].append_array(ar)
 	var i = 0
 	for k in s:
 		var ii = 1

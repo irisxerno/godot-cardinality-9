@@ -22,8 +22,8 @@ func color(c):
 		return c
 
 
-func to_color(cname):
-	$Tween.interpolate_property(self, "color", self.color, color(cname), duration, Tween.TRANS_LINEAR, Tween.EASE_IN)
+func to_color(cname, d=duration):
+	$Tween.interpolate_property(self, "color", self.color, color(cname), d, Tween.TRANS_LINEAR, Tween.EASE_IN)
 	$Tween.start()
 
 

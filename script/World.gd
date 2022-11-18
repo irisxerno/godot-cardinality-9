@@ -19,6 +19,9 @@ func from_data(world, n):
 	clear()
 	num = n
 	$Label.text = "W: " + str(num)
+	if len(world) != 15:
+		emit_signal("ccount", 0)
+		return
 	var tile_scene = preload("res://scene/Tile.tscn")
 	var row = 0
 	var col = 0 

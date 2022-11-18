@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -23,14 +23,11 @@
 [ext_resource path="res://script/Savior.gd" type="Script" id=21]
 [ext_resource path="res://script/Saves.gd" type="Script" id=22]
 [ext_resource path="res://script/Click.gd" type="Script" id=23]
+[ext_resource path="res://script/Ending.gd" type="Script" id=24]
+[ext_resource path="res://res/DejaVuSerif.ttf" type="DynamicFontData" id=25]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
-
-[sub_resource type="DynamicFont" id=6]
-use_mipmaps = true
-use_filter = true
-font_data = ExtResource( 12 )
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.188235, 0.25098, 0.207843, 0.752941 )
@@ -64,6 +61,12 @@ size = 32
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 12 )
+
+[sub_resource type="DynamicFont" id=11]
+size = 48
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 25 )
 
 [node name="Main" type="Node"]
 script = ExtResource( 10 )
@@ -186,15 +189,6 @@ __meta__ = {
 [node name="Cards" type="Node2D" parent="."]
 script = ExtResource( 4 )
 
-[node name="Debug" type="Label" parent="Cards"]
-margin_left = 70.0
-margin_top = 30.0
-margin_right = 110.0
-margin_bottom = 49.0
-custom_colors/font_color = Color( 1, 1, 1, 0.501961 )
-custom_fonts/font = SubResource( 6 )
-text = "0"
-
 [node name="Armories" type="Node2D" parent="."]
 script = ExtResource( 4 )
 
@@ -202,6 +196,7 @@ script = ExtResource( 4 )
 script = ExtResource( 7 )
 
 [node name="Tabs" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -430,8 +425,26 @@ script = ExtResource( 23 )
 color = Color( 0, 0, 0, 0 )
 duration = 2.0
 
-[node name="Position2D" type="Position2D" parent="."]
-position = Vector2( -30, 130 )
+[node name="Ending" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 24 )
+tick_dur = 0.1
+
+[node name="Label" type="Label" parent="Ending"]
+margin_left = 200.0
+margin_top = 200.0
+margin_right = 1200.0
+margin_bottom = 590.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 11 )
+text = "cum"
+autowrap = true
+percent_visible = 1.33333
+
+[node name="Timer" type="Timer" parent="Ending"]
+wait_time = 10.0
+one_shot = true
 
 [connection signal="card_data" from="Savior" to="Builder/Dealer" method="deal_data_now"]
 [connection signal="reset" from="Savior" to="." method="reset"]
@@ -483,6 +496,7 @@ position = Vector2( -30, 130 )
 [connection signal="load_save" from="Tabs/SaveView/Saves" to="Savior" method="load_save"]
 [connection signal="click" from="Tabs/SaveView/newgame" to="Savior" method="newgame"]
 [connection signal="gui_input" from="Tabs/SaveView/newgame" to="Tabs/SaveView/newgame" method="_on_gui_input"]
+[connection signal="timeout" from="Ending/Timer" to="Ending" method="_on_timeout"]
 
 [editable path="Fight/Dealer"]
 [editable path="Tabs/WorldView"]

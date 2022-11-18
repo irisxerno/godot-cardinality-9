@@ -62,13 +62,22 @@ func to_build():
 
 func _on_Fight_done(win):
 	# TODO: losing animation
-
+	var ending = false
 	if win:
 		$Savior.savable = true
 		$Builder.clear()
 
+		if $Fight.tile.col == 4:
+			$WorldGeneration.return_new_world($Tabs/WorldView/World.num+1)
+			$Foreground.set_color("flash")
+			$Foreground.to_color("off")
+			if $Tabs/WorldView/World.num >= 5:
+				ending = true
+
 		var reward = $Fight.tile.reward
 		var maxc = $Tabs/StatsView/Stats/Mainhand.level + $Tabs/StatsView/Stats/Offhand.level + $Tabs/StatsView/Stats/Extra.level - $Fight/Mainhand.count() - $Fight/Offhand.count()
+		if ending:
+			maxc = 0
 		var r = []
 		if maxc > 0:
 			r = reward.slice(0, maxc-1)
@@ -77,11 +86,6 @@ func _on_Fight_done(win):
 		if maxc - len(r) > 0:
 			loss = maxc - len(r)
 			print("net loss: -", loss)
-		
-		$Builder/Dealer.add_cards($Fight/Mainhand.cards())
-		$Builder/Dealer.add_cards($Fight/Offhand.cards())
-		$Builder/Dealer.deal_from_data(r)
-		$Builder/Dealer.start()
 
 		$Tabs/StatsView/Stats.reset_ticks()
 		$Tabs/StatsView/Stats.add_xp($Fight/Extra.count()+len(reward)-len(r))
@@ -90,13 +94,25 @@ func _on_Fight_done(win):
 		$UserArmory.kill_cards()
 
 		$Tabs/WorldView/World.defeat($Fight.tile)
+
+		if ending:
+			print("victory!")
+			$Fight.clear(true)
+			$Cards.kill()
+			$Builder.visible = false
+			$Fight.visible = false
+			$Background.to_color(Color.white, 10)
+			$Ending.start($WorldGeneration.seed_value)
+			$Savior.archive()
+			return
+
+		$Builder/Dealer.add_cards($Fight/Mainhand.cards())
+		$Builder/Dealer.add_cards($Fight/Offhand.cards())
+		$Builder/Dealer.deal_from_data(r)
+		$Builder/Dealer.start()
+
 		$Background.set_color("growth")
 		$Background.to_color("none")
-
-		if $Fight.tile.col == 4:
-			$WorldGeneration.return_new_world($Tabs/WorldView/World.num+1)
-			$Foreground.set_color("flash")
-			$Foreground.to_color("off")
 	else:
 		$Background.set_color("death")
 		$Background.to_color("build")
@@ -111,7 +127,6 @@ func _on_Fight_done(win):
 	$Builder.update()
 
 	$Cards.kill()
-
 
 func _on_Tabs_resized():
 	var w = $Tabs.rect_size

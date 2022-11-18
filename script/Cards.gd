@@ -9,8 +9,6 @@ func _process(delta):
 	if raise_counter > 0:
 		if raise_counter > rcmax:
 			rcmax = raise_counter
-		if get_node("Debug"):
-			$Debug.text = str(raise_counter)+"/"+str(rcmax)
 	raise_counter = 0
 
 

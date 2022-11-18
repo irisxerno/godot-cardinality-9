@@ -8,7 +8,7 @@ export var suit = 0
 export var face_up = false
 
 const value_visual_10 = ["x","J","Q","K"]
-const suit_visual = ["Ν","β","δ","λ","φ","Ξ","Γ","Σ","Ψ","Ω","Μ"]
+const suit_visual = ["Ν","β","δ","λ","φ","Ξ","Γ","Σ","Ψ","Ω"]
 
 var dest_position = position
 var dest_a = 1
@@ -39,14 +39,16 @@ func update_face():
 	$Face/Suit.text = suit_visual[self.suit]
 
 	var h = 1.0/9.0*(suit-1) + 0.5/9.0
-	$Face.modulate = Color.from_hsv(h, 0.6, 0.9)
+	$Face.modulate = Color.from_hsv(h, 0.6, 1)
 
 	if face_up:
-		$Back.visible = false
+		$Border.visible = false
 		$Face.visible = true
+		$Display.modulate = Color.from_hsv(0, 0.2, 0.2, 0.75)
 	else:
-		$Back.visible = true
+		$Border.visible = true
 		$Face.visible = false
+		$Display.modulate = Color8(22, 18, 18)
 
 
 func move_to(new_position):
