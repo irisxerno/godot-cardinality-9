@@ -80,6 +80,8 @@ func request_select(inst):
 func defeat(inst):
 	inst.state = "defeated"
 	inst.update()
+	if inst.col == 4:
+		return
 	for tile in tiles:
 		if tile.row > inst.row - 2 and tile.row < inst.row + 2 and tile.col > inst.col - 2 and tile.col < inst.col + 2:
 			if not (tile.row - inst.row == tile.col - inst.col):
