@@ -98,7 +98,8 @@ func _on_Fight_done(win):
 		if ending:
 			print("victory!")
 			$Fight.clear(true)
-			$Cards.kill()
+			$Cards.kill(true)
+			$Armories.kill(true)
 			$Builder.visible = false
 			$Fight.visible = false
 			$Background.to_color(Color.white, 10)
