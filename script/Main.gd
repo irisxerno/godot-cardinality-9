@@ -126,7 +126,7 @@ func _on_Fight_done(win):
 
 func _on_Tabs_resized():
 	var w = $Tabs.rect_size
-	$Fight/Extra.position = Vector2(w.x+45,w.y/2)
+	$Fight/Extra.position = Vector2(w.x+100,w.y/2)
 	$UserArmory.position = Vector2(w.x - 260, 640)
 
 

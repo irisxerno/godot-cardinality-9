@@ -138,7 +138,7 @@ position = Vector2( 1400, 300 )
 script = ExtResource( 14 )
 
 [node name="Trash" type="Node2D" parent="Fight"]
-position = Vector2( -45, 340 )
+position = Vector2( -100, 340 )
 script = ExtResource( 14 )
 
 [node name="Attack" parent="Fight" instance=ExtResource( 1 )]
@@ -213,6 +213,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 8 )
 __meta__ = {
+"_edit_group_": true,
 "_edit_lock_": true
 }
 
