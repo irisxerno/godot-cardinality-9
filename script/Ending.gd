@@ -4,6 +4,7 @@ extends Control
 var lines = []
 var linelen = 0
 var tick = false
+var fade = false
 var t = 0
 export var tick_dur = 0.2
 
@@ -13,6 +14,7 @@ func _ready():
 
 
 func start(rng_seed):
+	print(rng_seed)
 	var file = File.new()
 	file.open("res://lines", File.READ)
 	for i in range(100):
@@ -26,10 +28,15 @@ func start(rng_seed):
 	$Label.visible_characters = 0
 	linelen = len(line)
 	visible = true
+	tick = false
+	fade = false
 	$Timer.start()
 
 
 func _on_timeout():
+	if fade:
+		$AlphaTween.interpolate_property($Label, "modulate", Color(1, 1, 1, 1), Color(1, 1, 1, 0), 10, Tween.TRANS_LINEAR, Tween.EASE_IN)
+		$AlphaTween.start()
 	tick = true
 
 
@@ -40,3 +47,6 @@ func _process(delta):
 			t -= tick_dur
 			if $Label.visible_characters < linelen:
 				$Label.visible_characters += 1
+			elif not fade:
+				fade = true
+				$Timer.start()

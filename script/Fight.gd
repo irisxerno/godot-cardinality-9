@@ -2,6 +2,7 @@ extends Node2D
 
 
 signal done
+signal started
 
 var stats
 var tile
@@ -47,11 +48,12 @@ func _on_Mainhand_request_return_cards(inst):
 	inst.update()
 	$EnemyAttack.add_cards(c)
 
-	$Tally.start_count($Attack.cards(), armory.dict(), $EnemyAttack.cards(), $ArmoryController.dict())
+	$Tally.start_count($Attack.cards(), armory.list(), $EnemyAttack.cards(), $ArmoryController.list())
 
 
 func _on_Dealer_done():
 	set_input(true)
+	emit_signal("started")
 	#pass
 
 
@@ -90,3 +92,8 @@ func clear(death=false):
 		if inst.has_method("clear"):
 			inst.clear(death)
 	tile = null
+
+
+func _on_Cancel_click():
+	$Attack/LevelBar.count(0)
+	emit_signal("done", false)

@@ -125,8 +125,9 @@ func load_next(i):
 	armory.from_data(data["armories"])
 	stats.from_data(data["stats"])
 	world.from_data(data["world"], data["world_num"])
-
-	generator.rng.seed = data["rng_seed"]
+	
+	generator.seed_value = data["rng_seed"]
+	generator.rng.seed = generator.seed_value
 	generator.rng.state = data["rng_state"]
 
 	color = data["color"]

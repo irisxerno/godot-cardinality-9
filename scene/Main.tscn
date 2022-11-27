@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -28,6 +28,14 @@
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
+
+[sub_resource type="Gradient" id=12]
+offsets = PoolRealArray( 0.798165 )
+colors = PoolColorArray( 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=13]
+gradient = SubResource( 12 )
+width = 1
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.188235, 0.25098, 0.207843, 0.752941 )
@@ -154,9 +162,6 @@ position = Vector2( 0, 240 )
 [node name="Tally" type="Area2D" parent="Fight"]
 position = Vector2( 200, 340 )
 script = ExtResource( 18 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="Label" type="Label" parent="Fight/Tally"]
 anchor_left = 0.5
@@ -179,6 +184,13 @@ position = Vector2( 1070, 370 )
 shape = SubResource( 5 )
 disabled = true
 
+[node name="Indicator" type="Sprite" parent="Fight/Tally"]
+visible = false
+modulate = Color( 1, 1, 1, 0.25098 )
+position = Vector2( 300, 6 )
+scale = Vector2( 350, 5 )
+texture = SubResource( 13 )
+
 [node name="UserArmory" type="Node2D" parent="."]
 position = Vector2( 1020, 640 )
 script = ExtResource( 20 )
@@ -196,7 +208,6 @@ script = ExtResource( 4 )
 script = ExtResource( 7 )
 
 [node name="Tabs" type="Control" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
@@ -421,6 +432,19 @@ custom_fonts/font = SubResource( 10 )
 text = "newgame"
 script = ExtResource( 23 )
 
+[node name="Cancel" parent="Tabs" instance=ExtResource( 6 )]
+mouse_filter = 1
+property = "margin_left"
+button_only = true
+
+[node name="Button" parent="Tabs/Cancel" index="1"]
+modulate = Color( 0, 0, 0, 0.439216 )
+margin_top = 400.0
+margin_right = 1600.0
+margin_bottom = 900.0
+rect_rotation = -90.0
+mouse_filter = 1
+
 [node name="Foreground" parent="." instance=ExtResource( 17 )]
 color = Color( 0, 0, 0, 0 )
 duration = 2.0
@@ -429,6 +453,10 @@ duration = 2.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 24 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
 tick_dur = 0.1
 
 [node name="Label" type="Label" parent="Ending"]
@@ -440,12 +468,14 @@ margin_right = -80.0
 margin_bottom = -120.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = SubResource( 11 )
-text = "cum"
+text = "the debian administrator's handjob"
 autowrap = true
 
 [node name="Timer" type="Timer" parent="Ending"]
 wait_time = 10.0
 one_shot = true
+
+[node name="AlphaTween" type="Tween" parent="Ending"]
 
 [connection signal="card_data" from="Savior" to="Builder/Dealer" method="deal_data_now"]
 [connection signal="reset" from="Savior" to="." method="reset"]
@@ -460,6 +490,7 @@ one_shot = true
 [connection signal="done" from="Builder/Dealer" to="." method="to_build"]
 [connection signal="return_cards" from="Builder/Dealer" to="Savior" method="get_cards"]
 [connection signal="done" from="Fight" to="." method="_on_Fight_done"]
+[connection signal="started" from="Fight" to="Tabs/Cancel" method="force_show"]
 [connection signal="request_return_cards" from="Fight/Mainhand" to="Fight" method="_on_Mainhand_request_return_cards"]
 [connection signal="add_card" from="Fight/ArmoryController" to="Armories" method="add_card"]
 [connection signal="add_card" from="Fight/Dealer" to="Cards" method="add_card"]
@@ -497,9 +528,11 @@ one_shot = true
 [connection signal="load_save" from="Tabs/SaveView/Saves" to="Savior" method="load_save"]
 [connection signal="click" from="Tabs/SaveView/newgame" to="Savior" method="newgame"]
 [connection signal="gui_input" from="Tabs/SaveView/newgame" to="Tabs/SaveView/newgame" method="_on_gui_input"]
+[connection signal="click" from="Tabs/Cancel" to="Fight" method="_on_Cancel_click"]
 [connection signal="timeout" from="Ending/Timer" to="Ending" method="_on_timeout"]
 
 [editable path="Fight/Dealer"]
 [editable path="Tabs/WorldView"]
 [editable path="Tabs/StatsView"]
 [editable path="Tabs/SaveView"]
+[editable path="Tabs/Cancel"]

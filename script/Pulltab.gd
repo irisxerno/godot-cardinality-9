@@ -5,7 +5,7 @@ signal request_press
 
 signal open
 signal close
-
+signal click
 
 var state = "close"
 
@@ -13,16 +13,19 @@ export var open_distance = 120
 export var close_distance = 0
 export var hide_distance = -100
 export var property = "margin_top"
+export var button_only = false
 
 
-func update_state(new_state, tween=true):
+func update_state(new_state, tween=true, force=false):
 	var dest_dist = close_distance
-	if new_state == "open":
+	if new_state == "open" and not button_only:
 		dest_dist = open_distance
 		emit_signal("open")
 	elif new_state == "hide":
 		dest_dist = hide_distance
 		emit_signal("close")
+	if button_only and new_state == "close" and not force:
+		return
 	if not tween:
 		self.set(property, dest_dist)
 	else:
@@ -36,4 +39,12 @@ func _on_gui_input(event):
 		if state == "open":
 			update_state("close")
 		elif state == "close":
-			update_state("open")
+			if button_only:
+				update_state("hide")
+				emit_signal("click")
+			else:
+				update_state("open")
+
+
+func force_show():
+	update_state("close", true, true)
