@@ -15,14 +15,48 @@ var col = -1
 
 
 func _ready():
+	$Label.text = str(len(cards))
+	var cursor = Vector2(0,0)
+	var scenec = preload("res://scene/MiniCircle.tscn")
+	var scener = preload("res://scene/MiniRect.tscn")
+	var ic = []
+	var ak = armories.keys()
+	ak.sort()
+	for k in ak:
+		for a in armories[k]:
+			var inst = scenec.instance()
+			var h = 1.0/9.0*(int(k)-1) + 0.5/9.0
+			inst.modulate = Color.from_hsv(h, 0.6, 1)
+			ic.append(inst)
+
+	var cs = cards.duplicate()
+	cs.sort_custom(Sort, "by_suit")
+	for c in cs:
+		var inst = scener.instance()
+		var h = 1.0/9.0*(c.suit-1) + 0.5/9.0
+		inst.modulate = Color.from_hsv(h, 0.6, 1)
+		ic.append(inst)
+
+	for inst in ic:
+		inst.position = cursor*30+Vector2(15,15)
+		$Peek.add_child(inst)
+		cursor += Vector2(1, 0)
+		if cursor.x >= 8:
+			cursor.x = 0
+			cursor.y += 1
+
+	var i = len(ic)
+	$Peek/Rect.rect_size = Vector2(min(8, i), ceil(i/8.0))*30
 	update()
 
 
 func update():
-	$Label.text = str(len(cards))
 	$Background.modulate = Color(0, 0, 0, 0.5)
+	$Peek.visible = false
 	if selected:
 		$Background.modulate = Color(1, 1, 1, 0.5)
+		if state == "show":
+			$Peek.visible = true
 	$Defeated.visible = false
 	$Background.visible = true
 	$Label.visible = true

@@ -9,6 +9,11 @@ var t = 0
 var maxfps = 59.9
 
 
+func _ready():
+	randomize()
+	print(randi())
+
+
 func _process(delta):
 	var fps = 1/delta
 	# var fps = Performance.get_monitor(Performance.TIME_FPS)

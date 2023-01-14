@@ -24,7 +24,7 @@ visible = false
 shape = SubResource( 7 )
 
 [node name="Display" type="Sprite" parent="."]
-modulate = Color( 0.1, 0.08, 0.08, 0.752941 )
+modulate = Color( 0.101961, 0.0784314, 0.0784314, 0.752941 )
 scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 3 )
 

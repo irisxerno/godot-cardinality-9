@@ -18,6 +18,10 @@ func mx(w):
 	return 4 + w
 
 
+func c():
+	return rng.randi_range(2, 13)
+
+
 func iq():
 	return rng.randf() < iq_chance
 
@@ -41,7 +45,7 @@ func _rand_tile_num(w, h):
 func _rand_reward(w, num):
 	var cards = []
 	for i in range(num):
-		var value = rng.randi_range(2, 13)
+		var value = c()
 		cards.append({
 			"value": value,
 			"suit": rng.randi_range(1, mx(w))
@@ -54,7 +58,7 @@ func _rand_tile(w, h):
 	var cards = []
 	var suit = rng.randi_range(1, mx(w))
 	for i in range(num):
-		var value = rng.randi_range(2, 13)
+		var value = c()
 		if iq() and len(cards) > 0:
 			suit = cards[rng.randi_range(0, len(cards)-1)].suit
 		else:
@@ -66,9 +70,7 @@ func _rand_tile(w, h):
 	var armories = {}
 	var max_armory = w + 1
 	for i in range(w*world_row_len+h):
-		var avalue = rng.randi_range(2, 13)
-		if h == world_row_len:
-			avalue = max(avalue, rng.randi_range(2, 13))
+		var avalue = c()
 		var asuit
 		if iq():
 			asuit = cards[rng.randi_range(0, len(cards)-1)].suit
@@ -98,7 +100,7 @@ func new_game():
 	var cards = []
 	for i in range(10):
 		cards.append({
-			"value": rng.randi_range(2,13),
+			"value": c(),
 			"suit": rng.randi_range(1,mx(0))
 		})
 	emit_signal("new")

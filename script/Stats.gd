@@ -5,7 +5,6 @@ export var xp = 0
 
 var score = 0
 var progress = 0
-var loss = 0
 
 
 func _ready():
@@ -36,10 +35,6 @@ func add_xp(i):
 	return_cost(i)
 
 
-func add_loss(i):
-	loss += i
-
-
 func reset_ticks():
 	for inst in get_children():
 		if inst.has_method("cost"):
@@ -56,7 +51,6 @@ func to_data():
 		"armory": get_armory(),
 		"score": score,
 		"progress": progress,
-		"loss": loss
 	}
 
 
@@ -64,7 +58,6 @@ func from_data(sdata):
 	xp = sdata["xp"]
 	score = sdata["score"]
 	progress = sdata["progress"]
-	loss = sdata["loss"]
 	$Mainhand.setl(sdata["mainhand"])
 	$Offhand.setl(sdata["offhand"])
 	$Extra.setl(sdata["extra"])
@@ -77,7 +70,6 @@ func new():
 	xp = 0
 	score = 0
 	progress = 0
-	loss = 0
 	update()
 	for inst in get_children():
 		if inst.has_method("cost"):

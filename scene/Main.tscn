@@ -213,7 +213,6 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 8 )
 __meta__ = {
-"_edit_group_": true,
 "_edit_lock_": true
 }
 
@@ -249,9 +248,6 @@ margin_top = -120.0
 margin_right = -810.0
 margin_bottom = -120.0
 script = ExtResource( 9 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="Label" type="Label" parent="Tabs/WorldView/World"]
 modulate = Color( 1, 1, 1, 0.25098 )
@@ -461,6 +457,7 @@ __meta__ = {
 tick_dur = 0.1
 
 [node name="Label" type="Label" parent="Ending"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 200.0

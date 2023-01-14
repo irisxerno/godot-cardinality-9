@@ -89,14 +89,8 @@ func _on_Fight_done(win):
 		if maxc > 0:
 			r = reward.slice(0, maxc-1)
 
-		var loss = 0
-		if maxc - len(r) > 0:
-			loss = maxc - len(r)
-			print("net loss: -", loss)
-
 		$Tabs/StatsView/Stats.reset_ticks()
 		$Tabs/StatsView/Stats.add_xp($Fight/Extra.count()+len(reward)-len(r))
-		$Tabs/StatsView/Stats.add_loss(loss)
 
 		$UserArmory.kill_cards()
 

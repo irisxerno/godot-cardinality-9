@@ -17,7 +17,7 @@ var color
 
 var saves = []
 
-var magic = 1040447947
+var magic = 2510674299
 
 
 func archive():

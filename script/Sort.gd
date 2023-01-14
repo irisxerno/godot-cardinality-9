@@ -7,6 +7,13 @@ static func by_value(a, b):
 	return false
 
 
+static func by_suit(a, b):
+	if a.suit < b.suit:
+		return true
+	return false
+
+
+
 static func to_suits(things):
 	var by_suits = {}
 	for c in things:

@@ -24,6 +24,7 @@ func start(rng_seed):
 	#rng.randomize()
 	rng.seed = rng_seed
 	var line = lines[rng.randi_range(0,len(lines)-1)]
+	$Label.visible = true
 	$Label.text = line
 	$Label.visible_characters = 0
 	linelen = len(line)
