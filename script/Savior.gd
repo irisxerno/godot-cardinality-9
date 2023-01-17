@@ -6,6 +6,7 @@ signal update
 signal card_data
 signal reset
 signal update_lowest
+signal update_results
 
 
 var savable = false
@@ -19,7 +20,7 @@ var color
 var saves = []
 var lowest = {}
 
-var magic = 1012867407
+var magic = 1012867408
 
 var gametime = 0
 var idletime = 0
@@ -37,20 +38,32 @@ func _input(event):
 
 func archive():
 	var sc = stats.score - stats.xp
+	var lw = [false, false, false]
 	if len(lowest) == 0:
 		lowest["score"] = sc
 		lowest["progress"] = stats.progress
 		lowest["time"] = gametime
+		lw = [true, true, true]
 	else:
 		if sc < lowest["score"]:
 			lowest["score"] = sc
+			lw[0] = true
 		if stats.progress < lowest["progress"]:
 			lowest["progress"] = stats.progress
+			lw[1] = true
 		if gametime < lowest["time"]:
 			lowest["time"] = gametime
+			lw[2] = true
 
 	saves = []
 	save_file()
+
+	var results = {}
+	results["score"] = sc
+	results["progress"] = stats.progress
+	results["time"] = gametime
+
+	emit_signal("update_results", results, lw)
 
 
 func start():

@@ -27,7 +27,7 @@ func start(rng_seed):
 	$Label.visible = true
 	$Label.text = line
 	$Label.visible_characters = 0
-	linelen = len(line)
+	linelen = len($Label.text)
 	visible = true
 	tick = false
 	fade = false
@@ -51,3 +51,11 @@ func _process(delta):
 			elif not fade:
 				fade = true
 				$Timer.start()
+
+
+func _on_gui_input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+		if tick and not fade:
+			print("skip")
+			fade = true
+			_on_timeout()
