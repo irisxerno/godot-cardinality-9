@@ -13,10 +13,8 @@ func _ready():
 	randomize()
 	print(randi())
 
-
 func _process(delta):
 	var fps = 1/delta
-	# var fps = Performance.get_monitor(Performance.TIME_FPS)
 	$Debug.text = str(c) + " " + str(fps)
 
 	if fps < maxfps:

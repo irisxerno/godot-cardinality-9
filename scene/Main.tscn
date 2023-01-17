@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -25,6 +25,7 @@
 [ext_resource path="res://script/Click.gd" type="Script" id=23]
 [ext_resource path="res://script/Ending.gd" type="Script" id=24]
 [ext_resource path="res://res/DejaVuSerif.ttf" type="DynamicFontData" id=25]
+[ext_resource path="res://script/Lowest.gd" type="Script" id=26]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
@@ -45,7 +46,7 @@ corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
 [sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 0.1875, 0.197917, 0.25, 0.752941 )
+bg_color = Color( 0.188235, 0.196078, 0.25098, 0.752941 )
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
@@ -65,6 +66,19 @@ corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
 [sub_resource type="DynamicFont" id=10]
+size = 32
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 12 )
+
+[sub_resource type="StyleBoxFlat" id=14]
+bg_color = Color( 0.25098, 0.188235, 0.235294, 0.941176 )
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="DynamicFont" id=15]
 size = 32
 use_mipmaps = true
 use_filter = true
@@ -282,7 +296,7 @@ custom_styles/panel = SubResource( 2 )
 
 [node name="Button" parent="Tabs/StatsView" index="1"]
 visible = false
-modulate = Color( 0.5, 0.479167, 0.375, 0.878431 )
+modulate = Color( 0.501961, 0.478431, 0.376471, 0.878431 )
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -327,6 +341,7 @@ margin_right = -250.0
 margin_bottom = -160.0
 default = 5
 mult = 1
+maxval = 30
 
 [node name="Offhand" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
@@ -339,6 +354,7 @@ margin_right = -250.0
 margin_bottom = -80.0
 default = 5
 mult = 1
+maxval = 30
 
 [node name="Extra" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
@@ -349,6 +365,7 @@ margin_left = -250.0
 margin_right = -250.0
 base = 5
 mult = 1
+maxval = 30
 
 [node name="Attack" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
@@ -361,6 +378,7 @@ margin_right = -250.0
 margin_bottom = 80.0
 default = 5
 mult = 5
+maxval = 20
 
 [node name="Armory" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
@@ -373,6 +391,7 @@ margin_right = -250.0
 margin_bottom = 155.0
 base = 5
 mult = 5
+maxval = 10
 
 [node name="Temp" type="Label" parent="Tabs/StatsView/Stats"]
 visible = false
@@ -442,6 +461,89 @@ margin_bottom = 900.0
 rect_rotation = -90.0
 mouse_filter = 1
 
+[node name="ScoreView" parent="Tabs" instance=ExtResource( 6 )]
+anchor_right = 1.0
+anchor_bottom = 1.0
+open_distance = -150
+hide_distance = 100
+property = "margin_bottom"
+
+[node name="Background" parent="Tabs/ScoreView" index="0"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 140.0
+margin_right = 750.0
+margin_bottom = 290.0
+custom_styles/panel = SubResource( 14 )
+
+[node name="Button" parent="Tabs/ScoreView" index="1"]
+modulate = Color( 0.25098, 0.380392, 0.501961, 0.878431 )
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 340.0
+margin_top = 6.10352e-05
+margin_right = 1940.0
+margin_bottom = 500.0
+rect_rotation = -180.0
+rect_scale = Vector2( 0.1, 0.1 )
+mouse_filter = 1
+
+[node name="Lowest" type="Control" parent="Tabs/ScoreView"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 140.0
+margin_right = 750.0
+margin_bottom = 290.0
+script = ExtResource( 26 )
+
+[node name="Label" type="Label" parent="Tabs/ScoreView/Lowest"]
+margin_left = 80.0
+margin_top = 40.0
+margin_right = 156.0
+margin_bottom = 78.0
+custom_fonts/font = SubResource( 15 )
+text = "< score"
+
+[node name="Score" type="Label" parent="Tabs/ScoreView/Lowest"]
+margin_left = 100.0
+margin_top = 80.0
+margin_right = 176.0
+margin_bottom = 118.0
+custom_fonts/font = SubResource( 15 )
+text = "-"
+
+[node name="Label2" type="Label" parent="Tabs/ScoreView/Lowest"]
+margin_left = 240.0
+margin_top = 40.0
+margin_right = 354.0
+margin_bottom = 78.0
+custom_fonts/font = SubResource( 15 )
+text = "< time"
+
+[node name="Time" type="Label" parent="Tabs/ScoreView/Lowest"]
+margin_left = 260.0
+margin_top = 80.0
+margin_right = 374.0
+margin_bottom = 118.0
+custom_fonts/font = SubResource( 15 )
+text = "-"
+
+[node name="Label3" type="Label" parent="Tabs/ScoreView/Lowest"]
+margin_left = 400.0
+margin_top = 40.0
+margin_right = 514.0
+margin_bottom = 78.0
+custom_fonts/font = SubResource( 15 )
+text = "< enc."
+
+[node name="Progress" type="Label" parent="Tabs/ScoreView/Lowest"]
+margin_left = 420.0
+margin_top = 80.0
+margin_right = 534.0
+margin_bottom = 118.0
+custom_fonts/font = SubResource( 15 )
+text = "-"
+
 [node name="Foreground" parent="." instance=ExtResource( 17 )]
 color = Color( 0, 0, 0, 0 )
 duration = 2.0
@@ -479,6 +581,7 @@ one_shot = true
 [connection signal="reset" from="Savior" to="." method="reset"]
 [connection signal="return_cards" from="Savior" to="Builder/Deal" method="add_cards"]
 [connection signal="update" from="Savior" to="Tabs/SaveView/Saves" method="set_saves"]
+[connection signal="update_lowest" from="Savior" to="Tabs/ScoreView/Lowest" method="update_text"]
 [connection signal="dump" from="Builder/Offhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder/Deal" method="request_take_cards"]
 [connection signal="request_return_cards" from="Builder/Deal" to="Builder" method="_on_Deal_request_return_cards"]
@@ -534,3 +637,4 @@ one_shot = true
 [editable path="Tabs/StatsView"]
 [editable path="Tabs/SaveView"]
 [editable path="Tabs/Cancel"]
+[editable path="Tabs/ScoreView"]

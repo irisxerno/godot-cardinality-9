@@ -61,8 +61,9 @@ func to_build():
 
 
 func _on_Fight_done(win):
-	# TODO: losing animation
 	$Tabs/Cancel.update_state("hide")
+	var ending = false
+
 	if win:
 		$Savior.savable = true
 		$Builder.clear()
@@ -72,16 +73,8 @@ func _on_Fight_done(win):
 			$Foreground.set_color("flash")
 			$Foreground.to_color("off")
 			if $Tabs/WorldView/World.num > 5:
-				print("victory!")
-				$Fight.clear(true)
-				$Cards.kill(true)
-				$Armories.kill(true)
-				$Builder.visible = false
-				$Fight.visible = false
-				$Background.to_color(Color.white, 10)
-				$Ending.start($WorldGeneration.seed_value)
-				$Savior.archive()
-				return
+				ending = true
+
 
 		var reward = $Fight.tile.reward
 		var maxc = $Tabs/StatsView/Stats/Mainhand.level + $Tabs/StatsView/Stats/Offhand.level + $Tabs/StatsView/Stats/Extra.level - $Fight/Mainhand.count() - $Fight/Offhand.count()
@@ -95,6 +88,18 @@ func _on_Fight_done(win):
 		$UserArmory.kill_cards()
 
 		$Tabs/WorldView/World.defeat($Fight.tile)
+
+		if ending:
+				print("victory!")
+				$Fight.clear(true)
+				$Cards.kill(true)
+				$Armories.kill(true)
+				$Builder.visible = false
+				$Fight.visible = false
+				$Background.to_color(Color.white, 10)
+				$Ending.start($WorldGeneration.seed_value)
+				$Savior.archive()
+				return
 
 		$Builder/Dealer.add_cards($Fight/Mainhand.cards())
 		$Builder/Dealer.add_cards($Fight/Offhand.cards())

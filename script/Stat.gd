@@ -7,6 +7,7 @@ signal update
 export var default = 0
 export var base = 0
 export var mult = 0
+export var maxval = 100
 
 var level = 0
 
@@ -18,6 +19,12 @@ func _ready():
 
 func cost():
 	return (level + base) * mult
+
+
+func cost_str():
+	if level >= maxval:
+		return "-"
+	return str(cost())
 
 
 func decrease():
@@ -42,9 +49,9 @@ func update():
 	$Level.text = str(level)
 	$Cost.text = ""
 	$Level.rect_position = Vector2(0,0)
-	if cost() != level:
+	if cost() != level or level >= maxval:
 		$Level.rect_position = Vector2(-5, -5)
-		$Cost.text = str(cost())
+		$Cost.text = cost_str()
 	emit_signal("update", level)
 
 

@@ -17,7 +17,7 @@ func update():
 
 func try_buy(inst):
 	var cost = inst.cost()
-	if xp >= cost:
+	if xp >= cost and inst.level < inst.maxval:
 		xp -= cost
 		inst.increase()
 		update()
