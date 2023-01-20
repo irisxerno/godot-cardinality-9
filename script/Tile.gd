@@ -15,7 +15,8 @@ var col = -1
 
 
 func _ready():
-	$Label.text = str(len(cards))
+	$Label.text = str(len(reward))
+	var count = len(cards)
 	var cursor = Vector2(0,0)
 	var scenec = preload("res://scene/MiniCircle.tscn")
 	var scener = preload("res://scene/MiniRect.tscn")

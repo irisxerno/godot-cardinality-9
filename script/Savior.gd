@@ -16,14 +16,17 @@ var armory
 var world
 var generator
 var color
+var tutorial
 
 var saves = []
 var lowest = {}
 
-var magic = 1012867408
+var magic = 135606721
 
 var gametime = 0
 var idletime = 0
+
+var savefile_json
 
 
 func _process(delta):
@@ -77,6 +80,7 @@ func start():
 			if magic == svmg:
 				saves = savefile["saves"]
 				lowest = savefile["lowest"]
+				tutorial.set_tutorial(savefile["tutorial_progress"], savefile["stats_progress"])
 		save_f.close()
 	emit_signal("update", saves)
 	if len(lowest) > 0:
@@ -105,16 +109,33 @@ func get_cards(cards):
 
 
 func save_file():
-	while len(saves) > 5:
-		saves.pop_front()
+	savefile_json = null
+	if tutorial.tutorial:
+		print("refusing to save tutorial")
+		return
 
-	var save_game = File.new()
-	save_game.open_compressed("user://save", File.WRITE, File.COMPRESSION_GZIP)
 	var savefile = {}
 	savefile["saves"] = saves
 	savefile["magic"] = magic
 	savefile["lowest"] = lowest
-	save_game.store_line(to_json(savefile))
+	savefile["tutorial_progress"] = tutorial.tutorial_progress
+	savefile["stats_progress"] = tutorial.stats_progress
+	savefile_json = to_json(savefile)
+	if tutorial.inhibit_for_stats:
+		print("save inhibited")
+	else:
+		save_to_file()
+
+
+func save_to_file():
+	if not savefile_json:
+		print("no stored json")
+		return
+	var save_game = File.new()
+	save_game.open_compressed("user://save", File.WRITE, File.COMPRESSION_GZIP)
+	save_game.store_line(savefile_json)
+	savefile_json = null
+	print("saved")
 
 
 func save(cards):
@@ -135,6 +156,9 @@ func save(cards):
 		"time": gametime
 	}
 	saves.append(data)
+	while len(saves) > 5:
+		saves.pop_front()
+
 	save_file()
 	emit_signal("update", saves)
 
@@ -149,7 +173,7 @@ func load_next(i):
 		generator.new_game()
 		return
 	var data = saves[i]
-	
+
 	emit_signal("card_data", data["cards"])
 	armory.from_data(data["armories"])
 	stats.from_data(data["stats"])
@@ -162,6 +186,7 @@ func load_next(i):
 	gametime = data["time"]
 
 	color = data["color"]
+	tutorial.post_load()
 
 
 func color(c):
@@ -170,4 +195,10 @@ func color(c):
 
 func newgame():
 	gametime = 0
+	load_save(false)
+
+
+func newgame_tutorial():
+	gametime = 0
+	tutorial.set_tutorial(0, 0)
 	load_save(false)

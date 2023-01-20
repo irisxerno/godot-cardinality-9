@@ -6,18 +6,31 @@ export var xp = 0
 var score = 0
 var progress = 0
 
+var list
+var shown_stats = 0
+
+signal buy_pressed
+
 
 func _ready():
+	list = [$Mainhand, $Offhand, $Extra, $Attack, $Armory]
 	update()
 
 
 func update():
 	$XP.text = str(xp)
+	var i = 0
+	for inst in list:
+		inst.visible = false
+		if i < shown_stats:
+			inst.visible = true
+		i += 1
 
 
 func try_buy(inst):
 	var cost = inst.cost()
 	if xp >= cost and inst.level < inst.maxval:
+		emit_signal("buy_pressed")
 		xp -= cost
 		inst.increase()
 		update()

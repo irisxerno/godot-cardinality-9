@@ -3,11 +3,13 @@ extends Node2D
 
 signal done
 signal started
+signal win_height
 
 var stats
 var tile
 var armory
 var input = true
+var cancel = false
 
 
 func _process(delta):
@@ -53,8 +55,8 @@ func _on_Mainhand_request_return_cards(inst):
 
 func _on_Dealer_done():
 	set_input(true)
-	emit_signal("started")
-	#pass
+	if cancel:
+		emit_signal("started")
 
 
 func _on_Dealer_return_cards(new_cards):
@@ -77,7 +79,9 @@ func _on_Tally_done(c):
 	if $Mainhand.count()+$Offhand.count() == 0:
 		emit_signal("done", false)
 	elif $EnemyController.count() == 0:
-		emit_signal("done", true)
+		var tc = tile.col
+		emit_signal("done", true) # this clears tile.col
+		emit_signal("win_height", tc)
 	else:
 		set_input(true)
 		var take = stats.get_mainhand() - $Mainhand.count()
@@ -92,8 +96,13 @@ func clear(death=false):
 		if inst.has_method("clear"):
 			inst.clear(death)
 	tile = null
+	cancel = false
 
 
 func _on_Cancel_click():
 	$Attack/LevelBar.count(0)
 	emit_signal("done", false)
+
+
+func set_cancel(b):
+	cancel = b

@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -27,6 +27,7 @@
 [ext_resource path="res://res/DejaVuSerif.ttf" type="DynamicFontData" id=25]
 [ext_resource path="res://script/Lowest.gd" type="Script" id=26]
 [ext_resource path="res://script/Results.gd" type="Script" id=27]
+[ext_resource path="res://script/Tutorializer.gd" type="Script" id=28]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
@@ -66,8 +67,14 @@ corner_radius_top_right = 16
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=17]
 size = 32
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 12 )
+
+[sub_resource type="DynamicFont" id=18]
+size = 24
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 12 )
@@ -102,6 +109,9 @@ script = ExtResource( 10 )
 
 [node name="Savior" type="Node" parent="."]
 script = ExtResource( 21 )
+
+[node name="Tutorializer" type="Node" parent="."]
+script = ExtResource( 28 )
 
 [node name="Background" parent="." instance=ExtResource( 17 )]
 
@@ -425,34 +435,49 @@ property = "margin_left"
 
 [node name="Background" parent="Tabs/SaveView" index="0"]
 margin_left = -250.0
-margin_top = 150.0
-margin_bottom = 680.0
+margin_top = 100.0
+margin_bottom = 660.0
 custom_styles/panel = SubResource( 9 )
 
 [node name="Button" parent="Tabs/SaveView" index="1"]
 modulate = Color( 0.419608, 0.25098, 0.501961, 0.878431 )
-margin_top = 640.0
+margin_top = 620.0
 margin_right = 1600.0
-margin_bottom = 1140.0
+margin_bottom = 1120.0
 rect_rotation = -90.0
 mouse_filter = 1
 
 [node name="Saves" type="Control" parent="Tabs/SaveView"]
 margin_left = -200.0
-margin_top = 170.0
+margin_top = 120.0
 margin_right = -200.0
-margin_bottom = 170.0
+margin_bottom = 120.0
 script = ExtResource( 22 )
 
 [node name="newgame" type="Label" parent="Tabs/SaveView"]
 modulate = Color( 1, 1, 1, 0.25098 )
-margin_left = -170.0
-margin_top = 620.0
-margin_right = -37.0
-margin_bottom = 660.0
+margin_left = -180.0
+margin_top = 560.0
+margin_right = -40.0
+margin_bottom = 600.0
 mouse_filter = 1
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 17 )
 text = "newgame"
+align = 1
+valign = 1
+script = ExtResource( 23 )
+
+[node name="tutorial" type="Label" parent="Tabs/SaveView"]
+modulate = Color( 1, 1, 1, 0.25098 )
+margin_left = -180.0
+margin_top = 610.0
+margin_right = -40.0
+margin_bottom = 650.0
+mouse_filter = 1
+custom_fonts/font = SubResource( 18 )
+text = "tutorial"
+align = 1
+valign = 1
 script = ExtResource( 23 )
 
 [node name="Cancel" parent="Tabs" instance=ExtResource( 6 )]
@@ -462,9 +487,9 @@ button_only = true
 
 [node name="Button" parent="Tabs/Cancel" index="1"]
 modulate = Color( 0, 0, 0, 0.439216 )
-margin_top = 400.0
+margin_top = 380.0
 margin_right = 1600.0
-margin_bottom = 900.0
+margin_bottom = 880.0
 rect_rotation = -90.0
 mouse_filter = 1
 
@@ -677,8 +702,12 @@ text = " "
 [connection signal="update" from="Savior" to="Tabs/SaveView/Saves" method="set_saves"]
 [connection signal="update_lowest" from="Savior" to="Tabs/ScoreView/Lowest" method="update_text"]
 [connection signal="update_results" from="Savior" to="Results" method="update_results"]
+[connection signal="save" from="Tutorializer" to="Savior" method="save_to_file"]
+[connection signal="set_cancel" from="Tutorializer" to="Fight" method="set_cancel"]
+[connection signal="show_tab" from="Tutorializer" to="Tabs" method="show_tab"]
 [connection signal="dump" from="Builder/Offhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder/Deal" method="request_take_cards"]
+[connection signal="count" from="Builder/Deal" to="Tutorializer" method="_on_Deal_count"]
 [connection signal="request_return_cards" from="Builder/Deal" to="Builder" method="_on_Deal_request_return_cards"]
 [connection signal="dump" from="Builder/Mainhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Mainhand" to="Builder/Deal" method="request_take_cards"]
@@ -687,6 +716,7 @@ text = " "
 [connection signal="return_cards" from="Builder/Dealer" to="Savior" method="get_cards"]
 [connection signal="done" from="Fight" to="." method="_on_Fight_done"]
 [connection signal="started" from="Fight" to="Tabs/Cancel" method="force_show"]
+[connection signal="win_height" from="Fight" to="Tutorializer" method="_on_Fight_win_height"]
 [connection signal="request_return_cards" from="Fight/Mainhand" to="Fight" method="_on_Mainhand_request_return_cards"]
 [connection signal="add_card" from="Fight/ArmoryController" to="Armories" method="add_card"]
 [connection signal="add_card" from="Fight/Dealer" to="Cards" method="add_card"]
@@ -704,6 +734,7 @@ text = " "
 [connection signal="resized" from="Tabs" to="." method="_on_Tabs_resized"]
 [connection signal="ccount" from="Tabs/WorldView/World" to="." method="_on_World_ccount"]
 [connection signal="select_tile" from="Tabs/WorldView/World" to="." method="_on_select_tile"]
+[connection signal="buy_pressed" from="Tabs/StatsView/Stats" to="Tutorializer" method="_on_Stats_buy_pressed"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="try_buy"]
 [connection signal="update" from="Tabs/StatsView/Stats/Mainhand" to="Builder/Mainhand" method="limit"]
@@ -724,6 +755,8 @@ text = " "
 [connection signal="load_save" from="Tabs/SaveView/Saves" to="Savior" method="load_save"]
 [connection signal="click" from="Tabs/SaveView/newgame" to="Savior" method="newgame"]
 [connection signal="gui_input" from="Tabs/SaveView/newgame" to="Tabs/SaveView/newgame" method="_on_gui_input"]
+[connection signal="click" from="Tabs/SaveView/tutorial" to="Savior" method="newgame_tutorial"]
+[connection signal="gui_input" from="Tabs/SaveView/tutorial" to="Tabs/SaveView/tutorial" method="_on_gui_input"]
 [connection signal="click" from="Tabs/Cancel" to="Fight" method="_on_Cancel_click"]
 [connection signal="gui_input" from="Ending" to="Ending" method="_on_gui_input"]
 [connection signal="timeout" from="Ending/Timer" to="Ending" method="_on_timeout"]

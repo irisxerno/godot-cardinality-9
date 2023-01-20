@@ -3,6 +3,7 @@ extends Node2D
 
 signal request_return_cards
 signal dump
+signal count
 
 var column_controller_scene = preload("res://scene/ColumnController.tscn") 
 var movex = 110
@@ -69,8 +70,11 @@ func add_cards(new_cards):
 		inst.update()
 
 	cards.append_array(new_cards)
+	var prev_count = count
 	count = len(cards)
-	
+
+	emit_signal("count", prev_count, count)
+
 	for inst in cards:
 		inst.face_up = true
 		inst.death = false

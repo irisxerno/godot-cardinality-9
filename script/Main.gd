@@ -16,6 +16,8 @@ func _ready():
 	$Savior.armory = armory
 	$Savior.world = world
 	$Savior.generator = $WorldGeneration
+	$Savior.tutorial = $Tutorializer
+	$Tutorializer.stats = stats
 	$Fight.stats = stats
 	$Fight.armory = armory
 
@@ -54,8 +56,8 @@ func _on_select_tile(tile):
 
 func to_build():
 	$UserArmory.visible = true
-	$Tabs.update_all("close")
-	$Tabs/StatsView.update_state("open")
+	#$Tabs.update_all("close")
+	$Tutorializer.show_tabs()
 	$Background.to_color("build")
 	state = "build"
 
@@ -98,6 +100,7 @@ func _on_Fight_done(win):
 				$Fight.visible = false
 				$Background.to_color(Color.white, 10)
 				$Ending.start($WorldGeneration.seed_value)
+				$Tutorializer.on_ending()
 				$Savior.archive()
 				return
 
