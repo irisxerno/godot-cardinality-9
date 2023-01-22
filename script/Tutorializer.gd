@@ -6,7 +6,6 @@ signal show_tab
 signal set_cancel
 
 var stats
-var stats_criteria = [5, 15, 25, 50, 100, 150, 200]
 
 var tutorial = true
 var inhibit_for_stats = false
@@ -60,14 +59,9 @@ func progress_stats():
 	if stats_progress >= 5:
 		return
 	var stat = stats.list[stats_progress]
-	if stats.xp >= stat.cost():
+	if stats.unlocked-1 >= stats_progress and stats.xp >= stat.cost():
 		stats_progress += 1
-		stats.shown_stats = stats_progress
-		stats.update()
 		inhibit_for_stats = true
-	elif stats.score >= stats_criteria[stats_progress]:
-		stats.shown_stats = stats_progress+1
-		stats.update()
 
 
 func _on_Stats_buy_pressed():
@@ -87,13 +81,7 @@ func set_tutorial(t, s):
 	if t >= 3:
 		tutorial = false
 	stats_progress = s
-	stats.shown_stats = stats_progress
-	stats.update()
+	prevent_dealcount = false
 	if t < 1:
 		prevent_dealcount = true
 
-
-func post_load():
-	if stats.score >= stats_criteria[stats_progress]:
-		stats.shown_stats = stats_progress+1
-		stats.update()

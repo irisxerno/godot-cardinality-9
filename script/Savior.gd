@@ -21,7 +21,7 @@ var tutorial
 var saves = []
 var lowest = {}
 
-var magic = 135606721
+var magic = 135606722
 
 var gametime = 0
 var idletime = 0
@@ -186,7 +186,6 @@ func load_next(i):
 	gametime = data["time"]
 
 	color = data["color"]
-	tutorial.post_load()
 
 
 func color(c):

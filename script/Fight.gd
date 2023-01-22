@@ -96,7 +96,6 @@ func clear(death=false):
 		if inst.has_method("clear"):
 			inst.clear(death)
 	tile = null
-	cancel = false
 
 
 func _on_Cancel_click():
