@@ -14,8 +14,6 @@ func _ready():
 
 
 func set_bars(new_bar_count):
-	# TODO: Implement a blinking one: if it has Timer it should turn itself off
-	# Would be used to visualize Stats/Attack
 	if len(bars) < new_bar_count:
 		for i in range(new_bar_count-len(bars)):
 			var new_bar = shape.duplicate()
@@ -30,6 +28,9 @@ func set_bars(new_bar_count):
 			bar.visible = true
 	bar_count = new_bar_count
 	count(num)
+	if has_node("Timer"):
+		visible = true
+		get_node("Timer").start()
 
 
 func count(n):
@@ -39,3 +40,7 @@ func count(n):
 		bar.modulate = Color.black
 		if i+1 > num:
 			bar.modulate = Color.white
+
+
+func hide():
+	visible = false

@@ -235,6 +235,13 @@ script = ExtResource( 4 )
 [node name="Armories" type="Node2D" parent="."]
 script = ExtResource( 4 )
 
+[node name="AttackLevelFlash" parent="." instance=ExtResource( 5 )]
+position = Vector2( 240, 470 )
+z_index = 100
+
+[node name="Timer" type="Timer" parent="AttackLevelFlash"]
+one_shot = true
+
 [node name="WorldGeneration" type="Node" parent="."]
 script = ExtResource( 7 )
 
@@ -244,6 +251,7 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource( 8 )
 __meta__ = {
+"_edit_group_": true,
 "_edit_lock_": true
 }
 
@@ -403,9 +411,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 margin_left = -250.0
-margin_top = 155.0
+margin_top = 160.0
 margin_right = -250.0
-margin_bottom = 155.0
+margin_bottom = 160.0
 base = 5
 mult = 5
 maxval = 10
@@ -727,6 +735,7 @@ text = " "
 [connection signal="add_armory" from="UserArmory" to="Armories" method="add_card"]
 [connection signal="add_card" from="UserArmory" to="Cards" method="add_card"]
 [connection signal="return_cards" from="UserArmory" to="Builder/Deal" method="add_cards"]
+[connection signal="timeout" from="AttackLevelFlash/Timer" to="AttackLevelFlash" method="hide"]
 [connection signal="color" from="WorldGeneration" to="Savior" method="color"]
 [connection signal="new" from="WorldGeneration" to="UserArmory" method="new"]
 [connection signal="new" from="WorldGeneration" to="Tabs/StatsView/Stats" method="new"]
@@ -750,6 +759,7 @@ text = " "
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Attack" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Attack" to="Tabs/StatsView/Stats" method="try_buy"]
 [connection signal="update" from="Tabs/StatsView/Stats/Attack" to="Fight/Attack/LevelBar" method="set_bars"]
+[connection signal="update_input" from="Tabs/StatsView/Stats/Attack" to="AttackLevelFlash" method="set_bars"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="try_buy"]
 [connection signal="update" from="Tabs/StatsView/Stats/Armory" to="UserArmory" method="set_slots"]

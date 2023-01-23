@@ -3,6 +3,7 @@ extends Control
 signal return_cost
 signal try_buy
 signal update
+signal update_input
 
 export var default = 0
 export var base = 0
@@ -29,14 +30,14 @@ func cost_str():
 
 func decrease():
 	level -= 1
-	update()
+	update(true)
 	emit_signal("return_cost", cost())
 
 
 func increase():
 	level += 1
 	$Tickmarks.increase()
-	update()
+	update(true)
 
 
 func setl(l):
@@ -45,7 +46,7 @@ func setl(l):
 	update()
 
 
-func update():
+func update(from_input=false):
 	$Level.text = str(level)
 	$Cost.text = ""
 	$Level.rect_position = Vector2(0,0)
@@ -53,6 +54,17 @@ func update():
 		$Level.rect_position = Vector2(-5, -5)
 		$Cost.text = cost_str()
 	emit_signal("update", level)
+	if from_input:
+		emit_signal("update_input", level)
+
+
+func set_purchasable(b):
+	if b:
+		$Border.visible = true
+		$Border2.visible = false
+	else:
+		$Border.visible = false
+		$Border2.visible = true
 
 
 func _on_gui_input(event):

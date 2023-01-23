@@ -25,6 +25,10 @@ func update():
 		inst.visible = false
 		if i < unlocked:
 			inst.visible = true
+			if inst.cost() <= xp:
+				inst.set_purchasable(true)
+			else:
+				inst.set_purchasable(false)
 		i += 1
 
 
@@ -96,13 +100,12 @@ func new():
 	score = 0
 	progress = 0
 	unlocked = 0
-	update()
 	for inst in get_children():
 		if inst.has_method("cost"):
 			inst.get_node("Tickmarks").reset()
 			inst.level = inst.default
 			inst.update()
-
+	update()
 
 func get_mainhand():
 	return $Mainhand.level

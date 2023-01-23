@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://res/Hack-Bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://script/Stat.gd" type="Script" id=2]
@@ -12,7 +12,7 @@ corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0, 0, 0, 0.501961 )
+bg_color = Color( 0, 0, 0, 0.25098 )
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
@@ -25,6 +25,18 @@ border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
 border_color = Color( 0.501961, 0.439216, 0.376471, 1 )
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 0.498039, 0.372549, 0.372549, 0.752941 )
 corner_radius_top_left = 1
 corner_radius_top_right = 1
 corner_radius_bottom_right = 1
@@ -70,6 +82,14 @@ margin_right = 74.0
 margin_bottom = 74.0
 mouse_filter = 2
 custom_styles/panel = SubResource( 2 )
+
+[node name="Border2" type="Panel" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 70.0
+margin_bottom = 70.0
+mouse_filter = 2
+custom_styles/panel = SubResource( 6 )
 
 [node name="Level" type="Label" parent="."]
 margin_right = 80.0
