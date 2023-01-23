@@ -9,6 +9,8 @@ var armory = null
 
 
 func _on_Deal_request_return_cards(inst):
+	if uselect(inst):
+		return
 	var mainhand = stats.get_mainhand()
 	var offhand = stats.get_offhand()
 	var attack = stats.get_attack()
@@ -16,11 +18,8 @@ func _on_Deal_request_return_cards(inst):
 	var offhand_curr = $Offhand.count
 	var take
 	var dest
-	var uselect = armory.find_selected()
-	if uselect:
-		take = 1
-		dest = uselect
-	elif mainhand_curr < mainhand:
+
+	if mainhand_curr < mainhand:
 		take = mainhand - mainhand_curr
 		dest = $Mainhand
 	elif offhand_curr < offhand:
@@ -33,10 +32,17 @@ func _on_Deal_request_return_cards(inst):
 		take = min(take, attack)
 	var c = inst.cards.slice(max(len(inst.cards)-take,0), len(inst.cards)-1)
 	inst.remove_cards(c)
-	if uselect:
-		dest.give_card(c[0])
-	else:
-		dest.add_cards(c)
+	dest.add_cards(c)
+
+
+func uselect(inst):
+	var b = armory.find_selected()
+	if b:
+		var c = inst.cards.back()
+		inst.remove_cards([c])
+		b.give_card(c)
+		return true
+	return false
 
 
 func update():
@@ -49,3 +55,8 @@ func clear(death=false):
 	for inst in get_children():
 		if inst.has_method("clear"):
 			inst.clear(death)
+
+func request_take(inst):
+	if uselect(inst):
+		return
+	$Deal.request_take_cards(inst)

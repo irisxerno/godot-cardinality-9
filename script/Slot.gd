@@ -8,8 +8,8 @@ var selected = false
 var frame = 0
 var card
 var armory
-var backup_armory
 var hack_return_card
+var hack_load_card
 
 
 func _ready():
@@ -26,18 +26,9 @@ func _process(delta):
 	if hack_return_card:
 		emit_signal("return_cards", [hack_return_card])
 		hack_return_card = []
-		if backup_armory and armory == null:
-			armory = backup_armory
-			if $Timer.time_left == 0:
-				armory.to_alpha(1)
-
-
-func kill():
-	if card:
-		card.kill()
-		card = null
-	if armory:
-		backup_armory = armory
+	if hack_load_card:
+		give_card(hack_load_card)
+		hack_load_card = null
 
 
 func give_card(c):
@@ -46,8 +37,6 @@ func give_card(c):
 	card.face_up = false
 	card.update_face()
 	card.move_to($Hack.to_global(Vector2(0,0)))
-	if backup_armory:
-		backup_armory.to_alpha(0)
 	$Timer.start()
 
 
@@ -72,8 +61,7 @@ func clear():
 		hack_return_card = card
 		card = null
 	if armory:
-		if not armory == backup_armory:
-			armory.kill()
+		armory.kill()
 		armory = null
 
 

@@ -8,10 +8,9 @@ var progress = 0
 
 var list
 var unlocked = 0
-var criteria = [5, 15, 25, 50, 100, 150, 200]
+var criteria = [5, 10, 15, 40, 65, 90, 115]
 
 signal buy_pressed
-
 
 
 func _ready():
@@ -52,6 +51,8 @@ func add_xp(i):
 
 
 func progress_stats():
+	if unlocked > 5:
+		return
 	if score >= criteria[unlocked]:
 		unlocked += 1
 		update()

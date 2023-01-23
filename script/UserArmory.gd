@@ -3,6 +3,7 @@ extends Node2D
 
 signal return_cards
 signal add_armory
+signal add_card
 
 var slots = []
 var count = 0
@@ -13,9 +14,6 @@ func new():
 		if inst.armory:
 			inst.armory.kill()
 			inst.armory = null
-		if inst.backup_armory:
-			inst.backup_armory.kill()
-			inst.backup_armory = null
 		if inst.card:
 			inst.card.kill()
 			inst.card = null
@@ -27,11 +25,6 @@ func find_selected():
 		if inst.selected:
 			return inst
 	return false
-
-
-func kill_cards():
-	for inst in slots:
-		inst.kill()
 
 
 func set_slots(new_slot_count):
@@ -90,14 +83,20 @@ func to_data():
 
 
 func from_data(adata):
+	var scene = preload("res://scene/Card.tscn")
 	new()
 	set_slots(len(adata))
 	for i in range(len(adata)):
-		var inst = slots[i]
+		var ainst = slots[i]
 		var ad = adata[i]
 		if ad:
-			inst.new_armory(ad["value"], int(ad["suit"]))
-			inst.backup_armory = inst.armory
+			var inst = scene.instance()
+			inst.value = ad["value"]
+			inst.suit = int(ad["suit"])
+			inst.position = Vector2(1440,1440)
+			inst.face_up = false
+			emit_signal("add_card", inst)
+			ainst.hack_load_card = inst
 
 
 func return_cards(cs):
