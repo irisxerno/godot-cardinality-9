@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=43 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -28,6 +28,7 @@
 [ext_resource path="res://script/Lowest.gd" type="Script" id=26]
 [ext_resource path="res://script/Results.gd" type="Script" id=27]
 [ext_resource path="res://script/Tutorializer.gd" type="Script" id=28]
+[ext_resource path="res://script/Repairs.gd" type="Script" id=29]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
@@ -240,6 +241,27 @@ position = Vector2( 240, 470 )
 z_index = 100
 
 [node name="Timer" type="Timer" parent="AttackLevelFlash"]
+one_shot = true
+
+[node name="Repairs" type="Control" parent="."]
+margin_left = 100.0
+margin_top = 100.0
+margin_right = 300.0
+margin_bottom = 200.0
+mouse_filter = 2
+script = ExtResource( 29 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="Repairs"]
+margin_right = 418.0
+margin_bottom = 38.0
+custom_fonts/font = ExtResource( 15 )
+text = "0 xp - 0 repair = 0 xp"
+
+[node name="Timer" type="Timer" parent="Repairs"]
+wait_time = 2.0
 one_shot = true
 
 [node name="WorldGeneration" type="Node" parent="."]
@@ -736,6 +758,7 @@ text = " "
 [connection signal="add_card" from="UserArmory" to="Cards" method="add_card"]
 [connection signal="return_cards" from="UserArmory" to="Builder/Deal" method="add_cards"]
 [connection signal="timeout" from="AttackLevelFlash/Timer" to="AttackLevelFlash" method="hide"]
+[connection signal="timeout" from="Repairs/Timer" to="Repairs" method="_on_timeout"]
 [connection signal="color" from="WorldGeneration" to="Savior" method="color"]
 [connection signal="new" from="WorldGeneration" to="UserArmory" method="new"]
 [connection signal="new" from="WorldGeneration" to="Tabs/StatsView/Stats" method="new"]
