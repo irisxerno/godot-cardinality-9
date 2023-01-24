@@ -244,6 +244,7 @@ z_index = 100
 one_shot = true
 
 [node name="Repairs" type="Control" parent="."]
+visible = false
 margin_left = 100.0
 margin_top = 100.0
 margin_right = 300.0

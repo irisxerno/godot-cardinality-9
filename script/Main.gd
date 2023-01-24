@@ -86,7 +86,7 @@ func _on_Fight_done(win):
 
 		$Tabs/StatsView/Stats.reset_ticks()
 		$Tabs/StatsView/Stats.add_xp($Fight/Extra.count()+len(reward)-len(r))
-		$Repairs.show_repairs(len(reward), len(r))
+		$Repairs.show_repairs($Fight/Extra.count()+len(reward), len(r))
 
 		$Tabs/WorldView/World.defeat($Fight.tile)
 
