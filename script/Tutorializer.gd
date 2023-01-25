@@ -11,7 +11,7 @@ var tutorial = true
 var inhibit_for_stats = false
 var tutorial_progress = 0
 var stats_progress = 0
-var prevent_dealcount = false
+var control = false
 
 
 func show_tabs(uninhibit=false):
@@ -35,13 +35,11 @@ func show_tabs(uninhibit=false):
 		emit_signal("show_tab","SaveView")
 	if tutorial_progress >= 4:
 		emit_signal("show_tab","ScoreView")
+	control = true
 
 
-func _on_Deal_count(prev, count):
-	if tutorial_progress < 1 and prev > 0 and count <= 0:
-		if prevent_dealcount:
-			prevent_dealcount = false
-			return
+func _on_Deal_count(count):
+	if tutorial_progress < 1 and count <= 0 and control:
 		tutorial_progress = 1
 		show_tabs()
 
@@ -81,7 +79,5 @@ func set_tutorial(t, s):
 	if t >= 3:
 		tutorial = false
 	stats_progress = s
-	prevent_dealcount = false
-	if t < 1:
-		prevent_dealcount = true
+	control = false
 

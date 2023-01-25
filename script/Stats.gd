@@ -25,7 +25,7 @@ func update():
 		inst.visible = false
 		if i < unlocked:
 			inst.visible = true
-			if inst.cost() <= xp:
+			if inst.cost() <= xp and inst.level < inst.maxval:
 				inst.set_purchasable(true)
 			else:
 				inst.set_purchasable(false)
@@ -46,9 +46,9 @@ func return_cost(i):
 	update()
 
 
-func add_xp(i):
+func add_xp(i, p=1):
 	score += i
-	progress += 1
+	progress += p
 	progress_stats()
 	print("score: ", score)
 	return_cost(i)

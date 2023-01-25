@@ -237,6 +237,7 @@ script = ExtResource( 4 )
 script = ExtResource( 4 )
 
 [node name="AttackLevelFlash" parent="." instance=ExtResource( 5 )]
+modulate = Color( 1, 1, 1, 0.501961 )
 position = Vector2( 240, 470 )
 z_index = 100
 
@@ -244,7 +245,6 @@ z_index = 100
 one_shot = true
 
 [node name="Repairs" type="Control" parent="."]
-visible = false
 margin_left = 100.0
 margin_top = 100.0
 margin_right = 300.0
@@ -339,7 +339,7 @@ anchor_right = 1.0
 anchor_bottom = 0.5
 margin_top = -240.0
 margin_right = 220.0
-margin_bottom = 260.0
+margin_bottom = 280.0
 custom_styles/panel = SubResource( 2 )
 
 [node name="Button" parent="Tabs/StatsView" index="1"]
@@ -349,9 +349,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-margin_top = -139.0
+margin_top = -80.0
 margin_right = 1600.0
-margin_bottom = 361.0
+margin_bottom = 420.0
 rect_rotation = 90.0
 mouse_filter = 1
 
@@ -514,7 +514,9 @@ script = ExtResource( 23 )
 [node name="Cancel" parent="Tabs" instance=ExtResource( 6 )]
 mouse_filter = 1
 property = "margin_left"
-button_only = true
+
+[node name="Background" parent="Tabs/Cancel" index="0"]
+visible = false
 
 [node name="Button" parent="Tabs/Cancel" index="1"]
 modulate = Color( 0, 0, 0, 0.439216 )

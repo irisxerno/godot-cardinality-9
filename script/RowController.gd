@@ -70,10 +70,9 @@ func add_cards(new_cards):
 		inst.update()
 
 	cards.append_array(new_cards)
-	var prev_count = count
 	count = len(cards)
 
-	emit_signal("count", prev_count, count)
+	emit_signal("count", count)
 
 	for inst in cards:
 		inst.face_up = true

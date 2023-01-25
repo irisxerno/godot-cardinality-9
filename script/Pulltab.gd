@@ -14,20 +14,19 @@ export var open_distance = 120
 export var close_distance = 0
 export var hide_distance = -100
 export var property = "margin_top"
-export var button_only = false
 
 
 func update_state(new_state, tween=true, force=false):
 	var dest_dist = close_distance
 	if new_state == "close" and not $Button.visible:
 		new_state = "open"
-	if new_state == "open" and not button_only:
+	if new_state == "open" and $Background.visible:
 		dest_dist = open_distance
 		emit_signal("open")
 	elif new_state == "hide":
 		dest_dist = hide_distance
 		emit_signal("close")
-	if button_only and new_state == "close" and not force:
+	if not $Background.visible and new_state == "close" and not force:
 		return
 	if not tween:
 		self.set(property, dest_dist)
@@ -42,7 +41,7 @@ func _on_gui_input(event):
 		if state == "open":
 			update_state("close")
 		elif state == "close":
-			if button_only:
+			if not $Background.visible:
 				update_state("hide")
 				emit_signal("click")
 			else:
