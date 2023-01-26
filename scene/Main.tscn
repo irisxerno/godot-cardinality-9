@@ -114,6 +114,9 @@ script = ExtResource( 21 )
 [node name="Tutorializer" type="Node" parent="."]
 script = ExtResource( 28 )
 
+[node name="WorldGeneration" type="Node" parent="."]
+script = ExtResource( 7 )
+
 [node name="Background" parent="." instance=ExtResource( 17 )]
 
 [node name="Builder" type="Node2D" parent="."]
@@ -264,9 +267,6 @@ text = "0 xp - 0 repair = 0 xp"
 [node name="Timer" type="Timer" parent="Repairs"]
 wait_time = 2.0
 one_shot = true
-
-[node name="WorldGeneration" type="Node" parent="."]
-script = ExtResource( 7 )
 
 [node name="Tabs" type="Control" parent="."]
 anchor_right = 1.0
@@ -511,6 +511,19 @@ align = 1
 valign = 1
 script = ExtResource( 23 )
 
+[node name="debug" type="Label" parent="Tabs/SaveView"]
+modulate = Color( 1, 1, 1, 0.25098 )
+margin_left = -180.0
+margin_top = 660.0
+margin_right = -40.0
+margin_bottom = 700.0
+mouse_filter = 1
+custom_fonts/font = SubResource( 18 )
+text = "debug"
+align = 1
+valign = 1
+script = ExtResource( 23 )
+
 [node name="Cancel" parent="Tabs" instance=ExtResource( 6 )]
 mouse_filter = 1
 property = "margin_left"
@@ -738,6 +751,12 @@ text = " "
 [connection signal="save" from="Tutorializer" to="Savior" method="save_to_file"]
 [connection signal="set_cancel" from="Tutorializer" to="Fight" method="set_cancel"]
 [connection signal="show_tab" from="Tutorializer" to="Tabs" method="show_tab"]
+[connection signal="color" from="WorldGeneration" to="Savior" method="color"]
+[connection signal="debug" from="WorldGeneration" to="Tabs/StatsView/Stats" method="_on_debug"]
+[connection signal="new" from="WorldGeneration" to="UserArmory" method="new"]
+[connection signal="new" from="WorldGeneration" to="Tabs/StatsView/Stats" method="new"]
+[connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_data_now"]
+[connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="from_data"]
 [connection signal="dump" from="Builder/Offhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder" method="request_take"]
 [connection signal="count" from="Builder/Deal" to="Tutorializer" method="_on_Deal_count"]
@@ -762,11 +781,6 @@ text = " "
 [connection signal="return_cards" from="UserArmory" to="Builder/Deal" method="add_cards"]
 [connection signal="timeout" from="AttackLevelFlash/Timer" to="AttackLevelFlash" method="hide"]
 [connection signal="timeout" from="Repairs/Timer" to="Repairs" method="_on_timeout"]
-[connection signal="color" from="WorldGeneration" to="Savior" method="color"]
-[connection signal="new" from="WorldGeneration" to="UserArmory" method="new"]
-[connection signal="new" from="WorldGeneration" to="Tabs/StatsView/Stats" method="new"]
-[connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_data_now"]
-[connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="from_data"]
 [connection signal="resized" from="Tabs" to="." method="_on_Tabs_resized"]
 [connection signal="ccount" from="Tabs/WorldView/World" to="." method="_on_World_ccount"]
 [connection signal="select_tile" from="Tabs/WorldView/World" to="." method="_on_select_tile"]
@@ -794,6 +808,8 @@ text = " "
 [connection signal="gui_input" from="Tabs/SaveView/newgame" to="Tabs/SaveView/newgame" method="_on_gui_input"]
 [connection signal="click" from="Tabs/SaveView/tutorial" to="Savior" method="newgame_tutorial"]
 [connection signal="gui_input" from="Tabs/SaveView/tutorial" to="Tabs/SaveView/tutorial" method="_on_gui_input"]
+[connection signal="click" from="Tabs/SaveView/debug" to="Savior" method="newgame_debug"]
+[connection signal="gui_input" from="Tabs/SaveView/debug" to="Tabs/SaveView/debug" method="_on_gui_input"]
 [connection signal="click" from="Tabs/Cancel" to="Fight" method="_on_Cancel_click"]
 [connection signal="gui_input" from="Ending" to="Ending" method="_on_gui_input"]
 [connection signal="timeout" from="Ending/Timer" to="Ending" method="_on_timeout"]

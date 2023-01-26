@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://script/Card.gd" type="Script" id=1]
+[ext_resource path="res://res/Hack-Bold.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://res/diamond_border.png" type="Texture" id=3]
+[ext_resource path="res://res/diamond.png" type="Texture" id=4]
+
+[sub_resource type="DynamicFont" id=3]
+size = 24
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 2 )
+
+[node name="Armory" type="Node2D"]
+position = Vector2( 1, 0 )
+script = ExtResource( 1 )
+face_up = true
+armory = true
+
+[node name="Display" type="Sprite" parent="."]
+modulate = Color( 0.2, 0.160784, 0.160784, 0.752941 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Face" type="Node2D" parent="."]
+modulate = Color( 0, 0, 0, 1 )
+
+[node name="Value" type="Label" parent="Face"]
+margin_left = -15.0
+margin_top = -26.0
+margin_right = 4.0
+margin_bottom = 12.0
+custom_fonts/font = SubResource( 3 )
+text = "0"
+
+[node name="Suit" type="Label" parent="Face"]
+margin_left = -15.0
+margin_top = -1.0
+margin_right = 4.0
+margin_bottom = 37.0
+custom_fonts/font = SubResource( 3 )
+text = "Ν"
+
+[node name="TextureRect" type="Sprite" parent="Face"]
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 3 )
+
+[node name="Border" type="Node2D" parent="."]
+__meta__ = {
+"_editor_description_": "Card.gd"
+}
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="AlphaTween" type="Tween" parent="."]
+
+[connection signal="tween_completed" from="AlphaTween" to="." method="_on_AlphaTween_completed"]

@@ -5,6 +5,7 @@ signal return_card_data
 signal return_world_data
 signal new
 signal color
+signal debug
 
 var rng = RandomNumberGenerator.new()
 
@@ -89,7 +90,7 @@ func _rand_tile(w, h):
 	}
 
 
-func new_game():
+func new_game(mode="game"):
 	randomize()
 	seed_value = randi()
 	rng.seed = seed_value
@@ -97,15 +98,27 @@ func new_game():
 	var c = Color(rng.randf(),rng.randf(),rng.randf(),1).to_rgba32()
 	emit_signal("color", c)
 
+	emit_signal("new")
+
 	var cards = []
-	for i in range(10):
+	var cc = 10
+	var cw = 0
+	var cws = 0
+	if mode == "hardmode":
+		cw = 1
+	elif mode == "debug":
+		cc = 60
+		cw = 4
+		cws = 4
+		emit_signal("debug")
+	for i in range(cc):
 		cards.append({
 			"value": c(),
-			"suit": rng.randi_range(1,mx(0))
+			"suit": rng.randi_range(1,mx(cws))
 		})
-	emit_signal("new")
 	emit_signal("return_card_data", cards)
-	return_new_world(0)
+
+	return_new_world(cw)
 
 
 func return_new_world(n):

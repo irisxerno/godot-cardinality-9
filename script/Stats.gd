@@ -30,6 +30,7 @@ func update():
 			else:
 				inst.set_purchasable(false)
 		i += 1
+		inst.update()
 
 
 func try_buy(inst):
@@ -104,7 +105,6 @@ func new():
 		if inst.has_method("cost"):
 			inst.get_node("Tickmarks").reset()
 			inst.level = inst.default
-			inst.update()
 	update()
 
 func get_mainhand():
@@ -117,3 +117,13 @@ func get_attack():
 	return $Attack.level
 func get_armory():
 	return $Armory.level
+
+
+func _on_debug():
+	xp = 1985
+	unlocked = 5
+	$Mainhand.level = 20
+	$Offhand.level = 20
+	$Extra.level = 20
+	$Attack.level = 10
+	update()

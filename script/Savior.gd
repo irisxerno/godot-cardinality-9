@@ -10,6 +10,8 @@ signal update_results
 
 
 var savable = false
+var n_i
+var n_mode
 
 var stats
 var armory
@@ -87,9 +89,9 @@ func start():
 		emit_signal("update_lowest", lowest)
 
 	if len(saves) > 0:
-		load_next(-1)
+		load_save(-1)
 	else:
-		load_next(false)
+		load_save(false)
 
 
 func cards_to_data(c):
@@ -163,14 +165,22 @@ func save(cards):
 	emit_signal("update", saves)
 
 
-func load_save(i):
+func load_save(i, mode="game"):
 	savable = false
-	emit_signal("reset", i)
+	n_i = i
+	n_mode = mode
+	emit_signal("reset")
 
 
-func load_next(i):
+func load_next():
+	if n_i == null:
+		return
+	var i = n_i
+	n_i = null
+	var mode = n_mode
+	n_mode = null
 	if typeof(i) < 2:
-		generator.new_game()
+		generator.new_game(mode)
 		return
 	var data = saves[i]
 
@@ -201,3 +211,9 @@ func newgame_tutorial():
 	gametime = 0
 	tutorial.set_tutorial(0, 0)
 	load_save(false)
+
+
+func newgame_debug():
+	gametime = 0
+	tutorial.set_tutorial(4,5)
+	load_save(false, "debug")

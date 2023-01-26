@@ -135,7 +135,7 @@ func _on_World_ccount(cc):
 	$Tabs/WorldView.open_distance = 100 * cc + 50
 
 
-func reset(i):
+func reset():
 	$Tabs.update_all("hide", true)
 	$Builder.visible = true
 	$Fight.visible = false
@@ -143,4 +143,4 @@ func reset(i):
 	$Builder.clear(true)
 	$UserArmory.new()
 	$Cards.kill()
-	$Savior.load_next(i)
+	$Savior.load_next()
