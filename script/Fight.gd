@@ -8,6 +8,7 @@ signal win_height
 var stats
 var tile
 var armory
+var diamond
 var input = true
 var cancel = false
 
@@ -50,7 +51,7 @@ func _on_Mainhand_request_return_cards(inst):
 	inst.update()
 	$EnemyAttack.add_cards(c)
 
-	$Tally.start_count($Attack.cards(), armory.list(), $EnemyAttack.cards(), $ArmoryController.list())
+	$Tally.start_count($Attack.cards(), armory.list(), diamond.list(), $EnemyAttack.cards(), $ArmoryController.list(), [])
 
 
 func _on_Dealer_done():

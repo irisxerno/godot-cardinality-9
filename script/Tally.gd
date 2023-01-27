@@ -37,7 +37,7 @@ func _process(delta):
 			$Indicator.modulate = Color(1, 0, 0, 0.25)
 
 
-func filter(a, r):
+func filter(a, r, d):
 	var kinds = []
 	for inst in a:
 		if not inst.suit in kinds:
@@ -45,11 +45,14 @@ func filter(a, r):
 	for inst in r:
 		if inst.suit in kinds:
 			a.append(inst)
+	for inst in d:
+		if inst.suit in kinds:
+			a.append(inst)
 	return a
 
 
-func start_count(a, r, e, er):
-	all = [filter(a, r), filter(e, er)]
+func start_count(a, r, d, e, er, ed):
+	all = [filter(a, r, ed), filter(e, er, d)]
 	curr = [[],[]]
 	t = 0
 	update()
@@ -61,7 +64,11 @@ static func count(deck):
 	for k in s:
 		var ii = 1
 		for inst in s[k]:
-			ii *= inst.value
+			if inst.diamond:
+				print("NAPKIN!!!")
+				ii /= inst.value
+			else:
+				ii *= inst.value
 		i += ii
 	return i
 

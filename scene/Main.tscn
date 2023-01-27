@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -29,6 +29,10 @@
 [ext_resource path="res://script/Results.gd" type="Script" id=27]
 [ext_resource path="res://script/Tutorializer.gd" type="Script" id=28]
 [ext_resource path="res://script/Repairs.gd" type="Script" id=29]
+[ext_resource path="res://scene/Slot.tscn" type="PackedScene" id=30]
+[ext_resource path="res://scene/DiamondSlot.tscn" type="PackedScene" id=31]
+[ext_resource path="res://scene/Armory.tscn" type="PackedScene" id=32]
+[ext_resource path="res://scene/Diamond.tscn" type="PackedScene" id=33]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
@@ -226,15 +230,26 @@ position = Vector2( 300, 6 )
 scale = Vector2( 350, 5 )
 texture = SubResource( 13 )
 
+[node name="Cards" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
 [node name="UserArmory" type="Node2D" parent="."]
-position = Vector2( 1020, 640 )
+position = Vector2( 1040, 630 )
 script = ExtResource( 20 )
 __meta__ = {
 "_edit_group_": true
 }
+slot_scene = ExtResource( 30 )
+armory_scene = ExtResource( 32 )
 
-[node name="Cards" type="Node2D" parent="."]
-script = ExtResource( 4 )
+[node name="UserDiamond" type="Node2D" parent="."]
+position = Vector2( 1040, 570 )
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+slot_scene = ExtResource( 31 )
+armory_scene = ExtResource( 33 )
 
 [node name="Armories" type="Node2D" parent="."]
 script = ExtResource( 4 )
@@ -415,7 +430,7 @@ base = 5
 mult = 1
 maxval = 30
 
-[node name="Attack" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
+[node name="Armory" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -424,11 +439,11 @@ margin_left = -250.0
 margin_top = 80.0
 margin_right = -250.0
 margin_bottom = 80.0
-default = 5
+base = 5
 mult = 5
-maxval = 20
+maxval = 15
 
-[node name="Armory" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
+[node name="Diamond" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
@@ -439,7 +454,20 @@ margin_right = -250.0
 margin_bottom = 160.0
 base = 5
 mult = 5
-maxval = 10
+maxval = 15
+
+[node name="Attack" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -250.0
+margin_top = 240.0
+margin_right = -250.0
+margin_bottom = 240.0
+default = 5
+mult = 10
+maxval = 15
 
 [node name="Temp" type="Label" parent="Tabs/StatsView/Stats"]
 visible = false
@@ -512,6 +540,7 @@ valign = 1
 script = ExtResource( 23 )
 
 [node name="debug" type="Label" parent="Tabs/SaveView"]
+visible = false
 modulate = Color( 1, 1, 1, 0.25098 )
 margin_left = -180.0
 margin_top = 660.0
@@ -540,6 +569,7 @@ rect_rotation = -90.0
 mouse_filter = 1
 
 [node name="ScoreView" parent="Tabs" instance=ExtResource( 6 )]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 open_distance = -150
@@ -779,6 +809,10 @@ text = " "
 [connection signal="add_armory" from="UserArmory" to="Armories" method="add_card"]
 [connection signal="add_card" from="UserArmory" to="Cards" method="add_card"]
 [connection signal="return_cards" from="UserArmory" to="Builder/Deal" method="add_cards"]
+[connection signal="add_armory" from="UserDiamond" to="Armories" method="add_card"]
+[connection signal="add_card" from="UserDiamond" to="Cards" method="add_card"]
+[connection signal="return_cards" from="UserDiamond" to="Builder/Deal" method="add_cards"]
+[connection signal="added" from="Armories" to="." method="sort_them"]
 [connection signal="timeout" from="AttackLevelFlash/Timer" to="AttackLevelFlash" method="hide"]
 [connection signal="timeout" from="Repairs/Timer" to="Repairs" method="_on_timeout"]
 [connection signal="resized" from="Tabs" to="." method="_on_Tabs_resized"]
@@ -796,13 +830,16 @@ text = " "
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Extra" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Extra" to="Tabs/StatsView/Stats" method="try_buy"]
 [connection signal="update" from="Tabs/StatsView/Stats/Extra" to="Builder/Deal/LevelBar" method="set_bars"]
+[connection signal="return_cost" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="return_cost"]
+[connection signal="try_buy" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="try_buy"]
+[connection signal="update" from="Tabs/StatsView/Stats/Armory" to="UserArmory" method="set_slots"]
+[connection signal="return_cost" from="Tabs/StatsView/Stats/Diamond" to="Tabs/StatsView/Stats" method="return_cost"]
+[connection signal="try_buy" from="Tabs/StatsView/Stats/Diamond" to="Tabs/StatsView/Stats" method="try_buy"]
+[connection signal="update" from="Tabs/StatsView/Stats/Diamond" to="UserDiamond" method="set_slots"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Attack" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Attack" to="Tabs/StatsView/Stats" method="try_buy"]
 [connection signal="update" from="Tabs/StatsView/Stats/Attack" to="Fight/Attack/LevelBar" method="set_bars"]
 [connection signal="update_input" from="Tabs/StatsView/Stats/Attack" to="AttackLevelFlash" method="set_bars"]
-[connection signal="return_cost" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="return_cost"]
-[connection signal="try_buy" from="Tabs/StatsView/Stats/Armory" to="Tabs/StatsView/Stats" method="try_buy"]
-[connection signal="update" from="Tabs/StatsView/Stats/Armory" to="UserArmory" method="set_slots"]
 [connection signal="load_save" from="Tabs/SaveView/Saves" to="Savior" method="load_save"]
 [connection signal="click" from="Tabs/SaveView/newgame" to="Savior" method="newgame"]
 [connection signal="gui_input" from="Tabs/SaveView/newgame" to="Tabs/SaveView/newgame" method="_on_gui_input"]

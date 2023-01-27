@@ -18,6 +18,7 @@ var kill = false
 
 var test = false
 export var armory = false
+export var diamond = false
 
 var test_notween = false
 

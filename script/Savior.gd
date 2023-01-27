@@ -15,6 +15,7 @@ var n_mode
 
 var stats
 var armory
+var diamond
 var world
 var generator
 var color
@@ -23,12 +24,15 @@ var tutorial
 var saves = []
 var lowest = {}
 
-var magic = 135606722
+var magic = 135606727
 
 var gametime = 0
 var idletime = 0
 
 var savefile_json
+
+var saved_tutorial_progress = 0
+var saved_stats_progress = 0
 
 
 func _process(delta):
@@ -82,7 +86,9 @@ func start():
 			if magic == svmg:
 				saves = savefile["saves"]
 				lowest = savefile["lowest"]
-				tutorial.set_tutorial(savefile["tutorial_progress"], savefile["stats_progress"])
+				saved_tutorial_progress = savefile["tutorial_progress"]
+				saved_stats_progress = savefile["stats_progress"]
+				tutorial.set_tutorial(saved_tutorial_progress, saved_stats_progress)
 		save_f.close()
 	emit_signal("update", saves)
 	if len(lowest) > 0:
@@ -120,8 +126,12 @@ func save_file():
 	savefile["saves"] = saves
 	savefile["magic"] = magic
 	savefile["lowest"] = lowest
-	savefile["tutorial_progress"] = tutorial.tutorial_progress
-	savefile["stats_progress"] = tutorial.stats_progress
+	if tutorial.tutorial_progress > saved_tutorial_progress:
+		saved_tutorial_progress = tutorial.tutorial_progress
+	if tutorial.stats_progress > saved_stats_progress:
+		saved_stats_progress = tutorial.stats_progress
+	savefile["tutorial_progress"] = saved_tutorial_progress
+	savefile["stats_progress"] = saved_stats_progress
 	savefile_json = to_json(savefile)
 	if tutorial.inhibit_for_stats:
 		print("save inhibited")
@@ -143,6 +153,7 @@ func save_to_file():
 func save(cards):
 	var card_data = cards_to_data(cards)
 	var armory_data = armory.to_data()
+	var diamond_data = diamond.to_data()
 	var stat_data = stats.to_data()
 	var world_data = world.to_data()
 
@@ -150,6 +161,7 @@ func save(cards):
 		"color": color,
 		"cards": card_data,
 		"armories": armory_data,
+		"diamond": diamond_data,
 		"stats": stat_data,
 		"world": world_data,
 		"world_num": world.num,
@@ -186,6 +198,7 @@ func load_next():
 
 	emit_signal("card_data", data["cards"])
 	armory.from_data(data["armories"])
+	diamond.from_data(data["diamond"])
 	stats.from_data(data["stats"])
 	world.from_data(data["world"], data["world_num"])
 

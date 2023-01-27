@@ -4,9 +4,9 @@ export var mainhand = 5
 export var offhand = 5
 export var attack = 5
 
-var stats = null
-var armory = null
-
+var stats
+var armory
+var diamond
 
 func _on_Deal_request_return_cards(inst):
 	if uselect(inst):
@@ -37,6 +37,8 @@ func _on_Deal_request_return_cards(inst):
 
 func uselect(inst):
 	var b = armory.find_selected()
+	if not b:
+		b = diamond.find_selected()
 	if b:
 		var c = inst.cards.back()
 		inst.remove_cards([c])

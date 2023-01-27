@@ -8,6 +8,9 @@ signal add_card
 var slots = []
 var count = 0
 
+export (PackedScene) var slot_scene
+export (PackedScene) var armory_scene
+
 
 func new():
 	for inst in slots:
@@ -29,11 +32,11 @@ func find_selected():
 
 func set_slots(new_slot_count):
 	count = new_slot_count
-	var scene = preload("res://scene/Slot.tscn")
 	if len(slots) < count:
 		for i in range(count-len(slots)):
-			var new_slot = scene.instance()
-			new_slot.rect_position += Vector2(-len(slots)*(96), 0)
+			var new_slot = slot_scene.instance()
+			new_slot.armory_scene = armory_scene
+			new_slot.rect_position += Vector2(-len(slots)*(70), 0)
 			slots.append(new_slot)
 			new_slot.connect("return_cards", self, "return_cards")
 			new_slot.connect("add_armory", self, "add_armory")
@@ -46,6 +49,12 @@ func set_slots(new_slot_count):
 			slot.visible = true
 		else:
 			slot.clear()
+
+
+func update_armories():
+	for i in range(len(slots)):
+		var slot = slots[i]
+		slot.update_armories()
 
 
 func list():

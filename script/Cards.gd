@@ -1,6 +1,8 @@
 extends Node2D
 
 
+signal added
+
 var raise_counter = 0
 var rcmax = 0
 
@@ -15,6 +17,7 @@ func _process(delta):
 func add_card(inst):
 	inst.connect("to_front", self, "to_front")
 	call_deferred("add_child", inst)
+	call_deferred("emit_signal", "added")
 
 
 func to_front(inst):

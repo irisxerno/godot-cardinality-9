@@ -11,6 +11,8 @@ var armory
 var hack_return_card
 var hack_load_card
 
+var armory_scene
+
 
 func _ready():
 	$Flash.modulate = Color(0,0,0,0)
@@ -41,8 +43,7 @@ func give_card(c):
 
 
 func new_armory(v,s):
-	var scene = preload("res://scene/Armory.tscn")
-	armory = scene.instance()
+	armory = armory_scene.instance()
 	armory.position = $Hack2.to_global(Vector2(0,0))
 	armory.value = v
 	armory.suit = int(s)
@@ -66,11 +67,21 @@ func clear():
 
 
 func update():
-	$Background.modulate = Color(0, 0, 0, 0.5)
+	var a = 0.5
 	if selected:
-		$Background.modulate = Color(1, 1, 1, 0.5)
+		if armory:
+			a = 1
+		$Background.modulate = Color(1, 1, 1, a)
+	else:
+		$Background.modulate = Color(0, 0, 0, a)
 	visible = true
 
+
+func update_armories():
+	if armory:
+		armory.move_to($Hack2.to_global(Vector2(0,0)))
+	if card:
+		card.move_to($Hack.to_global(Vector2(0,0)))
 
 func _on_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
@@ -81,7 +92,7 @@ func _on_gui_input(event):
 
 
 func _input(event):
-	if event is InputEventMouseButton and event.pressed and not Rect2(Vector2(), rect_size).has_point(get_local_mouse_position()) and selected:
+	if event is InputEventMouseButton and event.pressed and not Rect2(Vector2(), $hitbox.rect_size).has_point($hitbox.get_local_mouse_position()) and selected:
 		frame = 1
 		update()
 

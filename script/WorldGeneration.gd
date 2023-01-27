@@ -107,9 +107,9 @@ func new_game(mode="game"):
 	if mode == "hardmode":
 		cw = 1
 	elif mode == "debug":
-		cc = 60
-		cw = 4
-		cws = 4
+		cc = 30
+		cw = 2
+		cws = 2
 		emit_signal("debug")
 	for i in range(cc):
 		cards.append({

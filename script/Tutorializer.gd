@@ -33,8 +33,9 @@ func show_tabs(uninhibit=false):
 		emit_signal("show_tab","WorldView")
 	if tutorial_progress >= 3:
 		emit_signal("show_tab","SaveView")
-	if tutorial_progress >= 4:
-		emit_signal("show_tab","ScoreView")
+	# TODO scoreview revamp
+	#if tutorial_progress >= 4:
+	#	emit_signal("show_tab","ScoreView")
 	control = true
 
 

@@ -19,14 +19,38 @@ func _process(delta):
 				$Timer.start()
 
 
-func show_repairs(xp, rp):
+func show_repairs(reward, hand_regen, leftover, extra_regen, gained_xp):
 	t = 0
 	visible = true
-	if rp > 0:
-		$Label.text = "{0} - {1} = {2} xp".format([xp, rp, xp - rp])
-	else:
-		$Label.text = "{0} xp".format([xp])
+	var sb = PoolStringArray()
+	var sec_visible = 1
+	sb.append(str(reward))
+	if hand_regen > 0:
+		sb.append("-")
+		sb.append(str(hand_regen))
+		sec_visible += 1
+	if leftover+extra_regen > 0 and abs(leftover-extra_regen) > 0:
+		var sbm = PoolStringArray()
+		sbm.append("(")
+		if leftover > 0:
+			sbm.append("+")
+			sbm.append(str(leftover))
+			sec_visible += 1
+		if extra_regen > 0:
+			sbm.append("-")
+			sbm.append(str(extra_regen))
+			sec_visible += 1
+		sbm.append(")")
+		sb.append(sbm.join(""))
+	if len(sb) > 1:
+		sb.append("=")
+		sb.append(gained_xp)
+		sec_visible += 1
+	sb.append("xp")
+	$Label.text = sb.join(" ")
+	print($Label.text)
 	$Label.visible_characters = 0
+	$Timer.wait_time = sec_visible
 
 
 func _on_timeout():

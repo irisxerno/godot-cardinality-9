@@ -9,17 +9,21 @@ func _ready():
 
 	var stats = $Tabs/StatsView/Stats
 	var armory = $UserArmory
+	var diamond = $UserDiamond
 	var world = $Tabs/WorldView/World
 	$Builder.stats = stats
 	$Builder.armory = armory
+	$Builder.diamond = diamond
 	$Savior.stats = stats
 	$Savior.armory = armory
+	$Savior.diamond = diamond
 	$Savior.world = world
 	$Savior.generator = $WorldGeneration
 	$Savior.tutorial = $Tutorializer
 	$Tutorializer.stats = stats
 	$Fight.stats = stats
 	$Fight.armory = armory
+	$Fight.diamond = diamond
 
 	$Tabs.update_all("hide", false)
 	$Builder.visible = true
@@ -43,6 +47,7 @@ func _on_select_tile(tile):
 	$Fight.visible = true
 	$Fight.set_input(false)
 	$UserArmory.visible = false
+	$UserDiamond.visible = false
 	$Background.to_color("fight")
 
 	$Fight.tile = tile
@@ -56,6 +61,7 @@ func _on_select_tile(tile):
 
 func to_build():
 	$UserArmory.visible = true
+	$UserDiamond.visible = true
 	#$Tabs.update_all("close")
 	$Tutorializer.show_tabs()
 	$Background.to_color("build")
@@ -78,15 +84,24 @@ func _on_Fight_done(win):
 				ending = true
 
 
-		var reward = $Fight.tile.reward
-		var maxc = $Tabs/StatsView/Stats/Mainhand.level + $Tabs/StatsView/Stats/Offhand.level + $Tabs/StatsView/Stats/Extra.level - $Fight/Mainhand.count() - $Fight/Offhand.count()
+		var reward_c = $Fight.tile.reward
+		var reward = len(reward_c) # max xp gain
+		var leftover = $Fight/Extra.count() # leftovers added as xp
+		var extra = $Tabs/StatsView/Stats/Extra.level # how much extra wants on top
+		# regen: how much your hand wants
+		var regen = $Tabs/StatsView/Stats/Mainhand.level + $Tabs/StatsView/Stats/Offhand.level - $Fight/Mainhand.count() - $Fight/Offhand.count()
+		var maxc = regen + extra # how much your deal wants
 		var r = []
 		if maxc > 0:
-			r = reward.slice(0, maxc-1)
+			r = reward_c.slice(0, maxc-1)
+		var total_regen = len(r) # how much xp was used as regen
+		var extra_regen = max(0,total_regen - regen) # how much xp was used in extra
+		var hand_regen = max(0,total_regen - extra_regen) # how much xp was used as hand
+		var gained_xp = reward-total_regen+leftover
 
+		$Repairs.show_repairs(reward, hand_regen, leftover, extra_regen, gained_xp)
 		$Tabs/StatsView/Stats.reset_ticks()
-		$Tabs/StatsView/Stats.add_xp($Fight/Extra.count()+len(reward)-len(r))
-		$Repairs.show_repairs($Fight/Extra.count()+len(reward), len(r))
+		$Tabs/StatsView/Stats.add_xp(gained_xp)
 
 		$Tabs/WorldView/World.defeat($Fight.tile)
 
@@ -125,10 +140,13 @@ func _on_Fight_done(win):
 
 	$Cards.kill()
 
+
 func _on_Tabs_resized():
 	var w = $Tabs.rect_size
 	$Fight/Extra.position = Vector2(w.x+100,w.y/2)
 	$UserArmory.position = Vector2(w.x - 260, 640)
+	$UserDiamond.position = Vector2(w.x - 260, 570)
+	sort_them()
 
 
 func _on_World_ccount(cc):
@@ -142,5 +160,11 @@ func reset():
 	
 	$Builder.clear(true)
 	$UserArmory.new()
+	$UserDiamond.new()
 	$Cards.kill()
 	$Savior.load_next()
+
+
+func sort_them():
+	$UserArmory.update_armories()
+	$UserDiamond.update_armories()

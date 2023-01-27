@@ -8,13 +8,13 @@ var progress = 0
 
 var list
 var unlocked = 0
-var criteria = [5, 10, 15, 40, 65, 90, 115]
+var criteria = [5, 10, 15, 40, 65, 115]
 
 signal buy_pressed
 
 
 func _ready():
-	list = [$Mainhand, $Offhand, $Extra, $Attack, $Armory]
+	list = [$Mainhand, $Offhand, $Extra, $Armory, $Diamond, $Attack]
 	update()
 
 
@@ -56,7 +56,7 @@ func add_xp(i, p=1):
 
 
 func progress_stats():
-	if unlocked > 5:
+	if unlocked > (len(criteria) - 1):
 		return
 	if score >= criteria[unlocked]:
 		unlocked += 1
@@ -75,8 +75,9 @@ func to_data():
 		"mainhand": get_mainhand(),
 		"offhand": get_offhand(),
 		"extra": get_extra(),
-		"attack": get_attack(),
 		"armory": get_armory(),
+		"diamond": get_diamond(),
+		"attack": get_attack(),
 		"score": score,
 		"progress": progress,
 		"unlocked": unlocked,
@@ -93,6 +94,7 @@ func from_data(sdata):
 	$Extra.setl(sdata["extra"])
 	$Attack.setl(sdata["attack"])
 	$Armory.setl(sdata["armory"])
+	$Diamond.setl(sdata["diamond"])
 	update()
 
 
@@ -107,6 +109,7 @@ func new():
 			inst.level = inst.default
 	update()
 
+
 func get_mainhand():
 	return $Mainhand.level
 func get_offhand():
@@ -117,13 +120,12 @@ func get_attack():
 	return $Attack.level
 func get_armory():
 	return $Armory.level
-
+func get_diamond():
+	return $Diamond.level
 
 func _on_debug():
-	xp = 1985
-	unlocked = 5
-	$Mainhand.level = 20
-	$Offhand.level = 20
-	$Extra.level = 20
-	$Attack.level = 10
+	xp = 1000
+	unlocked = len(criteria)
+	$Mainhand.level = 10
+	$Offhand.level = 10
 	update()
