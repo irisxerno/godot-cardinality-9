@@ -75,14 +75,15 @@ func _on_Fight_done(win):
 	if win:
 		$Savior.savable = true
 		$Builder.clear()
+		$Tutorializer.on_win($Fight.tile.col, $Tabs/WorldView/World.num)
 
 		if $Fight.tile.col == 4:
-			$WorldGeneration.return_new_world($Tabs/WorldView/World.num+1)
 			$Foreground.set_color("flash")
 			$Foreground.to_color("off")
-			if $Tabs/WorldView/World.num > 5:
+			if $Savior.ending_on_world($Tabs/WorldView/World.num):
 				ending = true
-
+			else:
+				$WorldGeneration.return_new_world($Tabs/WorldView/World.num+1)
 
 		var reward_c = $Fight.tile.reward
 		var reward = len(reward_c) # max xp gain
@@ -114,7 +115,6 @@ func _on_Fight_done(win):
 				$Fight.visible = false
 				$Background.to_color(Color.white, 10)
 				$Ending.start($WorldGeneration.seed_value)
-				$Tutorializer.on_ending()
 				$Savior.archive()
 				return
 
@@ -168,3 +168,4 @@ func reset():
 func sort_them():
 	$UserArmory.update_armories()
 	$UserDiamond.update_armories()
+

@@ -2,30 +2,43 @@ extends Control
 
 
 signal click
-signal select
 
 var selected = false
+var radio
 export var toggle = false
 
 
+func _ready():
+	update()
+
 func update():
+	c(selected)
+
+
+func c(b=false):
 	var c = modulate
 	c.a = 0.25
-	if selected:
+	if b:
 		c.a = 0.75
 	modulate = c
 
 
+func select(b):
+	selected = b
+	emit_signal("click", selected)
+	update()
+
+
 func _on_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		if selected:
-			emit_signal("click")
+		if radio:
+			radio.select(self)
 		else:
-			emit_signal("select")
-		selected = !selected
-		update()
+			selected = !selected
+			emit_signal("click", selected)
+			update()
 
 func _input(event):
-	if not toggle and event is InputEventMouseButton and event.pressed and not Rect2(Vector2(), rect_size).has_point(get_local_mouse_position()) and selected:
+	if not toggle and not radio and event is InputEventMouseButton and event.pressed and not Rect2(Vector2(), rect_size).has_point(get_local_mouse_position()) and selected:
 		selected = false
 		update()

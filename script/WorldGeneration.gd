@@ -14,9 +14,11 @@ var iq_chance = 1.0/4.0
 
 var seed_value = 0
 
+var mode = "tutorial"
+
 
 func mx(w):
-	return 4 + w
+	return min(9, 4 + w)
 
 
 func c():
@@ -90,7 +92,7 @@ func _rand_tile(w, h):
 	}
 
 
-func new_game(mode="game"):
+func new_game():
 	randomize()
 	seed_value = randi()
 	rng.seed = seed_value
@@ -104,13 +106,8 @@ func new_game(mode="game"):
 	var cc = 10
 	var cw = 0
 	var cws = 0
-	if mode == "hardmode":
+	if mode == "hard":
 		cw = 1
-	elif mode == "debug":
-		cc = 30
-		cw = 2
-		cws = 2
-		emit_signal("debug")
 	for i in range(cc):
 		cards.append({
 			"value": c(),
@@ -126,8 +123,6 @@ func return_new_world(n):
 
 
 func new_world(w):
-	if w > 5:
-		return []
 	var tiles = []
 	var r = world_row_len
 	var h = 0

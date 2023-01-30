@@ -2,16 +2,21 @@ extends Node
 
 
 signal return_cards
-signal update
 signal card_data
 signal reset
-signal update_lowest
+signal update_gamemode
+signal update_saves
+signal update_scoreboard
 signal update_results
 
 
+
 var savable = false
-var n_i
-var n_mode
+
+var n_i = false
+var n_list = "latest"
+var gamemode = "tutorial"
+var gamemode_sequence = ["tutorial", "normal", "hard", "hardcore", "debug"]
 
 var stats
 var armory
@@ -21,18 +26,70 @@ var generator
 var color
 var tutorial
 
-var saves = []
-var lowest = {}
-
-var magic = 135606727
-
 var gametime = 0
 var idletime = 0
 
+var version = 0
+
+var save_data
 var savefile_json
 
-var saved_tutorial_progress = 0
-var saved_stats_progress = 0
+var file_path = "user://save_debug"
+var file_compression = null
+
+
+func color(c):
+	color = c
+
+
+func skel_gamemode(m="tutorial"):
+	var skel = {
+		"latest": [],
+		"world": []
+	}
+	if m == "tutorial":
+		skel["progress"] = {
+			"tutorial": 0,
+			"stats": 0
+		}
+	if m == "normal" or m == "hard" or m == "hardcore":
+		skel["scoreboard"] = {
+			"low": {
+				"usedxp": [],
+				"time": [],
+				"progress": []
+			},
+			"high": {
+				"usedxp": [],
+				"score": [],
+				"progress": []
+			},
+			"latest": []
+		}
+	if m == "hardcore":
+		skel["bones"] = {
+			"high": {
+				"usedxp": [],
+				"score": [],
+				"progress": []
+			},
+			"latest": []
+		}
+	return skel
+
+
+# move these to world
+var gm_ending_world = {
+	"tutorial": 3,
+	"normal": 4,
+	"hard": 5,
+	"hardcore": 5,
+	"debug": 10
+}
+
+
+func ending_on_world(n):
+	return n >= gm_ending_world[gamemode]
 
 
 func _process(delta):
@@ -46,58 +103,69 @@ func _input(event):
 
 
 func archive():
-	var sc = stats.score - stats.xp
-	var lw = [false, false, false]
-	if len(lowest) == 0:
-		lowest["score"] = sc
-		lowest["progress"] = stats.progress
-		lowest["time"] = gametime
-		lw = [true, true, true]
-	else:
-		if sc < lowest["score"]:
-			lowest["score"] = sc
-			lw[0] = true
-		if stats.progress < lowest["progress"]:
-			lowest["progress"] = stats.progress
-			lw[1] = true
-		if gametime < lowest["time"]:
-			lowest["time"] = gametime
-			lw[2] = true
-
-	saves = []
+	var gm_i = gamemode_sequence.find()
+	if gm_i+1 < len(gamemode_sequence):
+		var ng = gamemode_sequence[gm_i+1]
+		if not ng in save_data:
+			save_data[ng] = skel_gamemode(ng)
+	# save_data[gamemode]["latest"] = []
+	# save_data[gamemode]["world"] = []
+#	var sc = stats.score - stats.xp
+#	var lw = [false, false, false]
+#	if len(lowest) == 0:
+#		lowest["score"] = sc
+#		lowest["progress"] = stats.progress
+#		lowest["time"] = gametime
+#		lw = [true, true, true]
+#	else:
+#		if sc < lowest["score"]:
+#			lowest["score"] = sc
+#			lw[0] = true
+#		if stats.progress < lowest["progress"]:
+#			lowest["progress"] = stats.progress
+#			lw[1] = true
+#		if gametime < lowest["time"]:
+#			lowest["time"] = gametime
+#			lw[2] = true
+#
+#	saves = []
 	save_file()
-
-	var results = {}
-	results["score"] = sc
-	results["progress"] = stats.progress
-	results["time"] = gametime
-
-	emit_signal("update_results", results, lw)
+#
+#	var results = {}
+#	results["score"] = sc
+#	results["progress"] = stats.progress
+#	results["time"] = gametime
+#
+#	emit_signal("update_results", results, lw)
 
 
 func start():
+	savable = false
+	n_i = -1
+	n_list = "latest"
+	gamemode = "tutorial"
+	save_data = {
+		"version": version,
+		"last_gamemode": "tutorial",
+	}
+	for gm in gamemode_sequence:
+		save_data[gm] = skel_gamemode(gm)
+	tutorial.set_progress(save_data[gamemode]["progress"])
 	var save_f = File.new()
 	var dir = Directory.new()
-	if dir.file_exists("user://save"):
-		save_f.open_compressed("user://save", File.READ, File.COMPRESSION_GZIP)
+	if dir.file_exists(file_path):
+		if file_compression:
+			save_f.open_compressed(file_path, File.READ, file_compression)
+		else:
+			save_f.open(file_path, File.READ)
 		var savefile = parse_json(save_f.get_line())
-		if typeof(savefile) == 18 and "magic" in savefile:
-			var svmg = savefile["magic"]
-			if magic == svmg:
-				saves = savefile["saves"]
-				lowest = savefile["lowest"]
-				saved_tutorial_progress = savefile["tutorial_progress"]
-				saved_stats_progress = savefile["stats_progress"]
-				tutorial.set_tutorial(saved_tutorial_progress, saved_stats_progress)
+		if typeof(savefile) == 18 and "version" in savefile:
+			var sv_ver = savefile["version"]
+			if version == sv_ver:
+				save_data = savefile
+				set_gamemode(save_data["last_gamemode"])
 		save_f.close()
-	emit_signal("update", saves)
-	if len(lowest) > 0:
-		emit_signal("update_lowest", lowest)
-
-	if len(saves) > 0:
-		load_save(-1)
-	else:
-		load_save(false)
+	load_save()
 
 
 func cards_to_data(c):
@@ -117,22 +185,8 @@ func get_cards(cards):
 
 
 func save_file():
-	savefile_json = null
-	if tutorial.tutorial:
-		print("refusing to save tutorial")
-		return
-
-	var savefile = {}
-	savefile["saves"] = saves
-	savefile["magic"] = magic
-	savefile["lowest"] = lowest
-	if tutorial.tutorial_progress > saved_tutorial_progress:
-		saved_tutorial_progress = tutorial.tutorial_progress
-	if tutorial.stats_progress > saved_stats_progress:
-		saved_stats_progress = tutorial.stats_progress
-	savefile["tutorial_progress"] = saved_tutorial_progress
-	savefile["stats_progress"] = saved_stats_progress
-	savefile_json = to_json(savefile)
+	save_data[gamemode]["progress"] = tutorial.to_data()
+	savefile_json = to_json(save_data)
 	if tutorial.inhibit_for_stats:
 		print("save inhibited")
 	else:
@@ -140,13 +194,18 @@ func save_file():
 
 
 func save_to_file():
+	if tutorial.tutorial:
+		print("refusing to save tutorial")
+		return
 	if not savefile_json:
 		print("no stored json")
 		return
 	var save_game = File.new()
-	save_game.open_compressed("user://save", File.WRITE, File.COMPRESSION_GZIP)
+	if file_compression:
+		save_game.open_compressed(file_path, File.WRITE, file_compression)
+	else:
+		save_game.open(file_path, File.WRITE)
 	save_game.store_line(savefile_json)
-	savefile_json = null
 	print("saved")
 
 
@@ -169,32 +228,69 @@ func save(cards):
 		"rng_state": generator.rng.state,
 		"time": gametime
 	}
-	saves.append(data)
-	while len(saves) > 5:
-		saves.pop_front()
+	
+	if gamemode == "hardcore":
+		save_data["hardcore"]["latest"] = []
 
+	var svl = save_data[gamemode]["latest"]
+	svl.append(data)
+	while len(svl) > 5:
+		svl.pop_front()
+	save_data[gamemode]["latest"] = svl
+	
+	if gamemode != "hardcore":
+		svl = save_data[gamemode]["world"]
+		var si = 0
+		var wa = true
+		while si < len(svl):
+			if svl[si]["world_num"] == world.num:
+				wa = false
+				break
+			si += 1
+		if wa:
+			svl.append(data)
+		else:
+			svl[si] = data
+		while len(svl) > 5:
+			svl.pop_front()
+		save_data[gamemode]["world"] = svl
+
+	save_data["last_gamemode"] = gamemode
 	save_file()
-	emit_signal("update", saves)
 
 
-func load_save(i, mode="game"):
+func _on_request_saves(m_gm, m_list):
+	emit_signal("update_saves", save_data[m_gm][m_list])
+
+
+func _on_Saves_load_save(m_list, index, m_gm):
+	n_list = m_list
+	n_i = index
+	set_gamemode(m_gm)
+	load_save()
+	if typeof(index) < 2:
+		if gamemode == "tutorial":
+			tutorial.set_progress({
+				"tutorial":0,
+				"stats":0
+			})
+			save_data["tutorial"]["latest"] = []
+			save_data["tutorial"]["world"] = []
+		if gamemode == "debug":
+			stats.unlocked = 6
+			stats.update()
+
+
+func load_save():
 	savable = false
-	n_i = i
-	n_mode = mode
 	emit_signal("reset")
 
 
 func load_next():
-	if n_i == null:
+	if typeof(n_i) < 2 or len(save_data[gamemode][n_list]) < 1: # null or bool
+		generator.new_game()
 		return
-	var i = n_i
-	n_i = null
-	var mode = n_mode
-	n_mode = null
-	if typeof(i) < 2:
-		generator.new_game(mode)
-		return
-	var data = saves[i]
+	var data = save_data[gamemode][n_list][n_i]
 
 	emit_signal("card_data", data["cards"])
 	armory.from_data(data["armories"])
@@ -211,22 +307,13 @@ func load_next():
 	color = data["color"]
 
 
-func color(c):
-	color = c
-
-
-func newgame():
-	gametime = 0
-	load_save(false)
-
-
-func newgame_tutorial():
-	gametime = 0
-	tutorial.set_tutorial(0, 0)
-	load_save(false)
-
-
-func newgame_debug():
-	gametime = 0
-	tutorial.set_tutorial(4,5)
-	load_save(false, "debug")
+func set_gamemode(new_gm):
+	# here: nourgency, nodiamond, noscoreboard, hardcore
+	# tutorial, stats, saves, scoreboard
+	gamemode = new_gm
+	if "progress" in save_data[gamemode]:
+		tutorial.set_progress(save_data[gamemode]["progress"])
+	else:
+		tutorial.set_progress(false)
+	generator.mode = gamemode
+	emit_signal("update_gamemode", gamemode)

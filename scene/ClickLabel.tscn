@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://script/Click.gd" type="Script" id=1]
+[ext_resource path="res://res/Hack.tres" type="DynamicFont" id=2]
+
+[node name="ClickLabel" type="Label"]
+margin_right = 40.0
+margin_bottom = 14.0
+mouse_filter = 0
+custom_fonts/font = ExtResource( 2 )
+script = ExtResource( 1 )
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

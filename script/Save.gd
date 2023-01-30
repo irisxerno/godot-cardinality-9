@@ -7,6 +7,12 @@ var selected
 var index
 
 
+func clear():
+	$Label.text = ""
+	$Panel.modulate = Color(0,0,0,0)
+	visible = false
+
+
 func set_save(save, i):
 	$Label.text = "w%d#%d+%d" % [save["world_num"], save["stats"]["progress"], save["stats"]["score"]]
 	var c = Color(int(save["color"]))

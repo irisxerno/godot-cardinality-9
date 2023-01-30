@@ -58,14 +58,16 @@ func update(from_input=false):
 		emit_signal("update_input", level)
 
 
-func set_purchasable(b):
+func set_purchasable(b,pd=false):
 	if b:
 		$Border.visible = true
 		$Border2.visible = false
 	else:
 		$Border.visible = false
 		$Border2.visible = true
-
+	$Background.modulate = Color(0,0,0,1)
+	if pd:
+		$Background.modulate = Color(0,0,0,0.25)
 
 func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:

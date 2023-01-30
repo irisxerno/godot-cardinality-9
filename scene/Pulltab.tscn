@@ -25,3 +25,4 @@ texture = ExtResource( 2 )
 [node name="Tween" type="Tween" parent="."]
 
 [connection signal="gui_input" from="Button" to="." method="_on_gui_input"]
+[connection signal="tween_all_completed" from="Tween" to="." method="_on_tween_all_completed"]

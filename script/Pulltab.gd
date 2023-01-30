@@ -4,9 +4,9 @@ extends Control
 signal set_input
 signal request_press
 
-signal open
-signal close
 signal click
+signal new_state
+signal trans_state
 
 var state = "close"
 
@@ -22,10 +22,8 @@ func update_state(new_state, tween=true, force=false):
 		new_state = "open"
 	if new_state == "open" and $Background.visible:
 		dest_dist = open_distance
-		emit_signal("open")
 	elif new_state == "hide":
 		dest_dist = hide_distance
-		emit_signal("close")
 	if not $Background.visible and new_state == "close" and not force:
 		return
 	if not tween:
@@ -34,6 +32,7 @@ func update_state(new_state, tween=true, force=false):
 		$Tween.interpolate_property(self, property, get(property), dest_dist, 0.5, Tween.TRANS_QUAD, Tween.EASE_IN_OUT)
 		$Tween.start()
 	state = new_state
+	emit_signal("new_state", state)
 
 
 func _on_gui_input(event):
@@ -50,3 +49,7 @@ func _on_gui_input(event):
 
 func force_show():
 	update_state("close", true, true)
+
+
+func _on_tween_all_completed():
+	emit_signal("trans_state", state)

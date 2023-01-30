@@ -3,7 +3,6 @@ extends Node2D
 
 signal done
 signal started
-signal win_height
 
 var stats
 var tile
@@ -82,7 +81,6 @@ func _on_Tally_done(c):
 	elif $EnemyController.count() == 0:
 		var tc = tile.col
 		emit_signal("done", true) # this clears tile.col
-		emit_signal("win_height", tc)
 	else:
 		set_input(true)
 		var take = stats.get_mainhand() - $Mainhand.count()
