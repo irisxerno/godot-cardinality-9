@@ -23,9 +23,11 @@ func color(c):
 
 
 func to_color(cname, d=duration):
+	$Tween.remove_all()
 	$Tween.interpolate_property(self, "color", self.color, color(cname), d, Tween.TRANS_LINEAR, Tween.EASE_IN)
 	$Tween.start()
 
 
 func set_color(cname):
+	$Tween.remove_all()
 	self.color = color(cname)

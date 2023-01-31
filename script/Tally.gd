@@ -1,6 +1,8 @@
 extends Node2D
 
 
+signal start
+signal napkin
 signal done
 
 var last_c
@@ -52,20 +54,22 @@ func filter(a, r, d):
 
 
 func start_count(a, r, d, e, er, ed):
+	emit_signal("start")
 	all = [filter(a, r, ed), filter(e, er, d)]
 	curr = [[],[]]
 	t = 0
 	update()
 
 
-static func count(deck):
+func count(deck):
 	var s = Sort.to_suits(deck)
 	var i = 0
 	for k in s:
 		var ii = 1
 		for inst in s[k]:
 			if inst.diamond:
-				print("NAPKIN!!!")
+				var h = 1.0/9.0*(k-1) + 0.5/9.0
+				emit_signal("napkin", Color.from_hsv(h, 0.6, 1))
 				ii /= inst.value
 			else:
 				ii *= inst.value

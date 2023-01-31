@@ -8,11 +8,28 @@ var tile_rsize = 125
 var tile_csize = 100
 var num = 0
 
+var states = ["hide", "peek", "show", "defeated"]
+
 
 func clear():
 	for tile in tiles:
 		tile.queue_free()
 	tiles = []
+
+
+func progress_from_data(p):
+	for i in range(len(tiles)):
+		var tile = tiles[i]
+		tile.state = states[p[i]]
+		tile.update()
+		emit_signal("ccount", ccount())
+
+
+func progress_to_data():
+	var data = []
+	for tile in tiles:
+		data.append(states.find(tile.state))
+	return data
 
 
 func from_data(world, n):
@@ -27,16 +44,14 @@ func from_data(world, n):
 	var col = 0 
 	for dat in world:
 		var tile = tile_scene.instance()
-		tile.cards = dat["cards"]
-		tile.armories = dat["armories"]
-		tile.reward = dat["reward"]
+		tile.cards = dat[0]
+		tile.armories = dat[1]
+		tile.reward = dat[2]
 		tile.row = row
 		tile.col = col
 		tile.rect_position += Vector2(tile_rsize*row + tile_rsize/2*col, -tile_csize*col)
 		if col == 0:
 			tile.state = "show"
-		if "state" in dat:
-			tile.state = dat["state"]
 		tile.connect("request_select", self, "request_select")
 		add_child(tile)
 		tiles.append(tile)
@@ -45,18 +60,6 @@ func from_data(world, n):
 			row = 0
 			col += 1
 	emit_signal("ccount", ccount())
-
-
-func to_data():
-	var data = []
-	for inst in tiles:
-		data.append({
-			"cards": inst.cards,
-			"armories": inst.armories,
-			"reward": inst.reward,
-			"state": inst.state
-		})
-	return data
 
 
 func ccount():
@@ -87,3 +90,8 @@ func defeat(inst):
 			if not (tile.row - inst.row == tile.col - inst.col):
 				tile.advance_state()
 				emit_signal("ccount", ccount())
+	var wprogc = 0
+	for tile in tiles:
+		if tile.state == "defeated":
+			wprogc += 1
+	print("wprogc: ", wprogc)

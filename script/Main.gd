@@ -20,6 +20,7 @@ func _ready():
 	$Savior.world = world
 	$Savior.generator = $WorldGeneration
 	$Savior.tutorial = $Tutorializer
+	$Savior.idle_filter = $IdleFilter
 	$Tutorializer.stats = stats
 	$Fight.stats = stats
 	$Fight.armory = armory
@@ -70,20 +71,19 @@ func to_build():
 
 func _on_Fight_done(win):
 	$Tabs/Cancel.update_state("hide")
-	var ending = false
+	var s = 0
 
 	if win:
 		$Savior.savable = true
 		$Builder.clear()
-		$Tutorializer.on_win($Fight.tile.col, $Tabs/WorldView/World.num)
 
 		if $Fight.tile.col == 4:
 			$Foreground.set_color("flash")
 			$Foreground.to_color("off")
 			if $Savior.ending_on_world($Tabs/WorldView/World.num):
-				ending = true
+				s = 1
 			else:
-				$WorldGeneration.return_new_world($Tabs/WorldView/World.num+1)
+				s = 2
 
 		var reward_c = $Fight.tile.reward
 		var reward = len(reward_c) # max xp gain
@@ -105,8 +105,9 @@ func _on_Fight_done(win):
 		$Tabs/StatsView/Stats.add_xp(gained_xp)
 
 		$Tabs/WorldView/World.defeat($Fight.tile)
+		$Tutorializer.on_win($Fight.tile.col, $Tabs/WorldView/World.num)
 
-		if ending:
+		if s == 1:
 				print("victory!")
 				$Fight.clear(true)
 				$Cards.kill(true)
@@ -114,9 +115,12 @@ func _on_Fight_done(win):
 				$Builder.visible = false
 				$Fight.visible = false
 				$Background.to_color(Color.white, 10)
-				$Ending.start($WorldGeneration.seed_value)
 				$Savior.archive()
+				# DEBUG: needs ending shit !!!
+				$Tabs/SaveView.force_show()
 				return
+		elif s == 2:
+			$WorldGeneration.return_world(true)
 
 		$Builder/Dealer.add_cards($Fight/Mainhand.cards())
 		$Builder/Dealer.add_cards($Fight/Offhand.cards())
@@ -154,6 +158,7 @@ func _on_World_ccount(cc):
 
 
 func reset():
+	$Background.to_color("none")
 	$Tabs.update_all("hide", true)
 	$Builder.visible = true
 	$Fight.visible = false

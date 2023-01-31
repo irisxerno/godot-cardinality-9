@@ -8,7 +8,7 @@ signal update_gamemode
 signal update_saves
 signal update_scoreboard
 signal update_results
-
+signal unlocked_gamemodes
 
 
 var savable = false
@@ -25,6 +25,7 @@ var world
 var generator
 var color
 var tutorial
+var idle_filter
 
 var gametime = 0
 var idletime = 0
@@ -96,6 +97,7 @@ func _process(delta):
 	idletime += delta
 	if idletime < 60:
 		gametime += delta
+	idle_filter.visible = idletime > 60
 
 
 func _input(event):
@@ -103,7 +105,7 @@ func _input(event):
 
 
 func archive():
-	var gm_i = gamemode_sequence.find()
+	var gm_i = gamemode_sequence.find(gamemode)
 	if gm_i+1 < len(gamemode_sequence):
 		var ng = gamemode_sequence[gm_i+1]
 		if not ng in save_data:
@@ -130,6 +132,7 @@ func archive():
 #
 #	saves = []
 	save_file()
+	update_unlocked_gamemodes()
 #
 #	var results = {}
 #	results["score"] = sc
@@ -146,11 +149,10 @@ func start():
 	gamemode = "tutorial"
 	save_data = {
 		"version": version,
-		"last_gamemode": "tutorial",
+		"last_gamemode": gamemode,
+		gamemode: skel_gamemode(gamemode)
 	}
-	for gm in gamemode_sequence:
-		save_data[gm] = skel_gamemode(gm)
-	tutorial.set_progress(save_data[gamemode]["progress"])
+	set_gamemode(gamemode)
 	var save_f = File.new()
 	var dir = Directory.new()
 	if dir.file_exists(file_path):
@@ -166,15 +168,13 @@ func start():
 				set_gamemode(save_data["last_gamemode"])
 		save_f.close()
 	load_save()
+	update_unlocked_gamemodes()
 
 
 func cards_to_data(c):
 	var data = []
 	for inst in c:
-		data.append({
-			"value": inst.value,
-			"suit": inst.suit
-		})
+		data.append([inst.value, inst.suit])
 	return data
 
 
@@ -187,7 +187,7 @@ func get_cards(cards):
 func save_file():
 	save_data[gamemode]["progress"] = tutorial.to_data()
 	savefile_json = to_json(save_data)
-	if tutorial.inhibit_for_stats:
+	if tutorial.inhibit > 0:
 		print("save inhibited")
 	else:
 		save_to_file()
@@ -214,7 +214,7 @@ func save(cards):
 	var armory_data = armory.to_data()
 	var diamond_data = diamond.to_data()
 	var stat_data = stats.to_data()
-	var world_data = world.to_data()
+	var world_progress = world.progress_to_data()
 
 	var data = {
 		"color": color,
@@ -222,10 +222,10 @@ func save(cards):
 		"armories": armory_data,
 		"diamond": diamond_data,
 		"stats": stat_data,
-		"world": world_data,
 		"world_num": world.num,
-		"rng_seed": generator.seed_value,
-		"rng_state": generator.rng.state,
+		"world_state": generator.world_state,
+		"world_seed": generator.world_seed,
+		"world_progress": world_progress,
 		"time": gametime
 	}
 	
@@ -260,7 +260,10 @@ func save(cards):
 
 
 func _on_request_saves(m_gm, m_list):
-	emit_signal("update_saves", save_data[m_gm][m_list])
+	var vw = true
+	if m_gm == "tutorial" and save_data["tutorial"]["progress"]["tutorial"] < 4:
+		vw = false
+	emit_signal("update_saves", save_data[m_gm][m_list], vw)
 
 
 func _on_Saves_load_save(m_list, index, m_gm):
@@ -274,8 +277,6 @@ func _on_Saves_load_save(m_list, index, m_gm):
 				"tutorial":0,
 				"stats":0
 			})
-			save_data["tutorial"]["latest"] = []
-			save_data["tutorial"]["world"] = []
 		if gamemode == "debug":
 			stats.unlocked = 6
 			stats.update()
@@ -296,11 +297,15 @@ func load_next():
 	armory.from_data(data["armories"])
 	diamond.from_data(data["diamond"])
 	stats.from_data(data["stats"])
-	world.from_data(data["world"], data["world_num"])
 
-	generator.seed_value = data["rng_seed"]
-	generator.rng.seed = generator.seed_value
-	generator.rng.state = data["rng_state"]
+	generator.world_seed = data["world_seed"]
+	generator.rng.seed = generator.world_seed
+	generator.world_state = data["world_state"]
+	generator.rng.state = generator.world_state
+
+	generator.world_num = data["world_num"]
+	generator.return_world()
+	world.progress_from_data(data["world_progress"])
 
 	gametime = data["time"]
 
@@ -308,7 +313,7 @@ func load_next():
 
 
 func set_gamemode(new_gm):
-	# here: nourgency, nodiamond, noscoreboard, hardcore
+	# here: nourgency, noscoreboard, hardcore
 	# tutorial, stats, saves, scoreboard
 	gamemode = new_gm
 	if "progress" in save_data[gamemode]:
@@ -317,3 +322,11 @@ func set_gamemode(new_gm):
 		tutorial.set_progress(false)
 	generator.mode = gamemode
 	emit_signal("update_gamemode", gamemode)
+
+
+func update_unlocked_gamemodes():
+	var ugm = []
+	for gm in gamemode_sequence:
+		if gm in save_data:
+			ugm.append(gm)
+	emit_signal("unlocked_gamemodes", ugm)

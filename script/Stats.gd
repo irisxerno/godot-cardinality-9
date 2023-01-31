@@ -9,7 +9,6 @@ var progress = 0
 var list
 var unlocked = 0
 var criteria = [5, 10, 15, 40, 65, 115]
-var pending_tutorial = false
 
 signal buy_pressed
 
@@ -29,10 +28,7 @@ func update():
 			if inst.cost() <= xp and inst.level < inst.maxval:
 				inst.set_purchasable(true)
 			else:
-				var pd = false
-				if typeof(pending_tutorial) >= 2 and pending_tutorial < i:
-					pd = true
-				inst.set_purchasable(false, pd)
+				inst.set_purchasable(false)
 		i += 1
 		inst.update()
 

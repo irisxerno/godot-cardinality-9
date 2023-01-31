@@ -65,9 +65,7 @@ func set_purchasable(b,pd=false):
 	else:
 		$Border.visible = false
 		$Border2.visible = true
-	$Background.modulate = Color(0,0,0,1)
-	if pd:
-		$Background.modulate = Color(0,0,0,0.25)
+
 
 func _on_gui_input(event):
 	if event is InputEventMouseButton and event.pressed:

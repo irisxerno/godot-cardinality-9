@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://script/Tile.gd" type="Script" id=1]
 [ext_resource path="res://res/hex_border.png" type="Texture" id=2]
@@ -8,6 +8,11 @@
 
 [sub_resource type="DynamicFont" id=2]
 size = 32
+use_mipmaps = true
+use_filter = true
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=4]
 use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 4 )
@@ -70,8 +75,23 @@ margin_left = -50.0
 margin_top = -50.0
 margin_right = 50.0
 margin_bottom = 50.0
-custom_colors/font_color = Color( 1, 0.752941, 0.752941, 1 )
+custom_colors/font_color = Color( 1, 0.894118, 0.894118, 1 )
 custom_fonts/font = SubResource( 2 )
+text = "-1"
+align = 1
+valign = 1
+
+[node name="Label2" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -40.0
+margin_top = -40.0
+margin_right = 10.0
+margin_bottom = 10.0
+custom_colors/font_color = Color( 0.556863, 0.447059, 0.447059, 1 )
+custom_fonts/font = SubResource( 4 )
 text = "-1"
 align = 1
 valign = 1

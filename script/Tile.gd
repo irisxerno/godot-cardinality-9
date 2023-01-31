@@ -15,13 +15,16 @@ var col = -1
 
 
 func _ready():
-	$Label.text = str(len(reward))
 	var count = len(cards)
+	$Label.text = str(count)
 	var cursor = Vector2(0,0)
 	var scenec = preload("res://scene/MiniCircle.tscn")
 	var scener = preload("res://scene/MiniRect.tscn")
 	var ic = []
 	var ak = armories.keys()
+	var acount = 0
+	$Label.rect_position = Vector2(0,0)
+	$Label2.text = ""
 	ak.sort()
 	for k in ak:
 		for a in armories[k]:
@@ -29,14 +32,19 @@ func _ready():
 			var h = 1.0/9.0*(int(k)-1) + 0.5/9.0
 			inst.modulate = Color.from_hsv(h, 0.6, 1)
 			ic.append(inst)
+			acount += 1
+	if acount > 0:
+		$Label.rect_position = Vector2(5,5)
+		$Label2.text = str(acount)
 
 	var cs = cards.duplicate()
 	cs.sort_custom(Sort, "by_suit")
 	for c in cs:
 		var inst = scener.instance()
-		var h = 1.0/9.0*(c.suit-1) + 0.5/9.0
+		var h = 1.0/9.0*(c[1]-1) + 0.5/9.0
 		inst.modulate = Color.from_hsv(h, 0.6, 1)
 		ic.append(inst)
+
 
 	for inst in ic:
 		inst.position = cursor*30+Vector2(15,15)
@@ -61,22 +69,20 @@ func update():
 	$Defeated.visible = false
 	$Background.visible = true
 	$Label.visible = true
+	$Label2.visible = true
 	$Border.visible = true
 	$Dot.visible = false
 	visible = true
-	if state == "peek":
+	if state != "show":
 		$Label.visible = false
+		$Label2.visible = false
 		$Border.visible = false
 	if state == "hide":
-		$Label.visible = false
-		$Background.visible = false
-		$Border.visible = false
 		$Dot.visible = true
-	elif state == "defeated":
-		$Label.visible = false
 		$Background.visible = false
-		$Border.visible = false
+	elif state == "defeated":
 		$Defeated.visible = true
+		$Background.visible = false
 
 
 func advance_state():

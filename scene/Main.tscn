@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -23,10 +23,7 @@
 [ext_resource path="res://script/Savior.gd" type="Script" id=21]
 [ext_resource path="res://script/Saves.gd" type="Script" id=22]
 [ext_resource path="res://scene/ClickLabel.tscn" type="PackedScene" id=23]
-[ext_resource path="res://script/Ending.gd" type="Script" id=24]
-[ext_resource path="res://res/DejaVuSerif.ttf" type="DynamicFontData" id=25]
 [ext_resource path="res://script/Lowest.gd" type="Script" id=26]
-[ext_resource path="res://script/Results.gd" type="Script" id=27]
 [ext_resource path="res://script/Tutorializer.gd" type="Script" id=28]
 [ext_resource path="res://script/Repairs.gd" type="Script" id=29]
 [ext_resource path="res://scene/Slot.tscn" type="PackedScene" id=30]
@@ -35,6 +32,8 @@
 [ext_resource path="res://scene/Diamond.tscn" type="PackedScene" id=33]
 [ext_resource path="res://script/Radio.gd" type="Script" id=34]
 [ext_resource path="res://res/LineThing.tres" type="StyleBox" id=35]
+[ext_resource path="res://script/NapkinController.gd" type="Script" id=36]
+[ext_resource path="res://scene/Napkin.tscn" type="PackedScene" id=37]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
@@ -94,18 +93,6 @@ corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
 [sub_resource type="DynamicFont" id=15]
-size = 32
-use_mipmaps = true
-use_filter = true
-font_data = ExtResource( 12 )
-
-[sub_resource type="DynamicFont" id=11]
-size = 48
-use_mipmaps = true
-use_filter = true
-font_data = ExtResource( 25 )
-
-[sub_resource type="DynamicFont" id=16]
 size = 32
 use_mipmaps = true
 use_filter = true
@@ -417,7 +404,7 @@ margin_top = -80.0
 margin_right = -250.0
 margin_bottom = -80.0
 default = 5
-mult = 5
+mult = 1
 maxval = 30
 
 [node name="Extra" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
@@ -714,107 +701,31 @@ margin_bottom = 118.0
 custom_fonts/font = SubResource( 15 )
 text = "-"
 
-[node name="Foreground" parent="." instance=ExtResource( 17 )]
-color = Color( 1, 1, 1, 0 )
-duration = 2.0
+[node name="NapkinController" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 36 )
+napkin = ExtResource( 37 )
 
-[node name="Ending" type="Control" parent="."]
+[node name="Cursor" type="Position2D" parent="NapkinController"]
+
+[node name="IdleFilter" type="ColorRect" parent="."]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 24 )
+mouse_filter = 2
+color = Color( 0, 0, 0, 0.501961 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true
 }
-tick_dur = 0.1
-
-[node name="Label" type="Label" parent="Ending"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 200.0
-margin_top = 200.0
-margin_right = -80.0
-margin_bottom = -120.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 11 )
-text = "the debian administrator's handjob"
-autowrap = true
-
-[node name="Timer" type="Timer" parent="Ending"]
-wait_time = 10.0
-one_shot = true
-
-[node name="AlphaTween" type="Tween" parent="Ending"]
-
-[node name="Results" type="Control" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-script = ExtResource( 27 )
-
-[node name="Label" type="Label" parent="Results"]
-margin_left = 200.0
-margin_top = 200.0
-margin_right = 295.0
-margin_bottom = 238.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 16 )
-text = "score"
-
-[node name="Score" type="Label" parent="Results"]
-margin_left = 400.0
-margin_top = 200.0
-margin_right = 552.0
-margin_bottom = 238.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 16 )
-text = "-"
-
-[node name="Label2" type="Label" parent="Results"]
-margin_left = 200.0
-margin_top = 300.0
-margin_right = 295.0
-margin_bottom = 338.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 16 )
-text = "time"
-
-[node name="Time" type="Label" parent="Results"]
-margin_left = 400.0
-margin_top = 300.0
-margin_right = 552.0
-margin_bottom = 338.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 16 )
-text = "-"
-
-[node name="Label3" type="Label" parent="Results"]
-margin_left = 200.0
-margin_top = 400.0
-margin_right = 352.0
-margin_bottom = 438.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 16 )
-text = "progress"
-
-[node name="Progress" type="Label" parent="Results"]
-margin_left = 400.0
-margin_top = 400.0
-margin_right = 552.0
-margin_bottom = 438.0
-custom_colors/font_color = Color( 0, 0, 0, 1 )
-custom_fonts/font = SubResource( 16 )
-text = "-"
 
 [connection signal="card_data" from="Savior" to="Builder/Dealer" method="deal_data_now"]
 [connection signal="reset" from="Savior" to="." method="reset"]
 [connection signal="return_cards" from="Savior" to="Builder/Deal" method="add_cards"]
+[connection signal="unlocked_gamemodes" from="Savior" to="Tabs/SaveView/Saves/Gamemodes" method="enable"]
 [connection signal="update_gamemode" from="Savior" to="Tabs/SaveView/Saves" method="update_gamemode"]
-[connection signal="update_results" from="Savior" to="Results" method="update_results"]
 [connection signal="update_saves" from="Savior" to="Tabs/SaveView/Saves" method="set_saves"]
-[connection signal="enable_worldsaves" from="Tutorializer" to="Tabs/SaveView/Saves" method="_on_enable_worldsaves"]
 [connection signal="save" from="Tutorializer" to="Savior" method="save_to_file"]
 [connection signal="set_cancel" from="Tutorializer" to="Fight" method="set_cancel"]
 [connection signal="show_tab" from="Tutorializer" to="Tabs" method="show_tab"]
@@ -842,6 +753,8 @@ text = "-"
 [connection signal="return_cards" from="Fight/Dealer" to="Fight" method="_on_Dealer_return_cards"]
 [connection signal="done" from="Fight/Tally" to="Fight" method="_on_Tally_done"]
 [connection signal="input_event" from="Fight/Tally" to="Fight/Tally" method="_on_input_event"]
+[connection signal="napkin" from="Fight/Tally" to="NapkinController" method="napkin"]
+[connection signal="start" from="Fight/Tally" to="NapkinController" method="reset_cursor"]
 [connection signal="add_armory" from="UserArmory" to="Armories" method="add_card"]
 [connection signal="add_card" from="UserArmory" to="Cards" method="add_card"]
 [connection signal="return_cards" from="UserArmory" to="Builder/Deal" method="add_cards"]
@@ -883,9 +796,6 @@ text = "-"
 [connection signal="click" from="Tabs/SaveView/Saves/worlds/Label" to="Tabs/SaveView/Saves" method="_worlds_click"]
 [connection signal="selected" from="Tabs/SaveView/Saves/Gamemodes" to="Tabs/SaveView/Saves" method="_on_Gamemodes_selected"]
 [connection signal="click" from="Tabs/Cancel" to="Fight" method="_on_Cancel_click"]
-[connection signal="gui_input" from="Ending" to="Ending" method="_on_gui_input"]
-[connection signal="timeout" from="Ending/Timer" to="Ending" method="_on_timeout"]
-[connection signal="tween_all_completed" from="Ending/AlphaTween" to="Results" method="show"]
 
 [editable path="Fight/Dealer"]
 [editable path="Tabs/WorldView"]

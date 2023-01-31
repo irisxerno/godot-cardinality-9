@@ -4,37 +4,31 @@ extends Node
 signal save
 signal show_tab
 signal set_cancel
-signal enable_worldsaves
 
 var stats
 
 var tutorial = false
-var inhibit_for_stats = false
+var inhibit = 0
 var tutorial_progress = 5
 var stats_progress = 6
 var control = false
 var scores = false
 
 
-func show_tabs(uninhibit=false):
+func show_tabs(uninhibit=0):
 	if tutorial_progress < 3:
 		emit_signal("set_cancel", false)
 	else:
 		emit_signal("set_cancel", true)
-	
-	if tutorial_progress < 4:
-		emit_signal("enable_worldsaves", false)
-	else:
-		emit_signal("enable_worldsaves", true)
-	
+
 	if tutorial_progress >= 2:
 		emit_signal("show_tab","StatsView")
 
-	if uninhibit and inhibit_for_stats:
-		inhibit_for_stats = false
+	if uninhibit == inhibit:
+		inhibit = 0
 		emit_signal("save")
 
-	if inhibit_for_stats:
+	if inhibit > 0:
 		return
 
 	if tutorial_progress >= 1:
@@ -65,22 +59,19 @@ func on_win(col, w_num):
 
 
 func progress_stats():
-	# TODO: this doesn't work??????
-	stats.pending_tutorial = false
-	if stats_progress >= 5:
+	if stats_progress >= 6:
 		return
 	var stat = stats.list[stats_progress]
+	print(stats.unlocked-1, ">=", stats_progress)
 	if stats.unlocked-1 >= stats_progress:
 		if stats.xp >= stat.cost():
 			stats_progress += 1
-			inhibit_for_stats = true
-		else:
-			stats.pending_tutorial = stats_progress
+			inhibit = 1
 
 
 func _on_Stats_buy_pressed():
-	if inhibit_for_stats:
-		show_tabs(true)
+	if inhibit == 1:
+		show_tabs(1)
 
 
 func set_progress(p):
@@ -91,14 +82,11 @@ func set_progress(p):
 		}
 	tutorial = true
 	tutorial_progress = p["tutorial"]
-	inhibit_for_stats = false
+	inhibit = 0
 	if tutorial_progress >= 3:
 		tutorial = false
 	stats_progress = p["stats"]
 	control = false
-	stats.pending_tutorial = false
-	if stats.unlocked-1 >= stats_progress and stats.xp < stats.list[stats_progress].cost():
-		stats.pending_tutorial = stats_progress
 
 
 func to_data():

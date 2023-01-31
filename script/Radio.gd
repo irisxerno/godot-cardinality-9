@@ -29,3 +29,8 @@ func select(si):
 			inst.update()
 
 
+func enable(list):
+	for inst in opts:
+		inst.visible = false
+		if inst.name in list:
+			inst.visible = true

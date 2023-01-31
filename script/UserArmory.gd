@@ -83,10 +83,7 @@ func to_data():
 		var inst = s.armory
 		var a = null
 		if inst:
-			a = {
-				"value": inst.value,
-				"suit": inst.suit
-			}
+			a = [inst.value, inst.suit]
 		armory_data.append(a)
 	return armory_data
 
@@ -100,8 +97,8 @@ func from_data(adata):
 		var ad = adata[i]
 		if ad:
 			var inst = scene.instance()
-			inst.value = ad["value"]
-			inst.suit = int(ad["suit"])
+			inst.value = ad[0]
+			inst.suit = int(ad[1])
 			inst.position = Vector2(1440,1440)
 			inst.face_up = false
 			emit_signal("add_card", inst)

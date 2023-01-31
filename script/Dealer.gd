@@ -32,8 +32,8 @@ func deal_from_data(card_data):
 	var scene = preload("res://scene/Card.tscn")
 	for d in card_data:
 		var inst = scene.instance()
-		inst.value = d["value"]
-		inst.suit = int(d["suit"])
+		inst.value = d[0]
+		inst.suit = int(d[1])
 		inst.position = self.position
 		inst.face_up = face_up
 		cards.append(inst)
