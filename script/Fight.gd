@@ -9,7 +9,6 @@ var tile
 var armory
 var diamond
 var input = true
-var cancel = false
 
 
 func _process(delta):
@@ -55,8 +54,7 @@ func _on_Mainhand_request_return_cards(inst):
 
 func _on_Dealer_done():
 	set_input(true)
-	if cancel:
-		emit_signal("started")
+	emit_signal("started")
 
 
 func _on_Dealer_return_cards(new_cards):
@@ -100,7 +98,3 @@ func clear(death=false):
 func _on_Cancel_click():
 	$Attack/LevelBar.count(0)
 	emit_signal("done", false)
-
-
-func set_cancel(b):
-	cancel = b

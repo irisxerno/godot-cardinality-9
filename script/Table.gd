@@ -1,5 +1,7 @@
 extends Node2D
 
+signal uselect
+
 export var mainhand = 5
 export var offhand = 5
 export var attack = 5
@@ -36,13 +38,16 @@ func _on_Deal_request_return_cards(inst):
 
 
 func uselect(inst):
+	var u = 3
 	var b = armory.find_selected()
 	if not b:
+		u = 4
 		b = diamond.find_selected()
 	if b:
 		var c = inst.cards.back()
 		inst.remove_cards([c])
 		b.give_card(c)
+		emit_signal("uselect", u)
 		return true
 	return false
 

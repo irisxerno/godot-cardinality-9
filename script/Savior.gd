@@ -16,7 +16,7 @@ var savable = false
 var n_i = false
 var n_list = "latest"
 var gamemode = "tutorial"
-var gamemode_sequence = ["tutorial", "normal", "hard", "hardcore", "debug"]
+var gamemode_sequence = ["tutorial", "normal", "hard", "hardcore", "testing"]
 
 var stats
 var armory
@@ -48,11 +48,6 @@ func skel_gamemode(m="tutorial"):
 		"latest": [],
 		"world": []
 	}
-	if m == "tutorial":
-		skel["progress"] = {
-			"tutorial": 0,
-			"stats": 0
-		}
 	if m == "normal" or m == "hard" or m == "hardcore":
 		skel["scoreboard"] = {
 			"low": {
@@ -85,7 +80,7 @@ var gm_ending_world = {
 	"normal": 4,
 	"hard": 5,
 	"hardcore": 5,
-	"debug": 10
+	"testing": 10
 }
 
 
@@ -167,7 +162,7 @@ func start():
 				save_data = savefile
 				set_gamemode(save_data["last_gamemode"])
 		save_f.close()
-	load_save()
+	# load_save()
 	update_unlocked_gamemodes()
 
 
@@ -185,18 +180,14 @@ func get_cards(cards):
 
 
 func save_file():
-	save_data[gamemode]["progress"] = tutorial.to_data()
 	savefile_json = to_json(save_data)
-	if tutorial.inhibit > 0:
-		print("save inhibited")
-	else:
-		save_to_file()
+	#if tutorial.inhibit > 0:
+	#	print("save inhibited")
+	#else:
+	save_to_file()
 
 
 func save_to_file():
-	if tutorial.tutorial:
-		print("refusing to save tutorial")
-		return
 	if not savefile_json:
 		print("no stored json")
 		return
@@ -228,7 +219,10 @@ func save(cards):
 		"world_progress": world_progress,
 		"time": gametime
 	}
-	
+
+	if gamemode == "tutorial":
+		data["stats_progress"] = tutorial.stats_progress
+
 	if gamemode == "hardcore":
 		save_data["hardcore"]["latest"] = []
 
@@ -260,10 +254,10 @@ func save(cards):
 
 
 func _on_request_saves(m_gm, m_list):
-	var vw = true
-	if m_gm == "tutorial" and save_data["tutorial"]["progress"]["tutorial"] < 4:
-		vw = false
-	emit_signal("update_saves", save_data[m_gm][m_list], vw)
+	var w = false
+	if len(save_data[m_gm]["world"]) >= 2:
+		w = true
+	emit_signal("update_saves", save_data[m_gm][m_list], w)
 
 
 func _on_Saves_load_save(m_list, index, m_gm):
@@ -271,15 +265,6 @@ func _on_Saves_load_save(m_list, index, m_gm):
 	n_i = index
 	set_gamemode(m_gm)
 	load_save()
-	if typeof(index) < 2:
-		if gamemode == "tutorial":
-			tutorial.set_progress({
-				"tutorial":0,
-				"stats":0
-			})
-		if gamemode == "debug":
-			stats.unlocked = 6
-			stats.update()
 
 
 func load_save():
@@ -289,6 +274,12 @@ func load_save():
 
 func load_next():
 	if typeof(n_i) < 2 or len(save_data[gamemode][n_list]) < 1: # null or bool
+		if gamemode == "tutorial":
+			tutorial.set_progress(-1)
+			tutorial.inhibit = 1
+		if gamemode == "testing":
+			stats.unlocked = 7
+			stats.update()
 		generator.new_game()
 		return
 	var data = save_data[gamemode][n_list][n_i]
@@ -311,15 +302,16 @@ func load_next():
 
 	color = data["color"]
 
+	if "stats_progress" in data:
+		tutorial.set_progress(data["stats_progress"])
+	else:
+		tutorial.set_progress(false)
+
 
 func set_gamemode(new_gm):
 	# here: nourgency, noscoreboard, hardcore
 	# tutorial, stats, saves, scoreboard
 	gamemode = new_gm
-	if "progress" in save_data[gamemode]:
-		tutorial.set_progress(save_data[gamemode]["progress"])
-	else:
-		tutorial.set_progress(false)
 	generator.mode = gamemode
 	emit_signal("update_gamemode", gamemode)
 

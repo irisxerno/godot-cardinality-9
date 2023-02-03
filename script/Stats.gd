@@ -9,6 +9,7 @@ var progress = 0
 var list
 var unlocked = 0
 var criteria = [5, 10, 15, 40, 65, 115]
+var inhibit = false
 
 signal buy_pressed
 
@@ -56,6 +57,8 @@ func add_xp(i, p=1):
 
 
 func progress_stats():
+	if inhibit:
+		return
 	if unlocked > (len(criteria) - 1):
 		return
 	if score >= criteria[unlocked]:
@@ -85,6 +88,7 @@ func to_data():
 
 
 func from_data(sdata):
+	inhibit = false
 	xp = sdata["xp"]
 	score = sdata["score"]
 	progress = sdata["progress"]
@@ -99,6 +103,7 @@ func from_data(sdata):
 
 
 func new():
+	inhibit = false
 	xp = 0
 	score = 0
 	progress = 0
@@ -122,11 +127,3 @@ func get_armory():
 	return $Armory.level
 func get_diamond():
 	return $Diamond.level
-
-func _on_debug():
-	xp = 1000
-	unlocked = len(criteria)
-	$Mainhand.level = 10
-	$Offhand.level = 10
-	update()
-

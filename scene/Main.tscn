@@ -487,12 +487,16 @@ margin_bottom = 690.0
 custom_styles/panel = SubResource( 9 )
 
 [node name="Button" parent="Tabs/SaveView" index="1"]
-modulate = Color( 0.419608, 0.25098, 0.501961, 0.878431 )
+modulate = Color( 0.4125, 0.25, 0.5, 0.878431 )
 margin_top = 620.0
 margin_right = 1600.0
 margin_bottom = 1120.0
 rect_rotation = -90.0
+rect_scale = Vector2( 0.1, 0.1 )
 mouse_filter = 1
+__meta__ = {
+"_editor_description_": "e06b4080"
+}
 
 [node name="Saves" type="Control" parent="Tabs/SaveView"]
 margin_left = -200.0
@@ -584,7 +588,7 @@ custom_fonts/font = SubResource( 17 )
 text = "hardcore"
 valign = 1
 
-[node name="debug" parent="Tabs/SaveView/Saves/Gamemodes" instance=ExtResource( 23 )]
+[node name="testing" parent="Tabs/SaveView/Saves/Gamemodes" instance=ExtResource( 23 )]
 anchor_left = 0.5
 anchor_right = 0.5
 margin_left = -70.0
@@ -592,7 +596,7 @@ margin_top = 120.0
 margin_right = 70.0
 margin_bottom = 150.0
 custom_fonts/font = SubResource( 17 )
-text = "debug"
+text = "testing"
 valign = 1
 
 [node name="Panel" type="Panel" parent="Tabs/SaveView/Saves/Gamemodes"]
@@ -709,6 +713,9 @@ napkin = ExtResource( 37 )
 
 [node name="Cursor" type="Position2D" parent="NapkinController"]
 
+[node name="Foreground" parent="." instance=ExtResource( 17 )]
+color = Color( 0, 0, 0, 0 )
+
 [node name="IdleFilter" type="ColorRect" parent="."]
 visible = false
 anchor_right = 1.0
@@ -727,14 +734,13 @@ __meta__ = {
 [connection signal="update_gamemode" from="Savior" to="Tabs/SaveView/Saves" method="update_gamemode"]
 [connection signal="update_saves" from="Savior" to="Tabs/SaveView/Saves" method="set_saves"]
 [connection signal="save" from="Tutorializer" to="Savior" method="save_to_file"]
-[connection signal="set_cancel" from="Tutorializer" to="Fight" method="set_cancel"]
 [connection signal="show_tab" from="Tutorializer" to="Tabs" method="show_tab"]
 [connection signal="color" from="WorldGeneration" to="Savior" method="color"]
-[connection signal="debug" from="WorldGeneration" to="Tabs/StatsView/Stats" method="_on_debug"]
 [connection signal="new" from="WorldGeneration" to="UserArmory" method="new"]
 [connection signal="new" from="WorldGeneration" to="Tabs/StatsView/Stats" method="new"]
 [connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_data_now"]
 [connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="from_data"]
+[connection signal="uselect" from="Builder" to="Tutorializer" method="_on_Builder_uselect"]
 [connection signal="dump" from="Builder/Offhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder" method="request_take"]
 [connection signal="count" from="Builder/Deal" to="Tutorializer" method="_on_Deal_count"]

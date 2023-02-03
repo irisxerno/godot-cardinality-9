@@ -27,10 +27,11 @@ func _ready():
 	$Fight.diamond = diamond
 
 	$Tabs.update_all("hide", false)
-	$Builder.visible = true
+	$Builder.visible = false
 	$Fight.visible = false
 	
 	$Savior.start()
+	$Tabs/SaveView.force_show()
 
 
 func _on_select_tile(tile):
@@ -115,9 +116,9 @@ func _on_Fight_done(win):
 				$Builder.visible = false
 				$Fight.visible = false
 				$Background.to_color(Color.white, 10)
-				$Savior.archive()
-				# DEBUG: needs ending shit !!!
-				$Tabs/SaveView.force_show()
+				# DEBUG; BETA; MY LOVE; OW
+				# $Savior.archive()
+				# $Tabs/SaveView.force_show()
 				return
 		elif s == 2:
 			$WorldGeneration.return_world(true)

@@ -26,7 +26,10 @@ func load_save(index):
 	emit_signal("load_save", m_list, index, m_gm)
 
 
-func set_saves(save_data, wv = true):
+func set_saves(save_data, w):
+	$worlds.visible = false
+	if w:
+		$worlds.visible = true
 	for inst in saves:
 		inst.clear()
 	for i in range(len(save_data)):
@@ -57,6 +60,7 @@ func _on_SaveView_trans_state(state):
 
 func update_gamemode(new_gm):
 	curr_gm = new_gm
+	m_gm = new_gm
 
 
 func _on_newgame_click(b):

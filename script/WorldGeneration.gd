@@ -5,7 +5,6 @@ signal return_card_data
 signal return_world_data
 signal new
 signal color
-signal debug
 
 var rng = RandomNumberGenerator.new()
 var iq_chance = 1.0/4.0
