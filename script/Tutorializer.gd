@@ -14,7 +14,7 @@ var scores = false
 
 
 func show_tabs(uninhibit=false):
-	if stats_progress >= 0:
+	if stats.unlocked > 0 or stats.progress > 0:
 		emit_signal("show_tab","StatsView")
 
 	control = true
