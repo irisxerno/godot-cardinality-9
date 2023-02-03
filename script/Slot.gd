@@ -74,7 +74,7 @@ func update():
 		$Background.modulate = Color(1, 1, 1, a)
 	else:
 		$Background.modulate = Color(0, 0, 0, a)
-	visible = true
+#	visible = true
 
 
 func update_armories():

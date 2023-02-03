@@ -274,13 +274,15 @@ func load_save():
 
 func load_next():
 	if typeof(n_i) < 2 or len(save_data[gamemode][n_list]) < 1: # null or bool
+		generator.new_game()
 		if gamemode == "tutorial":
 			tutorial.set_progress(-1)
 			tutorial.inhibit = 1
+		else:
+			tutorial.set_progress(6)
 		if gamemode == "testing":
 			stats.unlocked = 7
 			stats.update()
-		generator.new_game()
 		return
 	var data = save_data[gamemode][n_list][n_i]
 
