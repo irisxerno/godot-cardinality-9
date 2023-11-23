@@ -13,8 +13,6 @@ var world_seed = 0
 var world_state = 0
 var world_num = 0
 
-var mode = "tutorial"
-
 
 func mx(w):
 	return min(9, 4 + w)
@@ -57,7 +55,7 @@ func _rand_tile(w, h):
 	var suit = rng.randi_range(1, mx(w))
 	for i in range(num):
 		var value = c()
-		if iq() and len(cards) > 0:
+		if len(cards) > 0 and iq():
 			suit = cards[rng.randi_range(0, len(cards)-1)][1]
 		else:
 			suit = rng.randi_range(1, mx(w))
@@ -94,8 +92,6 @@ func new_game():
 	var cc = 10
 	var cw = 0
 	var cws = 0
-	if mode == "hard":
-		cw = 1
 	for i in range(cc):
 		cards.append([c(),rng.randi_range(1,mx(cws))])
 	emit_signal("return_card_data", cards)

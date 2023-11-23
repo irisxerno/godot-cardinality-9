@@ -48,7 +48,6 @@ func show_repairs(reward, hand_regen, leftover, extra_regen, gained_xp):
 		sec_visible += 1
 	sb.append("xp")
 	$Label.text = sb.join(" ")
-	print($Label.text)
 	$Label.visible_characters = 0
 	$Timer.wait_time = sec_visible
 

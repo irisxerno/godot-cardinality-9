@@ -19,9 +19,6 @@ func _ready():
 	$Savior.diamond = diamond
 	$Savior.world = world
 	$Savior.generator = $WorldGeneration
-	$Savior.tutorial = $Tutorializer
-	$Savior.idle_filter = $IdleFilter
-	$Tutorializer.stats = stats
 	$Fight.stats = stats
 	$Fight.armory = armory
 	$Fight.diamond = diamond
@@ -31,7 +28,6 @@ func _ready():
 	$Fight.visible = false
 	
 	$Savior.start()
-	$Tabs/SaveView.force_show()
 
 
 func _on_select_tile(tile):
@@ -64,8 +60,10 @@ func _on_select_tile(tile):
 func to_build():
 	$UserArmory.visible = true
 	$UserDiamond.visible = true
-	#$Tabs.update_all("close")
-	$Tutorializer.show_tabs()
+	$Tabs.show_tab("SaveView")
+	$Tabs.show_tab("WorldView")
+	if $Tabs/StatsView/Stats.unlocked > 0:
+		$Tabs.show_tab("StatsView")
 	$Background.to_color("build")
 	state = "build"
 
@@ -81,7 +79,7 @@ func _on_Fight_done(win):
 		if $Fight.tile.col == 4:
 			$Foreground.set_color("flash")
 			$Foreground.to_color("off")
-			if $Savior.ending_on_world($Tabs/WorldView/World.num):
+			if $Tabs/WorldView/World.num == 5:
 				s = 1
 			else:
 				s = 2
@@ -106,19 +104,15 @@ func _on_Fight_done(win):
 		$Tabs/StatsView/Stats.add_xp(gained_xp)
 
 		$Tabs/WorldView/World.defeat($Fight.tile)
-		$Tutorializer.on_win($Fight.tile.col, $Tabs/WorldView/World.num)
 
 		if s == 1:
-				print("victory!")
 				$Fight.clear(true)
 				$Cards.kill(true)
 				$Armories.kill(true)
 				$Builder.visible = false
 				$Fight.visible = false
 				$Background.to_color(Color.white, 10)
-				# DEBUG; BETA; MY LOVE; OW
-				# $Savior.archive()
-				# $Tabs/SaveView.force_show()
+				# stop playing this game
 				return
 		elif s == 2:
 			$WorldGeneration.return_world(true)

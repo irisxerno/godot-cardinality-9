@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://scene/RowController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://script/Table.gd" type="Script" id=2]
@@ -23,17 +23,12 @@
 [ext_resource path="res://script/Savior.gd" type="Script" id=21]
 [ext_resource path="res://script/Saves.gd" type="Script" id=22]
 [ext_resource path="res://scene/ClickLabel.tscn" type="PackedScene" id=23]
-[ext_resource path="res://script/Lowest.gd" type="Script" id=26]
-[ext_resource path="res://script/Tutorializer.gd" type="Script" id=28]
 [ext_resource path="res://script/Repairs.gd" type="Script" id=29]
 [ext_resource path="res://scene/Slot.tscn" type="PackedScene" id=30]
 [ext_resource path="res://scene/DiamondSlot.tscn" type="PackedScene" id=31]
 [ext_resource path="res://scene/Armory.tscn" type="PackedScene" id=32]
 [ext_resource path="res://scene/Diamond.tscn" type="PackedScene" id=33]
-[ext_resource path="res://script/Radio.gd" type="Script" id=34]
 [ext_resource path="res://res/LineThing.tres" type="StyleBox" id=35]
-[ext_resource path="res://script/NapkinController.gd" type="Script" id=36]
-[ext_resource path="res://scene/Napkin.tscn" type="PackedScene" id=37]
 
 [sub_resource type="RectangleShape2D" id=5]
 extents = Vector2( 1280, 720 )
@@ -79,33 +74,11 @@ use_mipmaps = true
 use_filter = true
 font_data = ExtResource( 12 )
 
-[sub_resource type="DynamicFont" id=17]
-size = 24
-use_mipmaps = true
-use_filter = true
-font_data = ExtResource( 12 )
-
-[sub_resource type="StyleBoxFlat" id=14]
-bg_color = Color( 0.25098, 0.188235, 0.235294, 0.941176 )
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-
-[sub_resource type="DynamicFont" id=15]
-size = 32
-use_mipmaps = true
-use_filter = true
-font_data = ExtResource( 12 )
-
 [node name="Main" type="Node"]
 script = ExtResource( 10 )
 
 [node name="Savior" type="Node" parent="."]
 script = ExtResource( 21 )
-
-[node name="Tutorializer" type="Node" parent="."]
-script = ExtResource( 28 )
 
 [node name="WorldGeneration" type="Node" parent="."]
 script = ExtResource( 7 )
@@ -392,7 +365,7 @@ margin_right = -250.0
 margin_bottom = -160.0
 default = 5
 mult = 1
-maxval = 30
+maxval = 20
 
 [node name="Offhand" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
@@ -405,7 +378,7 @@ margin_right = -250.0
 margin_bottom = -80.0
 default = 5
 mult = 1
-maxval = 30
+maxval = 20
 
 [node name="Extra" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
@@ -416,7 +389,7 @@ margin_left = -250.0
 margin_right = -250.0
 base = 5
 mult = 1
-maxval = 30
+maxval = 20
 
 [node name="Armory" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
@@ -429,7 +402,7 @@ margin_right = -250.0
 margin_bottom = 80.0
 base = 5
 mult = 5
-maxval = 15
+maxval = 10
 
 [node name="Diamond" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
@@ -442,7 +415,7 @@ margin_right = -250.0
 margin_bottom = 160.0
 base = 5
 mult = 5
-maxval = 15
+maxval = 10
 
 [node name="Attack" parent="Tabs/StatsView/Stats" instance=ExtResource( 11 )]
 anchor_left = 1.0
@@ -455,7 +428,7 @@ margin_right = -250.0
 margin_bottom = 240.0
 default = 5
 mult = 10
-maxval = 15
+maxval = 10
 
 [node name="Temp" type="Label" parent="Tabs/StatsView/Stats"]
 visible = false
@@ -482,15 +455,15 @@ property = "margin_left"
 
 [node name="Background" parent="Tabs/SaveView" index="0"]
 margin_left = -250.0
-margin_top = 150.0
-margin_bottom = 690.0
+margin_top = 200.0
+margin_bottom = 626.0
 custom_styles/panel = SubResource( 9 )
 
 [node name="Button" parent="Tabs/SaveView" index="1"]
 modulate = Color( 0.4125, 0.25, 0.5, 0.878431 )
-margin_top = 620.0
+margin_top = 600.0
 margin_right = 1600.0
-margin_bottom = 1120.0
+margin_bottom = 1100.0
 rect_rotation = -90.0
 rect_scale = Vector2( 0.1, 0.1 )
 mouse_filter = 1
@@ -500,8 +473,8 @@ __meta__ = {
 
 [node name="Saves" type="Control" parent="Tabs/SaveView"]
 margin_left = -200.0
-margin_top = 210.0
-margin_bottom = 750.0
+margin_top = 260.0
+margin_bottom = 610.0
 script = ExtResource( 22 )
 
 [node name="newgame" parent="Tabs/SaveView/Saves" instance=ExtResource( 23 )]
@@ -522,8 +495,9 @@ margin_bottom = -5.0
 [node name="Label" parent="Tabs/SaveView/Saves/worlds" instance=ExtResource( 23 )]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 5.0
 margin_right = 0.0
-margin_bottom = 0.0
+margin_bottom = 5.0
 mouse_filter = 1
 custom_fonts/font = SubResource( 18 )
 text = "worlds"
@@ -538,74 +512,6 @@ margin_top = -5.0
 margin_right = -20.0
 custom_styles/panel = ExtResource( 35 )
 
-[node name="Gamemodes" type="Control" parent="Tabs/SaveView/Saves"]
-margin_left = -20.0
-margin_top = 350.0
-margin_right = 200.0
-margin_bottom = 500.0
-script = ExtResource( 34 )
-
-[node name="tutorial" parent="Tabs/SaveView/Saves/Gamemodes" instance=ExtResource( 23 )]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -70.0
-margin_right = 70.0
-margin_bottom = 30.0
-custom_fonts/font = SubResource( 17 )
-text = "tutorial"
-valign = 1
-
-[node name="normal" parent="Tabs/SaveView/Saves/Gamemodes" instance=ExtResource( 23 )]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -70.0
-margin_top = 30.0
-margin_right = 70.0
-margin_bottom = 60.0
-custom_fonts/font = SubResource( 17 )
-text = "normal"
-valign = 1
-
-[node name="hard" parent="Tabs/SaveView/Saves/Gamemodes" instance=ExtResource( 23 )]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -70.0
-margin_top = 60.0
-margin_right = 70.0
-margin_bottom = 90.0
-custom_fonts/font = SubResource( 17 )
-text = "hard"
-valign = 1
-
-[node name="hardcore" parent="Tabs/SaveView/Saves/Gamemodes" instance=ExtResource( 23 )]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -70.0
-margin_top = 90.0
-margin_right = 70.0
-margin_bottom = 120.0
-custom_fonts/font = SubResource( 17 )
-text = "hardcore"
-valign = 1
-
-[node name="testing" parent="Tabs/SaveView/Saves/Gamemodes" instance=ExtResource( 23 )]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -70.0
-margin_top = 120.0
-margin_right = 70.0
-margin_bottom = 150.0
-custom_fonts/font = SubResource( 17 )
-text = "testing"
-valign = 1
-
-[node name="Panel" type="Panel" parent="Tabs/SaveView/Saves/Gamemodes"]
-margin_left = 20.0
-margin_top = 30.0
-margin_right = 30.0
-margin_bottom = 120.0
-custom_styles/panel = ExtResource( 35 )
-
 [node name="Cancel" parent="Tabs" instance=ExtResource( 6 )]
 mouse_filter = 1
 property = "margin_left"
@@ -615,135 +521,27 @@ visible = false
 
 [node name="Button" parent="Tabs/Cancel" index="1"]
 modulate = Color( 0, 0, 0, 0.439216 )
-margin_top = 380.0
+margin_top = 360.0
 margin_right = 1600.0
-margin_bottom = 880.0
+margin_bottom = 860.0
 rect_rotation = -90.0
-mouse_filter = 1
-
-[node name="ScoreView" parent="Tabs" instance=ExtResource( 6 )]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-open_distance = -150
-hide_distance = 100
-property = "margin_bottom"
-
-[node name="Background" parent="Tabs/ScoreView" index="0"]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 140.0
-margin_right = 750.0
-margin_bottom = 290.0
-custom_styles/panel = SubResource( 14 )
-
-[node name="Button" parent="Tabs/ScoreView" index="1"]
-modulate = Color( 0.25098, 0.380392, 0.501961, 0.878431 )
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 340.0
-margin_top = 6.10352e-05
-margin_right = 1940.0
-margin_bottom = 500.0
-rect_rotation = -180.0
 rect_scale = Vector2( 0.1, 0.1 )
 mouse_filter = 1
-
-[node name="Lowest" type="Control" parent="Tabs/ScoreView"]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 140.0
-margin_right = 750.0
-margin_bottom = 290.0
-script = ExtResource( 26 )
-
-[node name="Label" type="Label" parent="Tabs/ScoreView/Lowest"]
-margin_left = 80.0
-margin_top = 40.0
-margin_right = 156.0
-margin_bottom = 78.0
-custom_fonts/font = SubResource( 15 )
-text = "< score"
-
-[node name="Score" type="Label" parent="Tabs/ScoreView/Lowest"]
-margin_left = 100.0
-margin_top = 80.0
-margin_right = 176.0
-margin_bottom = 118.0
-custom_fonts/font = SubResource( 15 )
-text = "-"
-
-[node name="Label2" type="Label" parent="Tabs/ScoreView/Lowest"]
-margin_left = 240.0
-margin_top = 40.0
-margin_right = 354.0
-margin_bottom = 78.0
-custom_fonts/font = SubResource( 15 )
-text = "< time"
-
-[node name="Time" type="Label" parent="Tabs/ScoreView/Lowest"]
-margin_left = 260.0
-margin_top = 80.0
-margin_right = 374.0
-margin_bottom = 118.0
-custom_fonts/font = SubResource( 15 )
-text = "-"
-
-[node name="Label3" type="Label" parent="Tabs/ScoreView/Lowest"]
-margin_left = 400.0
-margin_top = 40.0
-margin_right = 514.0
-margin_bottom = 78.0
-custom_fonts/font = SubResource( 15 )
-text = "< enc."
-
-[node name="Progress" type="Label" parent="Tabs/ScoreView/Lowest"]
-margin_left = 420.0
-margin_top = 80.0
-margin_right = 534.0
-margin_bottom = 118.0
-custom_fonts/font = SubResource( 15 )
-text = "-"
-
-[node name="NapkinController" type="Control" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
-script = ExtResource( 36 )
-napkin = ExtResource( 37 )
-
-[node name="Cursor" type="Position2D" parent="NapkinController"]
 
 [node name="Foreground" parent="." instance=ExtResource( 17 )]
 color = Color( 0, 0, 0, 0 )
 
-[node name="IdleFilter" type="ColorRect" parent="."]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-color = Color( 0, 0, 0, 0.501961 )
-__meta__ = {
-"_edit_group_": true,
-"_edit_lock_": true
-}
-
 [connection signal="card_data" from="Savior" to="Builder/Dealer" method="deal_data_now"]
 [connection signal="reset" from="Savior" to="." method="reset"]
 [connection signal="return_cards" from="Savior" to="Builder/Deal" method="add_cards"]
-[connection signal="unlocked_gamemodes" from="Savior" to="Tabs/SaveView/Saves/Gamemodes" method="enable"]
-[connection signal="update_gamemode" from="Savior" to="Tabs/SaveView/Saves" method="update_gamemode"]
 [connection signal="update_saves" from="Savior" to="Tabs/SaveView/Saves" method="set_saves"]
-[connection signal="save" from="Tutorializer" to="Savior" method="save_to_file"]
-[connection signal="show_tab" from="Tutorializer" to="Tabs" method="show_tab"]
 [connection signal="color" from="WorldGeneration" to="Savior" method="color"]
 [connection signal="new" from="WorldGeneration" to="UserArmory" method="new"]
 [connection signal="new" from="WorldGeneration" to="Tabs/StatsView/Stats" method="new"]
 [connection signal="return_card_data" from="WorldGeneration" to="Builder/Dealer" method="deal_data_now"]
 [connection signal="return_world_data" from="WorldGeneration" to="Tabs/WorldView/World" method="from_data"]
-[connection signal="uselect" from="Builder" to="Tutorializer" method="_on_Builder_uselect"]
 [connection signal="dump" from="Builder/Offhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Offhand" to="Builder" method="request_take"]
-[connection signal="count" from="Builder/Deal" to="Tutorializer" method="_on_Deal_count"]
 [connection signal="request_return_cards" from="Builder/Deal" to="Builder" method="_on_Deal_request_return_cards"]
 [connection signal="dump" from="Builder/Mainhand" to="Builder/Deal" method="add_cards"]
 [connection signal="request_return_cards" from="Builder/Mainhand" to="Builder" method="request_take"]
@@ -759,8 +557,6 @@ __meta__ = {
 [connection signal="return_cards" from="Fight/Dealer" to="Fight" method="_on_Dealer_return_cards"]
 [connection signal="done" from="Fight/Tally" to="Fight" method="_on_Tally_done"]
 [connection signal="input_event" from="Fight/Tally" to="Fight/Tally" method="_on_input_event"]
-[connection signal="napkin" from="Fight/Tally" to="NapkinController" method="napkin"]
-[connection signal="start" from="Fight/Tally" to="NapkinController" method="reset_cursor"]
 [connection signal="add_armory" from="UserArmory" to="Armories" method="add_card"]
 [connection signal="add_card" from="UserArmory" to="Cards" method="add_card"]
 [connection signal="return_cards" from="UserArmory" to="Builder/Deal" method="add_cards"]
@@ -773,7 +569,6 @@ __meta__ = {
 [connection signal="resized" from="Tabs" to="." method="_on_Tabs_resized"]
 [connection signal="ccount" from="Tabs/WorldView/World" to="." method="_on_World_ccount"]
 [connection signal="select_tile" from="Tabs/WorldView/World" to="." method="_on_select_tile"]
-[connection signal="buy_pressed" from="Tabs/StatsView/Stats" to="Tutorializer" method="_on_Stats_buy_pressed"]
 [connection signal="return_cost" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="return_cost"]
 [connection signal="try_buy" from="Tabs/StatsView/Stats/Mainhand" to="Tabs/StatsView/Stats" method="try_buy"]
 [connection signal="update" from="Tabs/StatsView/Stats/Mainhand" to="Builder/Mainhand" method="limit"]
@@ -800,7 +595,6 @@ __meta__ = {
 [connection signal="request_saves" from="Tabs/SaveView/Saves" to="Savior" method="_on_request_saves"]
 [connection signal="click" from="Tabs/SaveView/Saves/newgame" to="Tabs/SaveView/Saves" method="_on_newgame_click"]
 [connection signal="click" from="Tabs/SaveView/Saves/worlds/Label" to="Tabs/SaveView/Saves" method="_worlds_click"]
-[connection signal="selected" from="Tabs/SaveView/Saves/Gamemodes" to="Tabs/SaveView/Saves" method="_on_Gamemodes_selected"]
 [connection signal="click" from="Tabs/Cancel" to="Fight" method="_on_Cancel_click"]
 
 [editable path="Fight/Dealer"]
@@ -808,4 +602,3 @@ __meta__ = {
 [editable path="Tabs/StatsView"]
 [editable path="Tabs/SaveView"]
 [editable path="Tabs/Cancel"]
-[editable path="Tabs/ScoreView"]

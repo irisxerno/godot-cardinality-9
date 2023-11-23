@@ -8,8 +8,7 @@ var progress = 0
 
 var list
 var unlocked = 0
-var criteria = [5, 10, 15, 40, 65, 115]
-var inhibit = false
+var criteria = [5, 10, 15, 40, 90, 240]
 
 signal buy_pressed
 
@@ -52,13 +51,10 @@ func add_xp(i, p=1):
 	score += i
 	progress += p
 	progress_stats()
-	print("score: ", score)
 	return_cost(i)
 
 
 func progress_stats():
-	if inhibit:
-		return
 	if unlocked > (len(criteria) - 1):
 		return
 	if score >= criteria[unlocked]:
@@ -88,7 +84,6 @@ func to_data():
 
 
 func from_data(sdata):
-	inhibit = false
 	xp = sdata["xp"]
 	score = sdata["score"]
 	progress = sdata["progress"]
@@ -103,7 +98,6 @@ func from_data(sdata):
 
 
 func new():
-	inhibit = false
 	xp = 0
 	score = 0
 	progress = 0

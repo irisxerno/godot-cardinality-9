@@ -94,4 +94,3 @@ func defeat(inst):
 	for tile in tiles:
 		if tile.state == "defeated":
 			wprogc += 1
-	print("wprogc: ", wprogc)
