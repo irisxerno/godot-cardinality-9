@@ -27,7 +27,7 @@ func _ready():
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	if test:
-		value = rng.randi_range(2,13)
+		value = rng.randi_range(1,13)
 		suit = rng.randi_range(1,9)
 	update_face()
 
@@ -35,6 +35,8 @@ func _ready():
 func update_face():
 	if self.value >= 10 and self.value <= 13:
 		$Face/Value.text = value_visual_10[self.value-10]
+	elif self.value == 1:
+		$Face/Value.text = "A"
 	else:
 		$Face/Value.text = str(value)
 	$Face/Suit.text = suit_visual[self.suit]
@@ -75,6 +77,12 @@ func to_alpha(a):
 func kill(k=true):
 	kill = k
 	to_alpha(0)
+
+
+func b_value():
+	if self.value == 1:
+		return 15
+	return self.value
 
 
 func flip():

@@ -19,7 +19,7 @@ func mx(w):
 
 
 func c():
-	return rng.randi_range(2, 13)
+	return rng.randi_range(1, 13)
 
 
 func iq():
@@ -36,7 +36,7 @@ func _rand_roll(c, n, m):
 
 func _rand_tile_num(w, h):
 	var ii = 0
-	ii += _rand_roll(5, h, 13)
+	ii += _rand_roll(5, h, 12)
 	for i in range(w):
 		ii += _rand_roll(5, h, 5)
 	return ii

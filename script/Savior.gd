@@ -22,7 +22,7 @@ var generator
 var color
 var idle_filter
 
-var version = 0
+var version = 1
 
 var save_data
 var savefile_json

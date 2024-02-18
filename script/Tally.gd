@@ -69,10 +69,9 @@ func count(deck):
 		for inst in s[k]:
 			if inst.diamond:
 				var h = 1.0/9.0*(k-1) + 0.5/9.0
-				emit_signal("napkin", Color.from_hsv(h, 0.6, 1))
-				ii /= inst.value
+				ii /= inst.b_value()
 			else:
-				ii *= inst.value
+				ii *= inst.b_value()
 		i += ii
 	return i
 
